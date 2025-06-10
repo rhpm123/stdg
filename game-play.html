@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>틀린그림찾기 게임</title>
+  
+  <!-- CSS 모듈 -->
+  <link rel="stylesheet" href="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/css/game-play.css">
+</head>
+<body>
+  <!-- 사이드바 -->
+  <div class="sidebar">
+    <div class="game-header">
+      <h1 class="game-title">틀린그림찾기 게임</h1>
+    </div>
+    
+    <!-- 사용자 정보 영역 추가 -->
+    <div class="user-section" id="userSection">
+      <!-- 인증 관리자가 동적으로 채움 -->
+    </div>
+    
+    <div class="game-stats">
+      <div class="stat-item">
+        <div class="stat-label">점수</div>
+        <div class="stat-value" id="score">0</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-label">시간</div>
+        <div class="stat-value" id="timer">00:00</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-label">진행률</div>
+        <div class="stat-value" id="progress">0%</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-label">찾은 개수</div>
+        <div class="stat-value" id="found">0/0</div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-label">목숨</div>
+        <div class="stat-value" id="lives">❤️❤️❤️❤️❤️</div>
+      </div>
+      
+      <!-- 로그인 사용자만 표시되는 최고 점수 -->
+      <div class="stat-item" id="bestScoreSection" style="display: none;">
+        <div class="stat-label">최고 점수</div>
+        <div class="stat-value" id="bestScore">-</div>
+      </div>
+    </div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+    
+    <div class="game-controls">
+      <button class="control-btn btn-primary" id="startBtn">게임 시작</button>
+      <button class="control-btn btn-secondary" id="pauseBtn" disabled>일시정지</button>
+      <button class="control-btn btn-secondary" id="resetBtn">다시 시작</button>
+      <button class="control-btn hint-btn" id="hintBtn" disabled>💡 힌트 (3/10)</button>
+      <button class="control-btn btn-secondary" id="newGameBtn">다른 게임 선택</button>
+      <button class="control-btn btn-secondary" id="toggleAnswerBtn" style="background-color: #9b59b6; border-color: #8e44ad;">정답 영역 표시</button>
+      <button class="control-btn btn-warning" id="debugModeBtn" style="background-color: #f39c12; border-color: #e67e22;">🔧 디버그 모드</button>
+      </div>
+    
+    <!-- 힌트 정보 섹션 -->
+    <div class="hint-info" id="hintInfo">
+      <div class="hint-counter" id="hintCounter">게임: 3/3 | 일일: 10/10</div>
+      <div style="font-size: 10px; margin-top: 3px; color: #999;">
+        힌트 사용 시 50점 차감됩니다
+      </div>
+    </div>
+      
+    
+    <!-- 개발자 도구 (개발 단계용) -->
+    <div class="dev-tools" id="devTools" style="display: none;">
+      <div class="dev-tools-header">
+        <h4>🛠️ 개발자 도구</h4>
+      </div>
+      <button class="control-btn btn-info" onclick="showAnswerHint()">💡 힌트</button>
+      <button class="control-btn btn-info" onclick="showDifferenceBlinking()">✨ 틀린부분 깜빡임</button>
+      <button class="control-btn btn-info" onclick="toggleAnswerPoints()">📍 정답 표시</button>
+      <button class="control-btn btn-warning" onclick="resetDeveloperHints()" style="background-color: #e67e22; border-color: #d35400;">🔄 힌트 리셋</button>
+    </div>
+    
+    <!-- 메시지 영역 -->
+    <div id="messageArea" class="message-area">
+      <div id="errorMessage" class="sidebar-message error-msg" style="display: none;"></div>
+      <div id="successMessage" class="sidebar-message success-msg" style="display: none;"></div>
+      <div id="loading" class="sidebar-message loading-msg" style="display: none;">📊 데이터 로딩중...</div>
+    </div>
+  </div>
+  
+  <!-- 메인 이미지 영역 -->
+  <div class="main-content">
+    <div class="images-container" id="imagesContainer" style="display: none;">
+      <div class="image-section">
+        <h3>원본 이미지</h3>
+        <div class="image-container" id="originalContainer">
+          <img id="originalImage" class="game-image" src="" alt="원본 이미지">
+        </div>
+      </div>
+      
+      <div class="image-section">
+        <h3>수정 이미지 (여기서 찾으세요!)</h3>
+        <div class="image-container" id="modifiedContainer">
+          <img id="modifiedImage" class="game-image" src="" alt="수정 이미지">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript 모듈들 -->
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/auth-manager.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/game-state.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/heart-system.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/coordinate-utils.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/api-client.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/game-logic.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/click-handler.js"></script>
+  <script src="https://ysvxjmqdafldfrmdscvd.supabase.co/storage/v1/object/public/static/js/answer-display.js"></script>
+  
+  <!-- 메인 게임 초기화 -->
+  <script>
+    console.log('🎮 모듈화된 게임 시작!');
+    
+    // 메시지 표시 함수
+    function showMessage(message, type = 'error') {
+      const errorEl = document.getElementById('errorMessage');
+      const successEl = document.getElementById('successMessage');
+      
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+      
+      if (type === 'error') {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      } else {
+        successEl.textContent = message;
+        successEl.style.display = 'block';
+      }
+      
+      setTimeout(() => {
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+      }, 3000);
+    }
+    
+    function showLoading(show = true) {
+      const loadingEl = document.getElementById('loading');
+      if (show) {
+        loadingEl.style.display = 'block';
+        setTimeout(() => {
+          loadingEl.style.display = 'none';
+        }, 10000);
+      } else {
+        loadingEl.style.display = 'none';
+      }
+    }
+    
+    // 이벤트 리스너 설정
+    function setupEventListeners() {
+      // 게임 제어 버튼들
+      document.getElementById('startBtn')?.addEventListener('click', startGame);
+      document.getElementById('pauseBtn')?.addEventListener('click', pauseGame);
+      document.getElementById('resetBtn')?.addEventListener('click', resetGame);
+      document.getElementById('hintBtn')?.addEventListener('click', showHint);
+      document.getElementById('newGameBtn')?.addEventListener('click', () => {
+        window.location.href = '../index.html';
+      });
+      document.getElementById('toggleAnswerBtn')?.addEventListener('click', toggleAnswerPoints);
+      
+      // 디버그 모드 토글
+      document.getElementById('debugModeBtn')?.addEventListener('click', () => {
+        debugMode = !debugMode;
+        const btn = document.getElementById('debugModeBtn');
+        const devTools = document.getElementById('devTools');
+        
+        // 버튼 텍스트와 색상 동시 업데이트
+        btn.textContent = debugMode ? '🔧 디버그 OFF' : '🔧 디버그 모드';
+        btn.style.backgroundColor = debugMode ? '#e74c3c' : '#f39c12';
+        
+        // 개발자 도구 패널 토글
+        devTools.style.display = debugMode ? 'block' : 'none';
+        
+        showMessage(`디버그 모드 ${debugMode ? 'ON' : 'OFF'}`, 'success');
+        });
+        
+      
+      // 이미지 클릭 이벤트
+      const modifiedImg = document.getElementById('modifiedImage');
+      if (modifiedImg) {
+        modifiedImg.addEventListener('click', (event) => {
+          if (debugMode) {
+            debugClickHandler(event);
+          } else {
+            handleImageClick(event);
+          }
+        });
+      }
+      
+      console.log('✅ 이벤트 리스너 설정 완료');
+    }
+    
+    // 페이지 로드 시 초기화
+    window.addEventListener('load', async function() {
+      console.log('📱 페이지 로드 완료, 초기화 시작!');
+      
+      try {
+        // 이벤트 리스너 설정
+        setupEventListeners();
+        
+        // 인증 상태 확인 후 사용자 정보 표시 (게스트 모드 허용)
+        try {
+          await authManager.checkAuthStatus();
+          
+          // 로그인된 사용자의 경우 하트 시스템 초기화
+          if (authManager.isAuthenticated && authManager.currentUser) {
+            const heartInitSuccess = await window.heartSystem.init(authManager.currentUser.id);
+            if (heartInitSuccess) {
+              console.log('💖 하트 시스템 초기화 성공');
+            } else {
+              console.warn('⚠️ 하트 시스템 초기화 실패, 게스트 모드로 진행');
+            }
+          }
+        } catch (error) {
+          console.log('🔄 인증 확인 실패, 게스트 모드로 진행:', error);
+        }
+        updateUserInterface();
+        
+        // 게임 데이터 로딩
+        await loadGameData();
+        
+        // UI 업데이트
+        updateUI();
+        
+        showMessage('게임 준비 완료! 시작 버튼을 눌러주세요.', 'success');
+        
+      } catch (error) {
+        console.error('❌ 게임 초기화 실패:', error);
+        showMessage(`게임 초기화 실패: ${error.message}`, 'error');
+      }
+    });
+    
+    /**
+     * 사용자 인터페이스 업데이트
+     */
+    async function updateUserInterface() {
+      const userSection = document.getElementById('userSection');
+      const bestScoreSection = document.getElementById('bestScoreSection');
+      const bestScoreEl = document.getElementById('bestScore');
+      
+      if (userSection) {
+        userSection.innerHTML = authManager.getUserInfoHTML();
+      }
+      
+      // 로그인된 사용자의 최고 점수 표시
+      if (authManager.isAuthenticated && bestScoreSection && bestScoreEl) {
+        try {
+          const bestScore = await authManager.getUserBestScore();
+          if (bestScore && bestScore.score) {
+            bestScoreEl.textContent = bestScore.score;
+            bestScoreSection.style.display = 'flex';
+          }
+        } catch (error) {
+          console.log('최고 점수 API가 구현되지 않음:', error.message);
+          // 최고 점수 기능이 구현되지 않았으므로 숨김 처리
+          if (bestScoreSection) {
+            bestScoreSection.style.display = 'none';
+          }
+        }
+      }
+    }
+    
+    // 게임 시작 전 정답 영역 숨김
+    window.addEventListener('beforeunload', () => {
+      hideAnswerPoints();
+    });
+
+    /**
+     * 개발자용 힌트 리셋 함수
+     */
+    async function resetDeveloperHints() {
+      if (authManager.isDeveloper()) {
+        const success = authManager.resetHintData();
+        if (success) {
+          await updateHintUI();
+          showMessage('🛠️ 개발자 권한: 힌트 데이터가 리셋되었습니다!', 'success');
+        }
+      } else {
+        showMessage('이 기능은 개발자만 사용할 수 있습니다.', 'error');
+      }
+    }
+
+    // 전역 함수로 노출
+    window.resetDeveloperHints = resetDeveloperHints;
+  </script>
+
+  
+</body>
+</html>
