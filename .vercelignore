@@ -1,0 +1,6 @@
+# 최소한의 배포 제외 파일들
+node_modules/
+.env*
+SHRIMP/
+.cursor/
+.shrimp/

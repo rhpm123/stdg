@@ -1,0 +1,49 @@
+{
+  "tasks": [
+    {
+      "id": "873154d4-7dfd-424c-9c0b-5a0567df7e33",
+      "name": "힌트 시스템 구현",
+      "description": "사용자가 어려운 게임에서 도움을 받을 수 있는 힌트 시스템을 구현합니다. 시간 기반 자동 힌트 표시, 수동 힌트 요청, 힌트 사용 시 점수 차감 로직을 포함합니다.",
+      "notes": "기존 CSS 애니메이션 패턴(@keyframes blinkHint)을 확장하여 구현. 힌트 제한 횟수는 게임 난이도에 따라 조절 가능하도록 설계.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-05T14:37:46.747Z",
+      "updatedAt": "2025-06-05T14:53:31.108Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/game-state.js",
+          "type": "TO_MODIFY",
+          "description": "힌트 관련 상태 변수 추가",
+          "lineStart": 15,
+          "lineEnd": 25
+        },
+        {
+          "path": "assets/js/game-logic.js",
+          "type": "TO_MODIFY",
+          "description": "힌트 표시 로직 구현",
+          "lineStart": 200,
+          "lineEnd": 250
+        },
+        {
+          "path": "assets/css/game-play.css",
+          "type": "TO_MODIFY",
+          "description": "힌트 애니메이션 스타일 추가",
+          "lineStart": 380,
+          "lineEnd": 400
+        },
+        {
+          "path": "game-play-simple.html",
+          "type": "TO_MODIFY",
+          "description": "힌트 버튼 UI 추가",
+          "lineStart": 50,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "기존 game-state.js의 gameState 객체에 hintCount, maxHints, lastHintTime 필드 추가. game-logic.js에 showHint() 함수 구현하여 정답 영역에 일시적 하이라이트 효과 적용. CSS 애니메이션으로 힌트 영역 깜빡임 효과 구현. 사이드바에 힌트 버튼 추가하고 남은 힌트 수 표시. 힌트 사용 시 gameState.score에서 점수 차감.",
+      "verificationCriteria": "힌트 버튼 클릭 시 정답 영역이 3초간 하이라이트되고, 힌트 사용 후 점수가 적절히 차감되며, 힌트 제한 횟수가 올바르게 관리되는지 확인",
+      "analysisResult": "틀린그림찾기 웹앱 프로젝트 완성을 위한 포괄적 개발 계획 - 현재 구현된 기본 게임 기능을 바탕으로 사용자 경험 개선, 새로운 기능 추가, 성능 최적화를 통해 완성도 있는 웹 애플리케이션으로 발전시키는 것이 목표입니다.",
+      "summary": "힌트 시스템이 완전히 구현되었습니다. 사용자별 힌트 관리 (Google OAuth 연동), 게임별 힌트 제한, 시각적 힌트 표시, 쿨다운 시스템, 점수 차감 로직이 모두 포함되어 있습니다. 로그인 사용자는 일일 15개, 게스트 사용자는 5개의 힌트를 사용할 수 있으며, 게임당 3개로 제한됩니다. 힌트 사용 시 50점이 차감되고 30초 쿨다운이 적용됩니다.",
+      "completedAt": "2025-06-05T14:53:31.107Z"
+    }
+  ]
+}

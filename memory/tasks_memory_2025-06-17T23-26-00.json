@@ -1,0 +1,231 @@
+{
+  "tasks": [
+    {
+      "id": "c3dbfab5-b2dd-4b11-bc1b-32571a2db5db",
+      "name": "CSS 모듈 디렉터리 구조 생성 및 기존 파일 백업",
+      "description": "CSS 모듈화를 위한 디렉터리 구조를 생성하고 기존 game-play.css 파일을 백업합니다. assets/css/game/ 디렉터리를 생성하고 현재 파일을 game-play-backup.css로 백업한 후 Git 커밋합니다.",
+      "notes": "백업은 모듈화 과정에서 문제 발생 시 롤백을 위해 필수적입니다. 각 모듈 파일에는 Shrimp Task Manager 표준 헤더 주석을 포함해야 합니다.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T14:58:16.286Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game-play.css",
+          "type": "TO_MODIFY",
+          "description": "백업 대상 원본 파일"
+        },
+        {
+          "path": "assets/css/game/",
+          "type": "CREATE",
+          "description": "새로 생성할 모듈 디렉터리"
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/ 디렉터리 생성\\n2. 현재 game-play.css를 game-play-backup.css로 복사\\n3. Git add 및 commit으로 백업 보장\\n4. 모듈 파일 7개의 빈 파일 생성 (variables.css, base.css, layout.css, components.css, animations.css, health-bar.css, responsive.css)",
+      "verificationCriteria": "디렉터리 구조가 올바르게 생성되고, 백업 파일이 원본과 동일한지 확인합니다. 7개의 모듈 파일이 생성되고 각각 표준 헤더 주석을 포함하는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "CSS 모듈화를 위한 디렉터리 구조 생성과 파일 백업 작업이 성공적으로 완료되었습니다. assets/css/game/ 디렉터리가 생성되고, 기존 game-play.css가 game-play-backup.css로 안전하게 백업되었으며, 7개의 모듈 파일(variables, base, layout, components, animations, health-bar, responsive)이 각각 표준 헤더 주석과 함께 생성되었습니다. 모든 변경사항이 Git에 커밋되어 버전 관리가 완료되었습니다.",
+      "completedAt": "2025-06-17T14:58:16.285Z"
+    },
+    {
+      "id": "79278f0a-adfd-48a6-ab7e-d51903d06b97",
+      "name": "CSS 변수 모듈 분리 (variables.css)",
+      "description": "game-play.css의 :root 블록에 정의된 모든 CSS 변수들을 variables.css로 분리합니다. 게임 레이아웃, 색상 팔레트, 애니메이션 타이밍, 파티클 색상, 체력바 색상 등 85라인의 변수 정의를 포함합니다.",
+      "notes": "variables.css는 모든 다른 모듈이 의존하는 기반이므로 가장 먼저 완성되어야 합니다. 변수 그룹별로 명확한 주석 구분을 유지해야 합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "c3dbfab5-b2dd-4b11-bc1b-32571a2db5db"
+        }
+      ],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T15:01:05.882Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "TO_MODIFY",
+          "description": "CSS 변수 정의 모듈",
+          "lineStart": 1,
+          "lineEnd": 85
+        },
+        {
+          "path": "assets/css/game-play.css",
+          "type": "TO_MODIFY",
+          "description": "변수 부분 제거할 원본 파일",
+          "lineStart": 1,
+          "lineEnd": 85
+        }
+      ],
+      "implementationGuide": "1. game-play.css의 라인 1-85 (:root 블록) 추출\\n2. variables.css에 변수 정의 복사\\n3. 변수 그룹별 주석 정리 (레이아웃, 색상, 애니메이션 등)\\n4. 변수명 일관성 검증 (--game- 접두사)\\n5. 기존 game-play.css에서 해당 부분 제거",
+      "verificationCriteria": "variables.css에 모든 --game- 접두사 변수가 올바르게 정의되고, 그룹별 주석이 명확히 구분되어 있는지 확인합니다. 기존 game-play.css에서 변수 부분이 완전히 제거되었는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "CSS 변수 모듈 분리 작업이 성공적으로 완료되었습니다. game-play.css의 :root 블록에 정의된 모든 CSS 변수(85라인)가 variables.css로 완전히 이전되었으며, 게임 레이아웃, 색상 팔레트, 애니메이션 타이밍, 파티클 색상, 체력바 색상 등 모든 --game- 접두사 변수들이 그룹별 주석과 함께 체계적으로 정리되었습니다. 기존 game-play.css에서는 변수 부분이 완전히 제거되어 파일 크기가 줄어들었고, 모든 변경사항이 Git에 커밋되었습니다.",
+      "completedAt": "2025-06-17T15:01:05.881Z"
+    },
+    {
+      "id": "f019258f-0451-41c7-8416-e209888beb64",
+      "name": "기본 스타일 모듈 분리 (base.css)",
+      "description": "body, sidebar, 게임 헤더, 게임 통계 등 기본적인 레이아웃과 사이드바 관련 스타일을 base.css로 분리합니다. 약 95라인의 기본 스타일 정의를 포함합니다.",
+      "notes": "base.css는 게임의 기본 골격을 담당하므로 sidebar와 기본 body 스타일에 집중해야 합니다. 변수 참조가 올바른지 확인이 필요합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "79278f0a-adfd-48a6-ab7e-d51903d06b97"
+        }
+      ],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T15:06:56.171Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/base.css",
+          "type": "TO_MODIFY",
+          "description": "기본 스타일 모듈",
+          "lineStart": 86,
+          "lineEnd": 180
+        },
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "DEPENDENCY",
+          "description": "변수 의존성"
+        }
+      ],
+      "implementationGuide": "1. body 스타일 (라인 86-95) 추출\\n2. sidebar 관련 스타일 (라인 96-180) 추출\\n3. 게임 헤더, 타이틀, 통계 스타일 포함\\n4. base.css에 구조화된 주석과 함께 정리\\n5. variables.css 의존성 확인",
+      "verificationCriteria": "base.css에 body, sidebar, 게임 헤더 스타일이 올바르게 포함되고, CSS 변수 참조가 정상 작동하는지 확인합니다. 사이드바의 기본 레이아웃이 정상 표시되는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "기본 스타일 모듈 분리 작업이 성공적으로 완료되었습니다. body, sidebar, 게임 헤더, 게임 통계 관련 77라인의 스타일을 base.css로 분리하고 원본 파일에서 제거했습니다. CSS 변수 참조가 올바르게 유지되며 모든 스타일이 정상적으로 분리되었습니다.",
+      "completedAt": "2025-06-17T15:06:56.171Z"
+    },
+    {
+      "id": "f72fd2ea-4a8d-4afa-b8f5-1807df56da83",
+      "name": "레이아웃 모듈 분리 (layout.css)",
+      "description": "메인 콘텐츠 영역, 이미지 컨테이너, 클릭 마커, 정답 영역 등 게임 플레이 화면의 핵심 레이아웃 스타일을 layout.css로 분리합니다. 약 120라인의 레이아웃 정의를 포함합니다.",
+      "notes": "layout.css는 게임의 핵심 이미지 표시 영역을 담당합니다. 이미지 비율과 반응형 레이아웃이 올바르게 유지되는지 확인이 중요합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "f019258f-0451-41c7-8416-e209888beb64"
+        }
+      ],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T15:11:40.461Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/layout.css",
+          "type": "TO_MODIFY",
+          "description": "레이아웃 스타일 모듈",
+          "lineStart": 181,
+          "lineEnd": 300
+        },
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "DEPENDENCY",
+          "description": "변수 의존성"
+        }
+      ],
+      "implementationGuide": "1. main-content 스타일 (라인 181-220) 추출\\n2. images-container, image-section 스타일 추출\\n3. 클릭 마커, 정답 영역 스타일 포함\\n4. 게임 이미지 관련 스타일 정리\\n5. 레이아웃 섹션별 주석 구분",
+      "verificationCriteria": "layout.css에 메인 콘텐츠와 이미지 레이아웃이 올바르게 포함되고, 게임 이미지가 정상 표시되는지 확인합니다. 클릭 마커와 정답 영역이 올바른 위치에 표시되는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "레이아웃 모듈 분리 작업이 성공적으로 완료되었습니다. 메인 콘텐츠, 이미지 컨테이너, 클릭 마커, 정답 영역 관련 120라인의 스타일을 layout.css로 분리하고 반응형 미디어 쿼리까지 포함했습니다. 게임 플레이 화면의 핵심 레이아웃이 독립 모듈로 정리되었습니다.",
+      "completedAt": "2025-06-17T15:11:40.460Z"
+    },
+    {
+      "id": "53e17bee-3a44-407b-8281-c9d0df3364f2",
+      "name": "컴포넌트 모듈 분리 (components.css)",
+      "description": "버튼, 모달, 메시지 시스템, 게임 컨트롤, 개발자 도구 등 UI 컴포넌트 스타일을 components.css로 분리합니다. 약 200라인의 컴포넌트 정의를 포함합니다.",
+      "notes": "components.css는 사용자 인터랙션 요소들을 담당합니다. 버튼 hover 효과와 모달 애니메이션이 올바르게 작동하는지 확인이 필요합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "f72fd2ea-4a8d-4afa-b8f5-1807df56da83"
+        }
+      ],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T15:17:24.117Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "컴포넌트 스타일 모듈",
+          "lineStart": 301,
+          "lineEnd": 600
+        },
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "DEPENDENCY",
+          "description": "변수 의존성"
+        }
+      ],
+      "implementationGuide": "1. 게임 컨트롤 스타일 (라인 301-400) 추출\\n2. 버튼, 모달 스타일 추출\\n3. 메시지 시스템, 사이드바 메시지 포함\\n4. 개발자 도구 패널 스타일 포함\\n5. 컴포넌트별 주석 구분",
+      "verificationCriteria": "components.css에 모든 UI 컴포넌트가 올바르게 포함되고, 버튼 클릭과 모달 표시가 정상 작동하는지 확인합니다. 메시지 시스템과 개발자 도구가 올바르게 표시되는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "컴포넌트 모듈 분리 작업이 성공적으로 완료되었습니다. 게임 컨트롤, 메시지 시스템, 버튼, 모달(게임 완료/게임 오버), 개발자 도구 관련 300라인의 스타일을 components.css로 분리했습니다. 모든 UI 컴포넌트가 독립 모듈로 정리되어 버튼 hover 효과와 모달 애니메이션이 올바르게 작동합니다.",
+      "completedAt": "2025-06-17T15:17:24.116Z"
+    },
+    {
+      "id": "c8dbdc7b-4747-4e25-84f2-8c52f0c79fdc",
+      "name": "애니메이션 모듈 분리 (animations.css)",
+      "description": "키프레임 애니메이션, 파티클 효과, 하트 깨지기 효과 등 모든 애니메이션 관련 스타일을 animations.css로 분리합니다. 약 300라인의 애니메이션 정의를 포함합니다.",
+      "notes": "animations.css는 게임의 시각적 효과를 담당합니다. 파티클 효과와 하트 애니메이션이 올바르게 재생되는지 확인이 중요합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "53e17bee-3a44-407b-8281-c9d0df3364f2"
+        }
+      ],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T15:22:56.538Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/animations.css",
+          "type": "TO_MODIFY",
+          "description": "애니메이션 스타일 모듈",
+          "lineStart": 601,
+          "lineEnd": 900
+        },
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "DEPENDENCY",
+          "description": "애니메이션 타이밍 변수 의존성"
+        }
+      ],
+      "implementationGuide": "1. @keyframes 정의들 (라인 601-900) 추출\\n2. 파티클 효과 애니메이션 포함\\n3. 하트 깨지기, 체크 펄스 애니메이션 포함\\n4. 애니메이션 클래스들 (.particle-1~8, .heart-piece-1~8) 포함\\n5. 애니메이션 타입별 주석 구분",
+      "verificationCriteria": "animations.css에 모든 키프레임과 애니메이션 클래스가 올바르게 포함되고, 파티클 효과와 하트 애니메이션이 정상 재생되는지 확인합니다. 애니메이션 타이밍 변수가 올바르게 참조되는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "animations.css 모듈 분리 작업을 성공적으로 완료했습니다. 정답 영역 깜빡임, 틀린부분 강조, 파티클 효과, 체크 마킹, 하트 깨지기 등 모든 애니메이션 효과를 별도 모듈로 분리하여 총 300+라인의 애니메이션 정의를 포함했습니다. 기존 game-play.css에서 해당 스타일들을 완전히 제거하고 Git 커밋까지 완료했습니다.",
+      "completedAt": "2025-06-17T15:22:56.537Z"
+    },
+    {
+      "id": "5c2112c7-47b9-409f-81fc-07ab6c1684da",
+      "name": "체력바 모듈 분리 (health-bar.css)",
+      "description": "체력바 시스템의 모든 스타일과 애니메이션을 health-bar.css로 분리합니다. 체력바 컨테이너, 채우기 효과, 상태별 색상, 관련 애니메이션 등 약 490라인을 포함합니다.",
+      "notes": "health-bar.css는 복잡한 체력바 시스템을 담당합니다. 상태 변화에 따른 색상과 애니메이션이 올바르게 작동하는지 확인이 중요합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "c8dbdc7b-4747-4e25-84f2-8c52f0c79fdc"
+        }
+      ],
+      "createdAt": "2025-06-17T14:54:00.885Z",
+      "updatedAt": "2025-06-17T15:55:30.064Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/health-bar.css",
+          "type": "TO_MODIFY",
+          "description": "체력바 시스템 모듈",
+          "lineStart": 1346,
+          "lineEnd": 1835
+        },
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "DEPENDENCY",
+          "description": "체력바 색상 변수 의존성"
+        }
+      ],
+      "implementationGuide": "1. 체력바 컨테이너 스타일 (라인 1346-1400) 추출\\n2. 체력바 채우기 및 텍스트 스타일 추출\\n3. 상태별 체력바 스타일 (critical, warning, low, good) 포함\\n4. 체력바 전용 애니메이션들 (@keyframes) 포함\\n5. 체력바 시스템별 주석 구분",
+      "verificationCriteria": "health-bar.css에 체력바의 모든 스타일과 애니메이션이 올바르게 포함되고, 체력 상태 변화에 따른 시각적 효과가 정상 작동하는지 확인합니다. 체력바 색상 변수가 올바르게 참조되는지 검증합니다.",
+      "analysisResult": "현재 1700+ 라인의 game-play.css 파일을 기능별로 7개의 작은 CSS 모듈로 분할하여 관리성과 유지보수성을 크게 향상시킵니다. 기존의 CSS 변수 시스템과 구조화된 섹션을 기반으로 논리적인 파일 분할을 진행하며, 각 모듈은 독립적으로 관리 가능하면서도 전체적으로 일관된 스타일 시스템을 유지합니다.",
+      "summary": "체력바 모듈 분리 작업이 성공적으로 완료되었습니다. health-bar.css 파일에 모든 체력바 관련 스타일과 애니메이션이 올바르게 포함되어 있으며, game-play.css에서 체력바 관련 스타일이 완전히 제거되었습니다. 체력바 시스템의 모든 기능(컨테이너, 채우기, 상태별 색상, 애니메이션)이 독립적인 모듈로 분리되어 유지보수성이 향상되었습니다.",
+      "completedAt": "2025-06-17T15:55:30.063Z"
+    }
+  ]
+}

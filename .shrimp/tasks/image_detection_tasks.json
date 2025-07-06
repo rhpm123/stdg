@@ -1,0 +1,191 @@
+{
+  "tasks": [
+    {
+      "id": "TASK-2025-0101",
+      "name": "Supabase 스토리지 설정",
+      "description": "이미지 저장을 위한 Supabase Storage 버킷 생성 및 보안 설정",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0001"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 저장용 버킷이 생성됨",
+        "적절한 접근 권한 및 보안 정책이 설정됨",
+        "테스트 이미지 업로드가 성공적으로 수행됨"
+      ],
+      "implementation_guide": "Supabase 대시보드를 통해 스토리지 버킷을 생성하고 필요한 보안 정책을 구성합니다. 이미지 업로드 테스트를 통해 설정을 검증합니다."
+    },
+    {
+      "id": "TASK-2025-0102",
+      "name": "이미지 관련 데이터베이스 테이블 구성",
+      "description": "이미지 세트와 틀린 부분 좌표를 저장할 데이터베이스 테이블 설계 및 생성",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0001"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 세트 테이블이 생성됨",
+        "틀린 부분 좌표 테이블이 생성됨",
+        "테이블 간 관계가 올바르게 설정됨",
+        "적절한 인덱스가 구성됨",
+        "RLS 정책이 적용됨"
+      ],
+      "implementation_guide": "Supabase SQL 에디터를 사용하여 필요한 테이블을 생성하고 관계 및 인덱스를 설정합니다. RLS 정책을 적용하여 데이터 접근을 제어합니다."
+    },
+    {
+      "id": "TASK-2025-0103",
+      "name": "이미지 업로드 UI 개발",
+      "description": "관리자가 원본/수정 이미지 페어를 업로드할 수 있는 UI 개발",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0101", "TASK-2025-0102"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 업로드 페이지 레이아웃이 구현됨",
+        "원본 및 수정 이미지 업로드 폼이 구현됨",
+        "이미지 미리보기 기능이 작동함",
+        "메타데이터 입력 필드가 구현됨"
+      ],
+      "implementation_guide": "HTML, CSS, JavaScript를 사용하여 이미지 업로드 페이지를 구현합니다. 파일 입력, 이미지 미리보기, 메타데이터 입력 요소를 포함합니다."
+    },
+    {
+      "id": "TASK-2025-0104",
+      "name": "이미지 저장 및 관리 기능 구현",
+      "description": "Supabase Storage API를 활용한 이미지 업로드 및 메타데이터 저장 기능 구현",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0101", "TASK-2025-0102", "TASK-2025-0103"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지가 Supabase Storage에 업로드됨",
+        "이미지 URL이 생성됨",
+        "메타데이터가 데이터베이스에 저장됨",
+        "이미지 수정 및 삭제 기능이 구현됨"
+      ],
+      "implementation_guide": "Supabase JavaScript 클라이언트를 사용하여 이미지 업로드 기능을 구현하고, 데이터베이스에 메타데이터를 저장합니다."
+    },
+    {
+      "id": "TASK-2025-0105",
+      "name": "이미지 비교 알고리즘 구현",
+      "description": "두 이미지의 픽셀 단위 비교를 통해 차이점을 감지하는 알고리즘 구현",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": [],
+      "assignee": "",
+      "verification_criteria": [
+        "Canvas API를 사용한 이미지 픽셀 데이터 추출 구현",
+        "효율적인 픽셀 비교 로직 구현",
+        "차이점 감지 알고리즘 성능이 최적화됨",
+        "다양한 이미지 쌍에 대한 테스트 통과"
+      ],
+      "implementation_guide": "HTML5 Canvas API를 사용하여 이미지 데이터를 추출하고, JavaScript로 픽셀 단위 비교 알고리즘을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0106",
+      "name": "차이점 클러스터링 및 좌표 추출",
+      "description": "감지된 차이점 픽셀을 그룹화하고 중심 좌표와 반경을 계산하는 기능 구현",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0105"],
+      "assignee": "",
+      "verification_criteria": [
+        "인접한 차이점 픽셀 그룹화 알고리즘 구현",
+        "각 그룹의 중심 좌표 계산 구현",
+        "클릭 반경 계산 구현",
+        "노이즈 필터링 및 정확도 검증"
+      ],
+      "implementation_guide": "연결된 컴포넌트 라벨링 알고리즘을 구현하여 차이점 픽셀을 그룹화하고, 각 그룹의 중심점과 반경을 계산합니다."
+    },
+    {
+      "id": "TASK-2025-0107",
+      "name": "좌표 데이터 시각화 및 검증 도구 개발",
+      "description": "감지된 차이점 좌표를 시각적으로 표시하고 수동으로 편집할 수 있는 도구 개발",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0105", "TASK-2025-0106"],
+      "assignee": "",
+      "verification_criteria": [
+        "감지된 차이점을 시각적으로 표시하는 기능 구현",
+        "좌표 수동 편집/추가/삭제 UI 구현",
+        "검증 도구 인터페이스 완성",
+        "다양한 테스트 케이스에 대한 정확도 검증"
+      ],
+      "implementation_guide": "Canvas와 DOM 조작을 활용하여 좌표 시각화 및 편집 도구를 구현합니다. 사용자가 직관적으로 조작할 수 있는 인터페이스를 개발합니다."
+    },
+    {
+      "id": "TASK-2025-0108",
+      "name": "좌표 데이터 저장 시스템 구현",
+      "description": "추출된 좌표 데이터를 Supabase 데이터베이스에 저장하는 기능 구현",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0102", "TASK-2025-0106", "TASK-2025-0107"],
+      "assignee": "",
+      "verification_criteria": [
+        "좌표 데이터가 DB에 저장됨",
+        "이미지 세트와 좌표 데이터 간 관계가 올바르게 설정됨",
+        "일괄 처리 및 트랜잭션 처리 구현",
+        "데이터 변경 이력 관리 기능 구현"
+      ],
+      "implementation_guide": "Supabase JavaScript 클라이언트를 사용하여 추출된 좌표 데이터를 데이터베이스에 저장하고, 트랜잭션을 통해 데이터 일관성을 보장합니다."
+    },
+    {
+      "id": "TASK-2025-0109",
+      "name": "게임 화면 데이터 연동",
+      "description": "게임 화면에서 이미지 및 좌표 데이터를 로드하고 사용하는 기능 구현",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0104", "TASK-2025-0108"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 및 좌표 데이터 로드 기능 구현",
+        "데이터 캐싱 및 성능 최적화 적용",
+        "실시간 데이터 업데이트 처리 구현",
+        "오류 상황 대응 기능 구현"
+      ],
+      "implementation_guide": "Supabase 클라이언트를 사용하여 게임에 필요한 데이터를 효율적으로 로드하고 캐싱합니다. 오류 처리 및 데이터 업데이트 메커니즘을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0110",
+      "name": "게임 화면 UI 구현",
+      "description": "이미지 비교 및 틀린 부분 클릭 인터랙션을 위한 게임 화면 UI 구현",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0109"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 비교 레이아웃 구현",
+        "클릭 인터랙션 기능 구현",
+        "좌표 감지 및 피드백 메커니즘 구현",
+        "진행 상황 표시 기능 구현"
+      ],
+      "implementation_guide": "HTML, CSS, JavaScript를 사용하여 게임 화면 UI를 구현합니다. 사용자 경험을 최적화하고 직관적인 인터페이스를 개발합니다."
+    },
+    {
+      "id": "TASK-2025-0111",
+      "name": "게임 로직 구현",
+      "description": "틀린 부분 클릭 처리, 점수 계산, 게임 완료 조건 등 게임 로직 구현",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-21",
+      "dependencies": ["TASK-2025-0109", "TASK-2025-0110"],
+      "assignee": "",
+      "verification_criteria": [
+        "클릭 처리 및 좌표 일치 확인 로직 구현",
+        "틀린 부분 발견 시 시각적 피드백 제공",
+        "게임 완료 조건 처리 구현",
+        "점수 계산 및 기록 저장 기능 구현"
+      ],
+      "implementation_guide": "JavaScript를 사용하여 게임의 핵심 로직을 구현합니다. 클릭 이벤트 처리, 좌표 비교, 게임 상태 관리 등의 기능을 개발합니다."
+    }
+  ]
+} 

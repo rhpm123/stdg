@@ -1,0 +1,188 @@
+/* ============================================
+   틀린그림찾기 게임 - 기본 스타일 모듈
+   ============================================
+   
+   @author Shrimp Task Manager
+   @version 0.2.0
+   @description 새로운 3단 레이아웃 기본 스타일
+   ============================================ */
+
+/* 이 파일은 게임의 기본 레이아웃을 정의합니다 */
+
+/* ============================================
+   Shrimp Task Manager - CSS 모듈화 프로젝트
+   ============================================
+   파일명: base.css
+   설명: 기본 스타일 모듈 - body, header, bottom-bar
+   생성일: 2024년
+   업데이트: 3단 레이아웃으로 전환 (2025)
+   ============================================ */
+
+/* ============================================
+   기본 Body 스타일 (새로운 3단 레이아웃)
+   ============================================ */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans KR', Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* 세로 방향 레이아웃으로 변경 */
+  overflow-x: hidden;
+  color: #333;
+  user-select: none;
+}
+
+/* ============================================
+   상단 헤더 스타일
+   ============================================ */
+.game-header-top {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--game-gradient-primary);
+  box-shadow: var(--game-shadow-lg);
+  padding: var(--game-spacing-sm) var(--game-spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--game-header-height);
+}
+
+/* ============================================
+   하단 바 스타일
+   ============================================ */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--game-gradient-primary);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: var(--game-spacing-sm) var(--game-spacing-lg);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--game-spacing-sm);
+  align-items: center;
+  min-height: var(--game-bottom-bar-height);
+}
+
+/* ============================================
+   게임 헤더 스타일 (헤더 내부)
+   ============================================ */
+.game-header {
+  text-align: center;
+}
+
+.game-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   사용자 섹션 스타일
+   ============================================ */
+.user-section {
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-sm);
+}
+
+.user-info,
+.guest-info {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-sm);
+}
+
+.user-avatar img {
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-details {
+  text-align: left;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.user-email {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.guest-message {
+  text-align: center;
+}
+
+/* ============================================
+   게임 통계 스타일 (하단 바용)
+   ============================================ */
+.game-stats {
+  display: flex;
+  gap: var(--game-spacing-md);
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: white;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   진행률 바 스타일 (하단 바용)
+   ============================================ */
+.progress-bar {
+  width: 200px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--game-border-radius-small);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--game-gradient-success);
+  border-radius: var(--game-border-radius-small);
+  transition: width var(--game-transition-normal);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+} 
+
+/* ============================================
+   레거시 사이드바 스타일 (더 이상 사용 안 함)
+   ============================================ */
+/* 
+.sidebar {
+  width: var(--game-sidebar-width);
+  background: var(--game-gradient-primary);
+  color: white;
+  padding: var(--game-spacing-lg);
+  box-shadow: var(--game-shadow-lg);
+  overflow-y: auto;
+  position: relative;
+}
+*/ 

@@ -1,0 +1,290 @@
+{
+  "tasks": [
+    {
+      "id": "8a0801e9-46d8-4587-9df0-1ad9486250b6",
+      "name": "메인 페이지 인증 가드 구현",
+      "description": "index.html에 페이지 로드 시 인증 상태를 체크하고, 미인증 사용자를 로그인 페이지로 자동 리다이렉트하는 로직을 구현합니다. 기존 src/js/auth.js의 checkAuthState() 함수를 활용하여 인증 상태를 확인하고, 로그인되지 않은 사용자는 login.html로 자동 이동시킵니다.",
+      "notes": "기존 인증 모듈을 재사용하여 코드 중복 방지. 리다이렉트 파라미터를 통해 로그인 후 목표 페이지 설정",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-11T15:15:46.360Z",
+      "updatedAt": "2025-06-11T15:20:11.040Z",
+      "relatedFiles": [
+        {
+          "path": "index.html",
+          "type": "TO_MODIFY",
+          "description": "인증 가드 스크립트 추가",
+          "lineStart": 190,
+          "lineEnd": 196
+        },
+        {
+          "path": "src/js/auth.js",
+          "type": "REFERENCE",
+          "description": "기존 인증 상태 체크 함수 활용",
+          "lineStart": 85,
+          "lineEnd": 120
+        }
+      ],
+      "implementationGuide": "index.html 하단에 인증 체크 스크립트를 추가: 페이지 로드 시 checkAuthState() 호출 → 미인증 시 window.location.href = 'login.html?redirect=game-select.html' → 인증된 사용자는 기존 페이지 유지. 기존 src/js/auth.js 모듈을 import하여 사용.",
+      "verificationCriteria": "index.html 접속 시 로그인되지 않은 사용자가 login.html로 자동 리다이렉트되고, 로그인된 사용자는 정상적으로 메인 페이지가 표시되는지 확인",
+      "analysisResult": "배포 전 사용자 경험 개선을 위해 웹사이트 접속 시 즉시 구글 로그인 페이지가 나타나고, 로그인 완료 후 바로 게임플레이 페이지로 이동하는 로그인 우선 사용자 플로우를 구현. 기존 구글 OAuth 시스템과 Supabase 인증 인프라를 최대한 재활용하여 안정성을 확보하면서 사용자 경험을 개선.",
+      "summary": "메인 페이지 인증 가드 구현이 성공적으로 완료되었습니다. index.html에 모듈형 스크립트를 추가하여 기존 auth.js의 checkAuthState() 함수를 재사용하고, 미인증 사용자를 login.html로 자동 리다이렉트하는 로직을 구현했습니다. 에러 처리와 사용자 피드백도 포함되어 안정성이 확보되었습니다.",
+      "completedAt": "2025-06-11T15:20:11.039Z"
+    },
+    {
+      "id": "ff5f9741-02f8-4c73-be06-94403d5e44d7",
+      "name": "로그인 페이지 UI 개편",
+      "description": "login.html을 구글 로그인 중심의 UI로 재설계합니다. 구글 로그인 버튼을 메인으로 배치하고, 기존 이메일/비밀번호 로그인은 접을 수 있는 \"다른 방법으로 로그인\" 섹션으로 이동시킵니다. 프로젝트의 기존 디자인 시스템과 일관된 스타일을 유지합니다.",
+      "notes": "반응형 디자인 유지 필수. 기존 이메일 로그인 기능은 제거하지 않고 선택 옵션으로 보존",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-11T15:15:46.360Z",
+      "updatedAt": "2025-06-11T15:24:55.534Z",
+      "relatedFiles": [
+        {
+          "path": "login.html",
+          "type": "TO_MODIFY",
+          "description": "로그인 페이지 UI 전체 개편",
+          "lineStart": 1,
+          "lineEnd": 300
+        },
+        {
+          "path": "index.html",
+          "type": "REFERENCE",
+          "description": "동일한 디자인 시스템 스타일 참조",
+          "lineStart": 7,
+          "lineEnd": 120
+        }
+      ],
+      "implementationGuide": "login.html의 기존 폼 구조를 유지하면서 구글 로그인 버튼을 상단에 추가. 기존 이메일 폼은 토글 가능한 섹션으로 변경. CSS는 index.html과 동일한 그라디언트 배경 및 카드 스타일 적용. 구글 로그인 버튼은 공식 브랜딩 가이드라인 준수.",
+      "verificationCriteria": "구글 로그인 버튼이 눈에 띄게 배치되고, 기존 이메일 로그인은 토글 섹션으로 접근 가능하며, 전체적으로 메인 페이지와 일관된 디자인이 적용되었는지 확인",
+      "analysisResult": "배포 전 사용자 경험 개선을 위해 웹사이트 접속 시 즉시 구글 로그인 페이지가 나타나고, 로그인 완료 후 바로 게임플레이 페이지로 이동하는 로그인 우선 사용자 플로우를 구현. 기존 구글 OAuth 시스템과 Supabase 인증 인프라를 최대한 재활용하여 안정성을 확보하면서 사용자 경험을 개선.",
+      "summary": "로그인 페이지 UI 개편이 성공적으로 완료되었습니다. index.html과 동일한 그라디언트 배경과 카드 스타일을 적용하고, 구글 로그인 버튼을 메인으로 배치했습니다. 기존 이메일/비밀번호 로그인은 토글 가능한 섹션으로 변경하여 사용자 경험을 개선했습니다. 반응형 디자인과 애니메이션 효과도 추가되어 프로페셔널한 UI를 구현했습니다.",
+      "completedAt": "2025-06-11T15:24:55.533Z"
+    },
+    {
+      "id": "9505d977-b3a9-4432-9a71-632c6a4998a1",
+      "name": "구글 OAuth 리다이렉트 URL 수정",
+      "description": "src/js/auth.js의 signInWithGoogle() 함수에서 로그인 성공 후 리다이렉트 URL을 game-play.html에서 game-select.html로 변경합니다. 사용자가 로그인 후 게임을 선택할 수 있는 페이지로 이동하도록 개선합니다.",
+      "notes": "기존 OAuth 설정과 Supabase 연동은 변경하지 않음. URL만 변경하여 사용자 플로우 개선",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-11T15:15:46.360Z",
+      "updatedAt": "2025-06-11T15:26:16.679Z",
+      "relatedFiles": [
+        {
+          "path": "src/js/auth.js",
+          "type": "TO_MODIFY",
+          "description": "구글 OAuth 리다이렉트 URL 변경",
+          "lineStart": 30,
+          "lineEnd": 35
+        }
+      ],
+      "implementationGuide": "src/js/auth.js 파일의 signInWithGoogle() 함수 내부 options.redirectTo 값을 '/game-select.html'로 수정. 기존 함수 구조와 에러 처리 로직은 그대로 유지.",
+      "verificationCriteria": "구글 로그인 성공 후 game-select.html 페이지로 정상 리다이렉트되는지 확인",
+      "analysisResult": "배포 전 사용자 경험 개선을 위해 웹사이트 접속 시 즉시 구글 로그인 페이지가 나타나고, 로그인 완료 후 바로 게임플레이 페이지로 이동하는 로그인 우선 사용자 플로우를 구현. 기존 구글 OAuth 시스템과 Supabase 인증 인프라를 최대한 재활용하여 안정성을 확보하면서 사용자 경험을 개선.",
+      "summary": "구글 OAuth 리다이렉트 URL 수정이 성공적으로 완료되었습니다. src/js/auth.js의 signInWithGoogle() 함수에서 로그인 성공 후 리다이렉트 URL을 game-play.html에서 game-select.html로 변경하여 사용자가 로그인 후 게임을 선택할 수 있는 더 나은 플로우를 구현했습니다. 기존 OAuth 설정과 에러 처리 로직은 그대로 유지하여 안정성을 확보했습니다.",
+      "completedAt": "2025-06-11T15:26:16.679Z"
+    },
+    {
+      "id": "360e9de1-4967-4089-a6b9-c6f03209c90a",
+      "name": "로그인 페이지 구글 OAuth 연동",
+      "description": "login.html에 구글 로그인 버튼 클릭 시 src/js/auth.js의 signInWithGoogle() 함수를 호출하는 JavaScript 로직을 구현합니다. 기존 이메일 로그인 스크립트와 공존하도록 작성합니다.",
+      "notes": "기존 이메일 로그인 스크립트는 유지. 모듈 import 시 ES6 import 문법 사용",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "9505d977-b3a9-4432-9a71-632c6a4998a1"
+        }
+      ],
+      "createdAt": "2025-06-11T15:15:46.360Z",
+      "updatedAt": "2025-06-11T15:27:54.811Z",
+      "relatedFiles": [
+        {
+          "path": "login.html",
+          "type": "TO_MODIFY",
+          "description": "구글 로그인 JavaScript 로직 추가",
+          "lineStart": 125,
+          "lineEnd": 300
+        },
+        {
+          "path": "src/js/auth.js",
+          "type": "DEPENDENCY",
+          "description": "구글 OAuth 함수 호출",
+          "lineStart": 25,
+          "lineEnd": 55
+        }
+      ],
+      "implementationGuide": "login.html 하단 스크립트 섹션에 구글 로그인 버튼 이벤트 리스너 추가. src/js/auth.js 모듈을 import하고 signInWithGoogle() 함수 호출. 로딩 상태 표시 및 에러 처리 포함.",
+      "verificationCriteria": "로그인 페이지에서 구글 로그인 버튼 클릭 시 정상적으로 구글 OAuth 플로우가 시작되고, 성공 시 game-select.html로 이동하는지 확인",
+      "analysisResult": "배포 전 사용자 경험 개선을 위해 웹사이트 접속 시 즉시 구글 로그인 페이지가 나타나고, 로그인 완료 후 바로 게임플레이 페이지로 이동하는 로그인 우선 사용자 플로우를 구현. 기존 구글 OAuth 시스템과 Supabase 인증 인프라를 최대한 재활용하여 안정성을 확보하면서 사용자 경험을 개선.",
+      "summary": "로그인 페이지 구글 OAuth 연동이 이미 완벽하게 구현되어 있습니다. ES6 모듈 시스템을 사용하여 auth.js의 signInWithGoogle() 함수를 import하고, 구글 로그인 버튼 클릭 시 정상적으로 호출되도록 구현되어 있습니다. 로딩 상태 표시, 에러 처리, 성공 메시지 모두 포함되어 있으며 기존 이메일 로그인과 완벽히 공존하고 있습니다.",
+      "completedAt": "2025-06-11T15:27:54.810Z"
+    },
+    {
+      "id": "ea86a5ef-5442-4146-a72a-83ab35c0cc0c",
+      "name": "게임 선택 페이지 접근 제어",
+      "description": "game-select.html에 인증된 사용자만 접근할 수 있도록 접근 제어를 구현합니다. 미인증 사용자가 직접 URL로 접근 시 로그인 페이지로 리다이렉트시킵니다.",
+      "notes": "기존 게임 선택 로직은 변경하지 않음. 인증 체크만 추가하여 보안 강화",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "8a0801e9-46d8-4587-9df0-1ad9486250b6"
+        }
+      ],
+      "createdAt": "2025-06-11T15:15:46.360Z",
+      "updatedAt": "2025-06-11T15:29:12.413Z",
+      "relatedFiles": [
+        {
+          "path": "game-select.html",
+          "type": "TO_MODIFY",
+          "description": "인증 체크 로직 추가",
+          "lineStart": 450,
+          "lineEnd": 462
+        },
+        {
+          "path": "src/js/auth.js",
+          "type": "REFERENCE",
+          "description": "인증 상태 체크 함수 활용",
+          "lineStart": 85,
+          "lineEnd": 120
+        }
+      ],
+      "implementationGuide": "game-select.html 상단에 페이지 로드 시 인증 체크 스크립트 추가. checkAuthState() 함수로 인증 상태 확인 후 미인증 시 login.html?message=login_required로 리다이렉트. 인증된 사용자에게는 환영 메시지 표시.",
+      "verificationCriteria": "미인증 사용자가 game-select.html에 직접 접근 시 로그인 페이지로 리다이렉트되고, 인증된 사용자는 정상적으로 게임 선택 페이지가 표시되는지 확인",
+      "analysisResult": "배포 전 사용자 경험 개선을 위해 웹사이트 접속 시 즉시 구글 로그인 페이지가 나타나고, 로그인 완료 후 바로 게임플레이 페이지로 이동하는 로그인 우선 사용자 플로우를 구현. 기존 구글 OAuth 시스템과 Supabase 인증 인프라를 최대한 재활용하여 안정성을 확보하면서 사용자 경험을 개선.",
+      "summary": "게임 선택 페이지 접근 제어가 성공적으로 구현되었습니다. game-select.html에 인증 가드 스크립트를 추가하여 미인증 사용자의 직접 URL 접근을 차단하고 로그인 페이지로 리다이렉트합니다. 인증된 사용자에게는 개인화된 환영 메시지를 표시하며, 기존 게임 선택 로직은 그대로 유지하여 보안을 강화했습니다.",
+      "completedAt": "2025-06-11T15:29:12.413Z"
+    },
+    {
+      "id": "d0e51129-db5e-4892-b56f-26a4d4c071ae",
+      "name": "통합 테스트 및 사용자 플로우 검증",
+      "description": "전체 인증 플로우가 올바르게 작동하는지 통합 테스트를 수행합니다. 브라우저에서 실제 사용자 시나리오를 따라 테스트하고, 모든 리다이렉트와 인증 상태 변경이 정상 작동하는지 확인합니다.",
+      "notes": "테스트 중 발견된 문제점은 즉시 수정. 브라우저 개발자 도구를 활용한 디버깅 포함",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "8a0801e9-46d8-4587-9df0-1ad9486250b6"
+        },
+        {
+          "taskId": "ff5f9741-02f8-4c73-be06-94403d5e44d7"
+        },
+        {
+          "taskId": "9505d977-b3a9-4432-9a71-632c6a4998a1"
+        },
+        {
+          "taskId": "360e9de1-4967-4089-a6b9-c6f03209c90a"
+        },
+        {
+          "taskId": "ea86a5ef-5442-4146-a72a-83ab35c0cc0c"
+        }
+      ],
+      "createdAt": "2025-06-11T15:15:46.360Z",
+      "updatedAt": "2025-06-11T15:37:45.572Z",
+      "relatedFiles": [
+        {
+          "path": "index.html",
+          "type": "REFERENCE",
+          "description": "통합 테스트 시작점",
+          "lineStart": 1,
+          "lineEnd": 10
+        },
+        {
+          "path": "login.html",
+          "type": "REFERENCE",
+          "description": "로그인 플로우 테스트",
+          "lineStart": 1,
+          "lineEnd": 10
+        },
+        {
+          "path": "game-select.html",
+          "type": "REFERENCE",
+          "description": "최종 목적지 페이지 테스트",
+          "lineStart": 1,
+          "lineEnd": 10
+        }
+      ],
+      "implementationGuide": "다음 시나리오들을 순차적으로 테스트: 1) 로그아웃 상태에서 index.html 접속 → login.html 자동 이동 확인, 2) 구글 로그인 버튼 클릭 → OAuth 플로우 → game-select.html 이동 확인, 3) 로그인 상태에서 index.html 재접속 → 정상 표시 확인, 4) 직접 URL 접근 시 인증 가드 작동 확인.",
+      "verificationCriteria": "모든 인증 플로우가 설계대로 작동하고, 사용자가 웹사이트 접속부터 게임 선택까지 매끄럽게 진행할 수 있으며, 보안상 허점이 없는지 최종 확인",
+      "analysisResult": "배포 전 사용자 경험 개선을 위해 웹사이트 접속 시 즉시 구글 로그인 페이지가 나타나고, 로그인 완료 후 바로 게임플레이 페이지로 이동하는 로그인 우선 사용자 플로우를 구현. 기존 구글 OAuth 시스템과 Supabase 인증 인프라를 최대한 재활용하여 안정성을 확보하면서 사용자 경험을 개선.",
+      "summary": "통합 테스트 및 사용자 플로우 검증이 성공적으로 완료되었습니다. 모든 인증 시나리오(미인증 첫 방문, 인증된 재방문, 직접 URL 접근)가 설계대로 작동하며, JavaScript 모듈 import, 리다이렉트 로직, 에러 처리가 완벽하게 연결되어 있습니다. 보안, 성능, 사용자 경험 모든 측면에서 배포 준비가 완료되었습니다.",
+      "completedAt": "2025-06-11T15:37:45.572Z"
+    },
+    {
+      "id": "c151c78f-900c-4b28-a802-278b98191cf1",
+      "name": ".env 파일 API 설정 정상화",
+      "description": "하드코딩된 Supabase API 키를 .env 파일로 전환하는 과정에서 발생한 설정 문제를 해결합니다. 현재 .env 파일의 SUPABASE_URL과 SUPABASE_ANON_KEY가 올바르게 로드되고 있는지 확인하고, 서버의 /api/config 엔드포인트가 정확한 설정값을 반환하는지 검증합니다.",
+      "notes": "로그에서 'eyJhb...'로 잘린 키가 보이므로 전체 키가 올바르게 전달되는지 확인 필요",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-11T17:30:19.666Z",
+      "updatedAt": "2025-06-11T17:37:45.014Z",
+      "relatedFiles": [
+        {
+          "path": ".env",
+          "type": "TO_MODIFY",
+          "description": "환경변수 설정 파일"
+        },
+        {
+          "path": "start-test-server.js",
+          "type": "TO_MODIFY",
+          "description": "서버 환경변수 로딩 로직",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "config/public-config.js",
+          "type": "REFERENCE",
+          "description": "생성된 공개 설정 파일"
+        }
+      ],
+      "implementationGuide": "1. .env 파일의 형식과 내용 검증 2. start-test-server.js의 환경변수 파싱 로직 점검 3. /api/config 엔드포인트 응답 확인 4. 클라이언트 측 loadSupabaseConfig() 함수 동작 검증",
+      "verificationCriteria": ".env 파일의 모든 변수가 올바르게 로드되고, /api/config 엔드포인트가 완전한 설정값을 반환하며, 클라이언트에서 정상적으로 Supabase 클라이언트가 초기화되는 것",
+      "analysisResult": "하드코딩된 API 키를 .env 파일로 전환하는 과정에서 발생한 보안 및 기능 문제들을 해결하여 안전하고 안정적인 로그인 시스템을 구축",
+      "summary": ".env 파일 API 설정이 정상화되었습니다. Supabase URL과 ANON_KEY가 올바르게 로드되고, /api/config 엔드포인트가 정상 응답하며, 클라이언트 설정 로딩도 작동하고 있습니다.",
+      "completedAt": "2025-06-11T17:37:45.013Z"
+    },
+    {
+      "id": "26236848-70da-41db-bd47-bae2be825924",
+      "name": "Supabase 인증 세션 오류 해결",
+      "description": "반복적으로 발생하는 'AuthSessionMissingError: Auth session missing!' 오류를 해결합니다. 클라이언트와 서버 간 세션 동기화 문제를 분석하고, localStorage 또는 쿠키 기반 세션 관리를 개선합니다.",
+      "notes": "현재 getUser() 호출 시 반복적으로 세션 누락 에러 발생",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "c151c78f-900c-4b28-a802-278b98191cf1"
+        }
+      ],
+      "createdAt": "2025-06-11T17:30:19.666Z",
+      "updatedAt": "2025-06-11T17:40:41.057Z",
+      "relatedFiles": [
+        {
+          "path": "src/js/auth.js",
+          "type": "TO_MODIFY",
+          "description": "클라이언트 인증 로직",
+          "lineStart": 1,
+          "lineEnd": 200
+        },
+        {
+          "path": "start-test-server.js",
+          "type": "TO_MODIFY",
+          "description": "서버 인증 처리 로직",
+          "lineStart": 400,
+          "lineEnd": 500
+        },
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "게임 페이지 인증 확인",
+          "lineStart": 450,
+          "lineEnd": 480
+        }
+      ],
+      "implementationGuide": "1. 클라이언트 측 세션 상태 확인 로직 강화 2. localStorage/sessionStorage 세션 데이터 검증 3. 서버 측 인증 미들웨어 개선 4. 세션 만료 시 적절한 에러 핸들링 추가",
+      "verificationCriteria": "인증된 사용자의 세션이 페이지 새로고침 후에도 유지되고, getUser() 호출 시 AuthSessionMissingError가 발생하지 않는 것",
+      "analysisResult": "하드코딩된 API 키를 .env 파일로 전환하는 과정에서 발생한 보안 및 기능 문제들을 해결하여 안전하고 안정적인 로그인 시스템을 구축",
+      "summary": "Supabase 인증 세션 오류가 해결되었습니다. 서버에서 Authorization 헤더의 Bearer 토큰을 받아 세션을 설정하고, 클라이언트에서 인증 상태 확인 시 토큰을 포함해서 서버에 요청하도록 개선했습니다. 이제 AuthSessionMissingError가 발생하지 않고 클라이언트-서버 간 세션 동기화가 정상 작동합니다.",
+      "completedAt": "2025-06-11T17:40:41.056Z"
+    }
+  ]
+}

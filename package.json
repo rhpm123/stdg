@@ -1,0 +1,30 @@
+{
+  "name": "spot-the-difference-app",
+  "version": "1.0.0",
+  "description": "틀린그림찾기 앱",
+    "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Static files ready for deployment'",
+    "test": "node test-deployment.js",
+    "test:api": "node test-api-endpoints.js",
+    "test:security": "node test-security.js",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server-postgres": "^0.6.2",
+    "@supabase/mcp-server-supabase": "^0.4.1",
+    "@supabase/supabase-js": "^2.49.8",
+    "axios": "^1.9.0",
+    "canvas": "^3.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "formidable": "^3.5.4",
+    "node-fetch": "^2.7.0",
+    "pg": "^8.16.0",
+    "supabase-mcp": "^1.5.0"
+  }
+}

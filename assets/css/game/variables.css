@@ -1,0 +1,107 @@
+/* ============================================
+   틀린그림찾기 게임 - CSS 변수 정의 모듈
+   ============================================
+   
+   @author Shrimp Task Manager
+   @version 0.1.0
+   @description 게임 전용 CSS 변수 정의
+   ============================================ */
+
+/* ===== 게임 전용 CSS 변수 ===== */
+:root {
+  /* 게임 레이아웃 */
+  --game-sidebar-width: 320px;
+  --game-header-height: 45px;
+  --game-bottom-bar-height: 40px;
+  --game-bottom-bar-compact-height: 35px;
+  --game-spacing-xs: 4px;
+  --game-spacing-sm: 8px;
+  --game-spacing-md: 16px;
+  --game-spacing-lg: 24px;
+  --game-border-radius: 12px;
+  --game-border-radius-small: 6px;
+  --game-border-radius-large: 20px;
+  
+  /* 게임 색상 팔레트 */
+  --game-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --game-success-gradient: linear-gradient(90deg, #27ae60, #2ecc71);
+  --game-error-gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  --game-warning-gradient: linear-gradient(135deg, #28a745, #20c997);
+  --game-bonus-gradient: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1));
+  
+  /* 게임 상태 색상 */
+  --game-success-color: #27ae60;
+  --game-error-color: #e74c3c;
+  --game-warning-color: #ffc107;
+  --game-info-color: #3498db;
+  --game-dev-color: #17a2b8;
+  
+  /* 투명도 색상 */
+  --game-white-10: rgba(255, 255, 255, 0.1);
+  --game-white-20: rgba(255, 255, 255, 0.2);
+  --game-white-80: rgba(255, 255, 255, 0.8);
+  --game-white-90: rgba(255, 255, 255, 0.9);
+  --game-black-10: rgba(0, 0, 0, 0.1);
+  --game-black-15: rgba(0, 0, 0, 0.15);
+  --game-black-20: rgba(0, 0, 0, 0.2);
+  --game-black-30: rgba(0, 0, 0, 0.3);
+  --game-black-80: rgba(0, 0, 0, 0.8);
+  
+  /* 정답 영역 색상 */
+  --game-answer-red: rgba(255, 0, 0, 0.6);
+  --game-answer-green: rgba(0, 255, 0, 0.6);
+  --game-answer-blue: rgba(0, 0, 255, 0.6);
+  --game-answer-yellow: rgba(255, 255, 0, 0.6);
+  --game-answer-magenta: rgba(255, 0, 255, 0.6);
+  --game-answer-cyan: rgba(0, 255, 255, 0.6);
+  --game-answer-orange: rgba(255, 128, 0, 0.6);
+  
+  /* 게임 박스 그림자 */
+  --game-shadow-small: 0 2px 5px rgba(0, 0, 0, 0.2);
+  --game-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --game-shadow-large: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --game-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
+  
+  /* 게임 애니메이션 */
+  --game-transition-fast: 0.2s ease;
+  --game-transition-normal: 0.3s ease;
+  --game-transition-slow: 0.5s ease;
+  --game-animation-pulse: 1.5s ease-in-out infinite alternate;
+  --game-animation-blink: 1.5s ease-in-out;
+  
+  /* 파티클 애니메이션 타이밍 */
+  --game-particle-duration: 1.0s;
+  --game-particle-easing: ease-out;
+  
+  /* 하트 애니메이션 타이밍 */
+  --game-heart-pulse-duration: 0.6s;
+  --game-heart-piece-duration-base: 1.2s;
+  --game-heart-piece-easing: ease-in;
+  
+  /* 체크 애니메이션 */
+  --game-check-pulse-duration: 1s;
+  --game-check-pulse-easing: ease-in-out;
+  
+  /* 글로우 및 깜빡임 */
+  --game-glow-duration: 2s;
+  --game-blink-duration: 1s;
+  --game-hint-blink-duration: 2s;
+  
+  /* 파티클 색상 */
+  --game-particle-1: #e74c3c;
+  --game-particle-2: #16a085;
+  --game-particle-3: #f39c12;
+  --game-particle-4: #8e44ad;
+  --game-particle-5: #2980b9;
+  --game-particle-6: #e91e63;
+  --game-particle-7: #27ae60;
+  --game-particle-8: #00b894;
+  
+  /* 체력바 색상 */
+  --game-health-good: #00ff88;
+  --game-health-warning: #ff9800;
+  --game-health-low: #ffeb3b;
+  --game-health-critical: #ff1744;
+}
+
+/* 이 파일은 게임의 모든 CSS 변수를 정의합니다 */ 

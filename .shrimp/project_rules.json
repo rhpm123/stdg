@@ -1,0 +1,156 @@
+{
+  "project": {
+    "name": "틀린그림찾기 웹앱",
+    "description": "Supabase를 활용한, Google ID로 로그인하는 틀린그림찾기 웹 애플리케이션",
+    "version": "0.1.0",
+    "created_at": "2025-05-20"
+  },
+  "workflow_guidelines": {
+    "important_note": "모든 코드 작업 시 항상 숙지하고 있어야 하는 작업 방법",
+    "practices": [
+      "Shrimp Task Manager를 사용하여 작업 관리",
+      "파일 편집 시 edit_file_lines 사용할 때 항상 부근 내용 확인",
+      "작업 전 항상 PROJECT_GUIDE.md 문서 참조",
+      "Context7을 사용하여 Supabase, Google OAuth 등 필요한 기술 문서 참조",
+      "라이브러리 문서가 필요할 때 resolve-library-id와 get-library-docs 도구를 사용하여 최신 정보 활용"
+    ]
+  },
+  "coding_standards": {
+    "language": "javascript",
+    "indent_style": "space",
+    "indent_size": 2,
+    "line_endings": "lf",
+    "max_line_length": 120,
+    "docblock_required": true
+  },
+  "architecture": {
+    "pattern": "Client-Serverless",
+    "framework": "Supabase",
+    "directory_structure": {
+      "src": {
+        "description": "Source code files",
+        "subdirectories": {
+          "js": "JavaScript files",
+          "css": "Stylesheets",
+          "components": "UI components"
+        }
+      },
+      "public": "Public accessible files including HTML and assets",
+      "logs": "Log files",
+      "config": "Configuration files for Supabase and Google OAuth",
+      "db": "Database scripts, migrations, and schema files"
+    },
+    "data_storage": {
+      "database": "Supabase PostgreSQL",
+      "authentication": "Supabase Auth with Google OAuth",
+      "file_storage": "Supabase Storage"
+    }
+  },
+  "git": {
+    "commit_message_format": "conventional",
+    "branches": {
+      "main": "production",
+      "develop": "development",
+      "feature": "feature/*",
+      "bugfix": "bugfix/*"
+    }
+  },
+  "task_management": {
+    "task_id_format": "TASK-YYYY-NNNN",
+    "status_flow": [
+      "backlog",
+      "in_progress",
+      "review",
+      "done"
+    ],
+    "priority_levels": [
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ],
+    "categories": [
+      "setup",
+      "auth",
+      "database",
+      "ui",
+      "image-processing", 
+      "game-logic",
+      "testing",
+      "deployment"
+    ],
+    "task_phases": [
+      "initial-setup",
+      "authentication",
+      "database-design",
+      "image-management",
+      "difference-detection",
+      "game-ui",
+      "game-logic",
+      "user-feedback",
+      "optimization",
+      "deployment"
+    ]
+  },
+  "tech_stack": {
+    "frontend": [
+      "HTML5",
+      "CSS3",
+      "JavaScript (ES6+)"
+    ],
+    "backend": [
+      "Supabase"
+    ],
+    "authentication": [
+      "Google OAuth",
+      "Supabase Auth"
+    ],
+    "storage": [
+      "Supabase Storage"
+    ],
+    "deployment": [
+      "Static hosting"
+    ]
+  },
+  "guidelines": {
+    "development_principles": [
+      "틀린 부분 탐지는 사전 처리 방식을 사용하여 미리 좌표를 계산하고 저장",
+      "모든 이미지와 좌표 데이터는 Supabase에 저장",
+      "반응형 디자인으로 모바일 및 데스크톱 모두 지원"
+    ],
+    "data_models": {
+      "image_sets": {
+        "fields": ["id", "title", "description", "original_image_url", "modified_image_url", "difficulty"],
+        "purpose": "원본과 수정된 이미지 쌍 저장"
+      },
+      "differences": {
+        "fields": ["id", "image_set_id", "x_coord", "y_coord", "radius"],
+        "purpose": "틀린 부분의 위치 좌표 저장"
+      },
+      "user_progress": {
+        "fields": ["user_id", "image_set_id", "completed", "score", "time_spent"],
+        "purpose": "사용자 게임 진행 상황 추적"
+      }
+    },
+    "development_process": {
+      "planning": "수행할 작업에 대해 Shrimp Task Manager를 사용하여 명확히 계획 수립",
+      "implementation": "계획에 따라 작업 순서대로 구현, 단계별 검증 진행",
+      "testing": "각 단계별로 테스트 케이스 작성 및 검증, 오류 발견 시 즉시 해결",
+      "review": "작업 완료 후 코드 리뷰 및 품질 검사 수행",
+      "documentation": "변경 사항 및 아키텍처 결정사항 문서화",
+      "deployment": "검증된 코드만 배포, 기능별 단계적 배포 권장"
+    },
+    "code_quality": {
+      "naming_conventions": "명확하고 일관된 변수/함수 이름 사용, 카멜케이스 적용",
+      "error_handling": "모든 사용자 인터랙션과 외부 API 호출에 적절한 오류 처리 구현",
+      "performance": "이미지 최적화, 비동기 작업 관리, 사용자 경험 우선 고려",
+      "responsiveness": "모든 화면에서 정상 작동하는 반응형 디자인 필수"
+    },
+    "future_enhancements": [
+      "난이도 시스템 강화: 난이도별 단계 구성, 틀린 부분 수 조절, 제한 시간 설정",
+      "힌트 시스템 추가: 시간 경과 힌트, 힌트 사용 점수 차감, 포인트 구매 시스템",
+      "사용자 참여 확대: 일일 도전 과제, 연속 로그인 보상, 친구 초대 및 멀티플레이어",
+      "분석 시스템: 사용자 플레이 패턴 분석, 이탈 지점 파악, 난이도 통계"
+    ]
+  }
+} 

@@ -1,0 +1,314 @@
+/* ============================================
+   틀린그림찾기 게임 - 반응형 스타일 모듈
+   ============================================
+   
+   @author Shrimp Task Manager
+   @version 0.2.0
+   @description 모바일 터치 이벤트 최적화, 반응형 디자인, 성능 개선
+   ============================================ */
+
+/* ============================================
+   모바일 터치 이벤트 최적화
+   ============================================ */
+
+/* 모바일 기기에서 터치 영역 최적화 */
+@media (max-width: 768px) {
+  /* 기본 터치 영역 설정 */
+  .game-image-container {
+    /* 터치 이벤트 가속화 */
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* 모바일에서 이미지 비율 조정 */
+    max-width: 100%;
+    padding: 0 10px;
+  }
+  
+  /* 이미지 터치 영역 최적화 */
+  .game-image {
+    /* 모바일에서 터치가 잘 되도록 비율 조정 */
+    max-width: 100%;
+    height: auto;
+    
+    /* 터치 이벤트 레이턴시 최소화 */
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+  
+  /* 차이점 마크 터치 영역 확대 */
+  .difference-mark {
+    /* 모바일에서 터치하기 쉬도록 크기 증가 */
+    min-width: 44px !important;
+    min-height: 44px !important;
+    
+    /* 터치 영역 시각적 피드백 강화 */
+    border-width: 3px;
+    transform: scale(1.1);
+    
+    /* 터치 이벤트 최적화 */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* 버튼 터치 영역 최적화 */
+  .control-btn, .btn-primary, .btn-secondary {
+    /* 모바일 최소 터치 영역 44px 보장 */
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+    
+    /* 터치 피드백 강화 */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+    
+    /* 터치시 비주얼 피드백 */
+    transition: all 0.15s ease-out;
+  }
+  
+  .control-btn:active, .btn-primary:active, .btn-secondary:active {
+    transform: scale(0.95);
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* 하단 바 터치 영역 최적화 */
+  .bottom-bar {
+    /* 모바일에서 안전한 터치 영역 보장 */
+    min-height: 60px;
+    padding-bottom: env(safe-area-inset-bottom, 0px); /* 아이폰 X 이상 노치 대응 */
+  }
+  
+  .bottom-bar .stat-item {
+    /* 모바일에서 터치 영역 보장 */
+    min-height: 40px;
+    min-width: 60px;
+    
+    /* 터치 시 비주얼 피드백 */
+    transition: all 0.2s ease;
+  }
+  
+  .bottom-bar .stat-item:active {
+    transform: scale(0.97);
+    opacity: 0.8;
+  }
+}
+
+/* ============================================
+   가로 모드 (Landscape) 최적화
+   ============================================ */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* 가로 모드에서 화면 공간 최적화 */
+  .game-header-top {
+    padding: 8px 16px; /* 세로 패딩 축소 */
+  }
+  
+  .bottom-bar {
+    padding: 8px 16px; /* 세로 패딩 축소 */
+  }
+  
+  /* 모달 크기 조정 */
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* ============================================
+   고해상도 디스플레이 최적화
+   ============================================ */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* 레티나 디스플레이에서 선명한 텍스트 */
+  .game-title, .stat-label, .stat-value {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* 고해상도에서 경계선 선명도 개선 */
+  .difference-mark {
+    border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* ============================================
+   성능 최적화 - GPU 가속
+   ============================================ */
+.game-image-container,
+.difference-mark,
+.bottom-bar,
+.game-header-top {
+  /* GPU 가속 전용 레이어 생성 */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* 애니메이션 요소 GPU 가속 */
+.difference-mark:hover,
+.control-btn:hover,
+.stat-item:hover {
+  will-change: transform, opacity;
+}
+
+/* ============================================
+   접근성 개선 (a11y)
+   ============================================ */
+
+/* 대비없이 고려된 배경색 */
+@media (prefers-contrast: high) {
+  .difference-mark {
+    border-color: #000000 !important;
+    background-color: rgba(255, 255, 0, 0.9) !important;
+  }
+  
+  .stat-item {
+    border: 2px solid rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* 모션 감소 선호 사용자 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .difference-mark,
+  .control-btn,
+  .stat-item {
+    transform: none !important;
+  }
+}
+
+/* ============================================
+   다크모드 지원
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .modal-content {
+    background: #2d3748;
+    color: white;
+  }
+  
+  .modal-header {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+  }
+  
+  .score-item {
+    border-color: #4a5568;
+  }
+  
+  .achievement-text {
+    background: #4a5568;
+    color: #e2e8f0;
+    border-color: #667eea;
+  }
+}
+
+/* ============================================
+   소형 화면 (아이폰 SE 등) 최적화
+   ============================================ */
+@media (max-width: 375px) {
+  .game-title {
+    font-size: 1rem;
+  }
+  
+  .bottom-bar {
+    /* 소형 화면에서 공간 효율성 */
+    padding: 8px;
+    gap: 4px;
+  }
+  
+  .bottom-bar .stat-item {
+    min-width: 50px;
+    font-size: 0.7rem;
+    padding: 4px 6px;
+  }
+  
+  .control-btn {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+  
+  /* 모달 마진 강화 */
+  .modal-content {
+    width: 98%;
+    margin: 5px;
+  }
+  
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 15px;
+  }
+}
+
+/* ============================================
+   대형 모바일 (iPhone Pro Max 등) 최적화
+   ============================================ */
+@media (min-width: 414px) and (max-width: 768px) {
+  .game-image-container {
+    /* 대형 모바일에서 이미지 크기 최적화 */
+    max-width: 90%;
+    margin: 0 auto;
+  }
+  
+  .difference-mark {
+    /* 대형 화면에서 터치 영역 조금 작게 */
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+  
+  .bottom-bar .stat-item {
+    /* 더 여유로운 공간 활용 */
+    min-width: 70px;
+    padding: 8px 12px;
+  }
+}
+
+/* ============================================
+   태블릿 반응형 (768px~1024px)
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .game-image-container {
+    /* 태블릿에서 이미지 중앙 정렬과 적절한 크기 */
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  
+  .difference-mark {
+    /* 태블릿에서 마우스와 터치 둘 다 고려 */
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+  
+  .bottom-bar {
+    /* 태블릿에서 더 넓은 공간 활용 */
+    padding: 12px 24px;
+  }
+}
+
+/* ============================================
+   iOS Safari 전용 최적화
+   ============================================ */
+@supports (-webkit-touch-callout: none) {
+  /* iOS에서 오류를 일으킬 수 있는 CSS 속성 조정 */
+  .game-image {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+  
+  /* iOS에서 더 나은 터치 반응성 */
+  .difference-mark,
+  .control-btn {
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* iOS에서 오딘오 자동재생 방지 */
+  input, button {
+    -webkit-touch-callout: none;
+  }
+}

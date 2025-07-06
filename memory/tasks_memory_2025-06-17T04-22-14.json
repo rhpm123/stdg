@@ -1,0 +1,59 @@
+{
+  "tasks": [
+    {
+      "id": "1a0e397b-1e14-4c62-87de-1c45d8c5b56e",
+      "name": "게임 상태에 힌트 관리 시스템 추가",
+      "description": "game-state.js 파일에 힌트 사용량, 제한, 쿨다운 관리를 위한 상태 변수들을 추가합니다. 기존 gameState 객체를 확장하여 힌트 관련 모든 상태를 중앙 집중식으로 관리할 수 있도록 구현합니다.",
+      "notes": "기존 gameState 구조를 유지하면서 확장. 하트 시스템과 유사한 패턴으로 일관성 유지",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-15T11:55:29.038Z",
+      "updatedAt": "2025-06-15T11:57:58.186Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/game-state.js",
+          "type": "TO_MODIFY",
+          "description": "힌트 상태 변수 및 관리 함수 추가",
+          "lineStart": 10,
+          "lineEnd": 20
+        }
+      ],
+      "implementationGuide": "gameState 객체에 hints 프로퍼티 추가: { used: 0, maxPerGame: 3, dailyUsed: 0, maxDaily: 10, lastUsedTime: 0, cooldownMs: 30000 }. resetGameState() 함수에서 게임별 힌트 카운터 초기화. localStorage에서 일일 힌트 사용량 로드/저장 함수 추가.",
+      "verificationCriteria": "gameState.hints 객체가 정의되고, 게임 시작 시 힌트 카운터가 올바르게 초기화되며, localStorage에서 일일 사용량이 정상적으로 로드되는지 확인",
+      "analysisResult": "틀린그림찾기 게임에 완전한 힌트 시스템 구현 - 기존 showAnswerHint() 함수와 CSS 애니메이션을 활용하여 사용자별 힌트 제한, 점수 차감, 쿨다운 시스템을 포함한 완성도 높은 힌트 기능 제공",
+      "summary": "게임 상태에 힌트 관리 시스템이 성공적으로 추가되었습니다. gameState.hints 객체가 정의되고, 게임별/일일 제한 관리, 쿨다운 시스템, localStorage 기반 영속성이 모두 구현되었습니다. resetGameState()에서 게임별 카운터가 올바르게 초기화되며, 일일 사용량은 localStorage에서 자동으로 로드됩니다.",
+      "completedAt": "2025-06-15T11:57:58.186Z"
+    },
+    {
+      "id": "f4b05f3a-ebf4-4414-84bb-454ad80846c3",
+      "name": "체력바 시스템 활성화 로직 개선",
+      "description": "체력바가 게임 시작 시 화면에 표시되지 않는 문제를 해결합니다. CSS의 display: none 기본값과 active 클래스 추가 로직 사이의 연동을 개선하여 체력바가 확실히 표시되도록 수정합니다.",
+      "notes": "CSS의 #healthBarSection.active { display: flex; } 규칙이 제대로 적용되는지 확인하고, 필요시 JavaScript에서 직접 스타일을 설정합니다.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-06-17T01:53:23.933Z",
+      "updatedAt": "2025-06-17T01:56:36.310Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/health-bar-system.js",
+          "type": "TO_MODIFY",
+          "description": "체력바 활성화 및 표시 로직 개선",
+          "lineStart": 40,
+          "lineEnd": 60
+        },
+        {
+          "path": "assets/css/game-play.css",
+          "type": "REFERENCE",
+          "description": "체력바 CSS 스타일 확인",
+          "lineStart": 1430,
+          "lineEnd": 1445
+        }
+      ],
+      "implementationGuide": "health-bar-system.js의 start() 메서드에서 active 클래스 추가 후 실제로 요소가 표시되는지 확인하는 로직을 추가합니다. 필요시 CSS 스타일을 직접 조작하여 표시를 보장합니다. 또한 init() 메서드에서 DOM 요소 확인 로직을 강화합니다.",
+      "verificationCriteria": "게임 시작 시 체력바가 화면에 정상적으로 표시되고, 시간 경과에 따라 부드럽게 감소하는 애니메이션이 작동하는지 확인합니다.",
+      "analysisResult": "틀린그림찾기 게임의 체력바 표시 문제와 하트 시스템 연결 문제를 해결하여 사용자가 시각적으로 체력 상태를 확인할 수 있고, 오답 시 적절한 피드백을 받을 수 있도록 개선합니다. 기존 모듈화된 JavaScript 구조를 유지하면서 하트 시스템과 체력바 시스템의 연동을 강화합니다.",
+      "summary": "체력바 시스템 활성화 로직을 성공적으로 개선했습니다. 주요 개선사항: 1) CSS 클래스 적용 실패 시 직접 스타일 설정하는 fallback 로직 추가, 2) DOM 요소 상태를 상세히 로깅하여 디버깅 용이성 향상, 3) 초기화와 리셋 시 체력바 표시/숨김 처리 개선. 이제 체력바가 게임 시작 시 확실히 표시되고, 문제 발생 시 자동으로 대안 방법을 사용하여 표시됩니다.",
+      "completedAt": "2025-06-17T01:56:36.309Z"
+    }
+  ]
+}

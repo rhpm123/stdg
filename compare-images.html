@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이미지 비교 - 틀린그림찾기</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .images-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .image-wrapper {
+      flex: 1;
+      min-width: 45%;
+      position: relative;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .image-wrapper h2 {
+      text-align: center;
+      background-color: #4a6baf;
+      color: white;
+      padding: 10px;
+      margin: 0;
+    }
+    .image-container {
+      position: relative;
+      width: 100%;
+      overflow: visible;
+      text-align: center;
+    }
+    .image-container img {
+      display: block;
+      max-width: 100%;
+      margin: 0 auto;
+      cursor: crosshair;
+    }
+    .point {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 0, 0, 0.3);
+      border: 2px solid rgba(255, 0, 0, 0.8);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: width 0.3s, height 0.3s;
+    }
+    .controls {
+      margin-top: 20px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .data-display {
+      margin-top: 20px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .data-display h3 {
+      margin-top: 0;
+    }
+    button {
+      background-color: #4a6baf;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #3a539b;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-family: monospace;
+    }
+    .threshold-controls {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .threshold-controls label {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    .threshold-controls input {
+      margin-right: 20px;
+    }
+    #analysis-canvas {
+      display: none;
+    }
+    .result-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .display-mode {
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+    .display-mode label {
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    .legend {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      margin-bottom: 5px;
+    }
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      border-radius: 3px;
+    }
+    .pre-merge {
+      background-color: rgba(255, 165, 0, 0.7);
+    }
+    .post-merge {
+      background-color: rgba(255, 0, 0, 0.7);
+    }
+    .correct-answer {
+      background-color: rgba(0, 255, 0, 0.5);
+    }
+    .game-mode {
+      background-color: #4a6baf;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      color: white;
+    }
+    .game-mode h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    .progress-bar {
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: #27ae60;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .status {
+      margin-top: 10px;
+      font-style: italic;
+      color: #666;
+    }
+    .auto-detect {
+      background-color: #27ae60;
+    }
+    .auto-detect:hover {
+      background-color: #219653;
+    }
+    .file-inputs {
+      margin-bottom: 20px;
+    }
+    .file-inputs input {
+      margin-bottom: 10px;
+    }
+    .file-inputs label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .answer-mode-options {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .highlight-area {
+      position: absolute;
+      background-color: rgba(0, 255, 0, 0.4);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .outline-area {
+      position: absolute;
+      border: 2px solid rgba(0, 255, 0, 0.9);
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <h1>틀린그림찾기 - 이미지 비교</h1>
+  
+  <div class="controls file-inputs">
+    <h3>이미지 파일 선택</h3>
+    <div>
+      <label for="original-file">원본 이미지 선택:</label>
+      <input type="file" id="original-file" accept="image/*">
+    </div>
+    <div>
+      <label for="modified-file">수정된 이미지 선택:</label>
+      <input type="file" id="modified-file" accept="image/*">
+    </div>
+    <p>또는 Supabase Storage에서 이미지 불러오기</p>
+    <button id="use-default-urls">Storage 이미지 불러오기</button>
+  </div>
+  
+  <div class="images-container">
+    <div class="image-wrapper">
+      <h2>원본 이미지</h2>
+      <div class="image-container" id="original-container">
+        <img id="original-image" alt="원본 이미지">
+      </div>
+    </div>
+    
+    <div class="image-wrapper">
+      <h2>수정된 이미지</h2>
+      <div class="image-container" id="modified-container">
+        <img id="modified-image" alt="수정된 이미지">
+        <canvas id="result-canvas" class="result-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="controls">
+    <h3>자동 틀린 부분 감지</h3>
+    <div class="display-mode">
+      <label>표시 방식:</label>
+      <input type="radio" id="display-circle" name="display-mode" value="circle" checked>
+      <label for="display-circle">원형 표시</label>
+      
+      <input type="radio" id="display-pixel" name="display-mode" value="pixel">
+      <label for="display-pixel">픽셀 표시</label>
+      
+      <input type="radio" id="display-pre-merge" name="display-mode" value="pre-merge">
+      <label for="display-pre-merge">병합 전 영역</label>
+      
+      <input type="radio" id="display-both" name="display-mode" value="both">
+      <label for="display-both">병합 전/후 비교</label>
+    </div>
+    <div class="threshold-controls">
+      <label for="diff-threshold">차이 감지 민감도:</label>
+      <input type="range" id="diff-threshold" min="1" max="100" value="30">
+      <span id="threshold-value">30</span>
+      
+      <label for="min-area">최소 영역 크기:</label>
+      <input type="range" id="min-area" min="10" max="1000" value="100">
+      <span id="min-area-value">100</span>
+      
+      <label for="merge-distance">영역 병합 거리:</label>
+      <input type="range" id="merge-distance" min="0" max="200" value="50">
+      <span id="merge-distance-value">50</span>
+    </div>
+    <button id="detect-differences" class="auto-detect">자동으로 틀린 부분 찾기</button>
+    <div class="status" id="detection-status"></div>
+  </div>
+  
+  <div class="game-mode" id="game-section" style="display: none;">
+    <h3>틀린그림찾기 게임 모드</h3>
+    <p>틀린 부분을 클릭하여 찾아보세요!</p>
+    
+    <div class="answer-mode-options">
+      <label>정답 표시 방식:</label>
+      <input type="radio" id="answer-exact" name="answer-mode" value="exact" checked>
+      <label for="answer-exact">정확한 영역</label>
+      
+      <input type="radio" id="answer-outline" name="answer-mode" value="outline">
+      <label for="answer-outline">외곽선만</label>
+      
+      <input type="radio" id="answer-outline-dots" name="answer-mode" value="outline-dots">
+      <label for="answer-outline-dots">외곽선+내부점</label>
+    </div>
+    
+    <div>찾은 정답: <span id="found-count">0</span> / <span id="total-count">0</span></div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <button id="start-game" class="auto-detect" style="margin-top: 15px;">게임 시작하기</button>
+    <button id="show-answers" style="margin-top: 15px; display: none;">정답 보기</button>
+  </div>
+  
+  <div class="controls">
+    <h3>수동 틀린 부분 제어</h3>
+    <button id="clear-points">모든 점 지우기</button>
+    <button id="remove-last">마지막 점 지우기</button>
+    <button id="save-points">좌표 저장하기</button>
+    <button id="save-to-database" class="auto-detect">데이터베이스에 정답 저장</button>
+  </div>
+  
+  <div class="controls" id="database-panel">
+    <h3>데이터베이스 연결 상태</h3>
+    <div>
+      <label for="image-set-id">이미지 세트 ID:</label>
+      <input type="number" id="image-set-id" value="3" min="1" style="width: 100px;">
+    </div>
+    <div style="margin-top: 10px;">
+      <button id="test-connection" class="auto-detect">연결 테스트</button>
+      <button id="create-tables" class="auto-detect">테이블 생성</button>
+      <button id="load-image-sets" class="auto-detect">이미지 세트 불러오기</button>
+    </div>
+    <div id="connection-status" class="status"></div>
+  </div>
+  
+  <div class="controls" id="image-sets-panel" style="display: none;">
+    <h3>이미지 세트 선택</h3>
+    <div id="image-sets-container">
+      <!-- 이미지 세트 목록이 여기에 표시됩니다 -->
+    </div>
+  </div>
+  
+  <div class="data-display">
+    <h3>틀린 부분 좌표 (JSON 형식)</h3>
+    <p>수정된 이미지에서 틀린 부분을 클릭하거나 자동으로 감지하면 좌표가 기록됩니다.</p>
+    <textarea id="points-data" readonly></textarea>
+  </div>
+  
+  <!-- 이미지 분석용 캔버스 -->
+  <canvas id="analysis-canvas"></canvas>
+  
+  <div class="legend" id="color-legend" style="display: none;">
+    <div class="legend-item">
+      <div class="legend-color pre-merge"></div>
+      <span>병합 전 영역</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color post-merge"></div>
+      <span>병합 후 영역</span>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const originalContainer = document.getElementById('original-container');
+      const modifiedContainer = document.getElementById('modified-container');
+      const modifiedImage = document.getElementById('modified-image');
+      const originalImage = document.getElementById('original-image');
+      const pointsData = document.getElementById('points-data');
+      const clearPointsBtn = document.getElementById('clear-points');
+      const removeLastBtn = document.getElementById('remove-last');
+      const savePointsBtn = document.getElementById('save-points');
+      const detectDifferencesBtn = document.getElementById('detect-differences');
+      const diffThreshold = document.getElementById('diff-threshold');
+      const thresholdValue = document.getElementById('threshold-value');
+      const minArea = document.getElementById('min-area');
+      const minAreaValue = document.getElementById('min-area-value');
+      const mergeDistance = document.getElementById('merge-distance');
+      const mergeDistanceValue = document.getElementById('merge-distance-value');
+      const detectionStatus = document.getElementById('detection-status');
+      const analysisCanvas = document.getElementById('analysis-canvas');
+      const resultCanvas = document.getElementById('result-canvas');
+      const originalFileInput = document.getElementById('original-file');
+      const modifiedFileInput = document.getElementById('modified-file');
+      const useDefaultUrlsBtn = document.getElementById('use-default-urls');
+      const displayCircleRadio = document.getElementById('display-circle');
+      const displayPixelRadio = document.getElementById('display-pixel');
+      const displayPreMergeRadio = document.getElementById('display-pre-merge');
+      const displayBothRadio = document.getElementById('display-both');
+      const colorLegend = document.getElementById('color-legend');
+      const gameSection = document.getElementById('game-section');
+      const startGameBtn = document.getElementById('start-game');
+      const showAnswersBtn = document.getElementById('show-answers');
+      const foundCountElem = document.getElementById('found-count');
+      const totalCountElem = document.getElementById('total-count');
+      const progressFill = document.getElementById('progress-fill');
+      const answerExactRadio = document.getElementById('answer-exact');
+      const answerOutlineRadio = document.getElementById('answer-outline');
+      const answerOutlineDotsRadio = document.getElementById('answer-outline-dots');
+      const saveToDatabaseBtn = document.getElementById('save-to-database');
+      const imageSetIdInput = document.getElementById('image-set-id');
+      const testConnectionBtn = document.getElementById('test-connection');
+      const createTablesBtn = document.getElementById('create-tables');
+      const loadImageSetsBtn = document.getElementById('load-image-sets');
+      const connectionStatus = document.getElementById('connection-status');
+      const imageSetsPanel = document.getElementById('image-sets-panel');
+      const imageSetsContainer = document.getElementById('image-sets-container');
+      
+      let points = [];
+      let imageWidth = 0;
+      let imageHeight = 0;
+      let allRegions = []; // 모든 차이점 영역 저장 (병합 후)
+      let originalRegions = []; // 병합 전 원본 영역
+      let differenceMap = null; // 차이점 맵 저장
+      let answerRegions = []; // 정답 영역
+      let foundAnswers = []; // 찾은 정답 영역
+      let gameMode = false; // 게임 모드 활성화 여부
+      
+      // 로컬 스토리지에서 이미지 세트 ID 불러오기
+      if (localStorage.getItem('imageSetId')) {
+        imageSetIdInput.value = localStorage.getItem('imageSetId');
+      }
+      
+      // 파일 업로드 이벤트 리스너 추가
+      originalFileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            originalImage.crossOrigin = "anonymous";
+            originalImage.src = e.target.result;
+            originalImage.onload = function() {
+              console.log('원본 이미지 로드됨:', this.naturalWidth, 'x', this.naturalHeight);
+              updateImageDimensions();
+            };
+          };
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+      
+      modifiedFileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            modifiedImage.crossOrigin = "anonymous";
+            modifiedImage.src = e.target.result;
+            modifiedImage.onload = function() {
+              console.log('수정된 이미지 로드됨:', this.naturalWidth, 'x', this.naturalHeight);
+              updateImageDimensions();
+              setupCanvas();
+            };
+          };
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+      
+      // 이미지 크기 업데이트 함수 (항상 naturalSize 기준)
+      function updateImageDimensions() {
+        if (originalImage.naturalWidth && modifiedImage.naturalWidth) {
+          imageWidth = Math.max(originalImage.naturalWidth, modifiedImage.naturalWidth);
+          imageHeight = Math.max(originalImage.naturalHeight, modifiedImage.naturalHeight);
+          console.log('🌐 이미지 naturalSize 설정:', {
+            원본: `${originalImage.naturalWidth}x${originalImage.naturalHeight}`,
+            수정: `${modifiedImage.naturalWidth}x${modifiedImage.naturalHeight}`,
+            최종: `${imageWidth}x${imageHeight}`,
+            상태: '성공'
+          });
+        } else {
+          console.warn('⚠️ 이미지 크기 업데이트 실패:', {
+            원본Loaded: !!originalImage.naturalWidth,
+            수정Loaded: !!modifiedImage.naturalWidth
+          });
+        }
+      }
+      
+      // 캔버스 설정 함수
+      function setupCanvas() {
+        // 결과 캔버스 크기 설정
+        const rect = modifiedImage.getBoundingClientRect();
+        resultCanvas.width = rect.width;
+        resultCanvas.height = rect.height;
+        resultCanvas.style.width = rect.width + 'px';
+        resultCanvas.style.height = rect.height + 'px';
+        
+        console.log('캔버스 설정 완료:', resultCanvas.width, 'x', resultCanvas.height);
+      }
+      
+      // Supabase Storage에서 이미지 불러오기 버튼 이벤트 리스너
+      useDefaultUrlsBtn.addEventListener('click', async function() {
+        connectionStatus.textContent = 'Storage에서 이미지 목록을 불러오는 중...';
+        
+        try {
+          // 서버에서 Storage 이미지 목록 가져오기
+          const response = await fetch('/api/storage/list-images');
+          const data = await response.json();
+          
+          if (response.ok && data.original.length > 0 && data.modified.length > 0) {
+            // 첫 번째 이미지 쌍 사용 (보안 강화를 위해 프록시 URL 사용)
+            const originalUrl = `/api/storage/image/original/${data.original[0]}`;
+            const modifiedUrl = `/api/storage/image/modified/${data.modified[0]}`;
+            
+            // 이미지 로드 완료 카운터
+            let imagesLoaded = 0;
+            
+            // 원본 이미지 로드 이벤트 설정
+            originalImage.onload = function() {
+              console.log('Storage 원본 이미지 로드됨:', this.naturalWidth, 'x', this.naturalHeight);
+              imagesLoaded++;
+              if (imagesLoaded === 2) {
+                updateImageDimensions();
+        setupCanvas();
+              }
+            };
+            
+            // 수정된 이미지 로드 이벤트 설정
+            modifiedImage.onload = function() {
+              console.log('Storage 수정된 이미지 로드됨:', this.naturalWidth, 'x', this.naturalHeight);
+              imagesLoaded++;
+              if (imagesLoaded === 2) {
+                updateImageDimensions();
+                setupCanvas();
+              }
+            };
+            
+            // CORS 오류 방지를 위해 crossOrigin 설정
+            originalImage.crossOrigin = "anonymous";
+            modifiedImage.crossOrigin = "anonymous";
+            
+            // 이미지 소스 설정 (onload 이벤트 설정 후에)
+            originalImage.src = originalUrl;
+            modifiedImage.src = modifiedUrl;
+            
+            connectionStatus.textContent = `Storage 이미지 로드됨: ${data.original[0]}, ${data.modified[0]}`;
+          } else {
+            throw new Error('Storage에 이미지가 없거나 불러오기 실패');
+          }
+        } catch (error) {
+          console.error('Storage 이미지 불러오기 오류:', error);
+          connectionStatus.textContent = 'Storage 이미지 불러오기 실패: ' + error.message;
+          
+          // 실패 시 기본 테스트 이미지 사용 (프록시 URL)
+          originalImage.src = '/api/storage/image/original/test.jpg';
+          modifiedImage.src = '/api/storage/image/modified/test.jpg';
+          connectionStatus.textContent = '기본 테스트 이미지를 사용합니다.';
+        }
+      });
+      
+      // 연결 테스트 버튼 클릭 이벤트
+      testConnectionBtn.addEventListener('click', async function() {
+        connectionStatus.textContent = '연결 테스트 중...';
+        
+        try {
+          const response = await fetch('/api/status');
+          const data = await response.json();
+          
+          if (response.ok) {
+            connectionStatus.textContent = data.message + ` (테이블 수: ${data.count})`;
+          } else {
+            throw new Error(data.error || 'Unknown error');
+          }
+        } catch (error) {
+          console.error('데이터베이스 연결 오류:', error);
+          connectionStatus.textContent = '연결 실패: ' + error.message;
+        }
+      });
+      
+      // 테이블 생성 버튼 클릭 이벤트
+      createTablesBtn.addEventListener('click', async function() {
+        connectionStatus.textContent = '테이블 생성 중...';
+        
+        try {
+          const response = await fetch('/api/create-tables', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+          
+          if (response.ok) {
+            connectionStatus.textContent = data.message;
+            alert('테이블이 성공적으로 생성되었습니다!');
+          } else {
+            throw new Error(data.error || 'Unknown error');
+          }
+        } catch (error) {
+          console.error('테이블 생성 오류:', error);
+          connectionStatus.textContent = '테이블 생성 실패: ' + error.message;
+          alert('테이블 생성 실패: ' + error.message);
+        }
+      });
+      
+      // 이미지 세트 불러오기 버튼 클릭 이벤트
+      loadImageSetsBtn.addEventListener('click', async function() {
+        connectionStatus.textContent = '이미지 세트 불러오는 중...';
+        
+        try {
+          const response = await fetch('/api/image-sets');
+          const data = await response.json();
+          
+          if (response.ok) {
+            if (data && data.length > 0) {
+              displayImageSets(data);
+              connectionStatus.textContent = `${data.length}개의 이미지 세트를 불러왔습니다.`;
+              imageSetsPanel.style.display = 'block';
+            } else {
+              connectionStatus.textContent = '이미지 세트가 없습니다.';
+            }
+          } else {
+            throw new Error(data.error || 'Unknown error');
+          }
+        } catch (error) {
+          console.error('이미지 세트 불러오기 오류:', error);
+          connectionStatus.textContent = '이미지 세트 불러오기 실패: ' + error.message;
+        }
+      });
+      
+      // 이미지 세트 목록 표시 함수
+      function displayImageSets(imageSets) {
+        imageSetsContainer.innerHTML = '';
+        
+        // 테이블 생성
+        const table = document.createElement('table');
+        table.style.width = '100%';
+        table.style.borderCollapse = 'collapse';
+        table.style.marginTop = '10px';
+        
+        // 헤더 행 생성
+        const headerRow = document.createElement('tr');
+        const headers = ['ID', '제목', '설명', '원본 이미지', '수정 이미지', '동작'];
+        
+        headers.forEach(headerText => {
+          const th = document.createElement('th');
+          th.textContent = headerText;
+          th.style.padding = '8px';
+          th.style.textAlign = 'left';
+          th.style.borderBottom = '1px solid #ddd';
+          headerRow.appendChild(th);
+        });
+        
+        table.appendChild(headerRow);
+        
+        // 각 이미지 세트에 대한 행 생성
+        imageSets.forEach(set => {
+          const row = document.createElement('tr');
+          
+          // ID 열
+          const idCell = document.createElement('td');
+          idCell.textContent = set.id;
+          idCell.style.padding = '8px';
+          idCell.style.borderBottom = '1px solid #ddd';
+          row.appendChild(idCell);
+          
+          // 제목 열
+          const titleCell = document.createElement('td');
+          titleCell.textContent = set.title || '제목 없음';
+          titleCell.style.padding = '8px';
+          titleCell.style.borderBottom = '1px solid #ddd';
+          row.appendChild(titleCell);
+          
+          // 설명 열
+          const descCell = document.createElement('td');
+          descCell.textContent = set.description || '설명 없음';
+          descCell.style.padding = '8px';
+          descCell.style.borderBottom = '1px solid #ddd';
+          row.appendChild(descCell);
+          
+          // 원본 이미지 열
+          const originalCell = document.createElement('td');
+          originalCell.style.padding = '8px';
+          originalCell.style.borderBottom = '1px solid #ddd';
+                  if (set.original_image_url) {
+          const img = document.createElement('img');
+          img.src = set.original_image_url;
+          img.style.maxHeight = '50px';
+          img.style.cursor = 'pointer';
+          img.title = '클릭하여 이미지 보기';
+          img.onclick = () => window.open(set.original_image_url, '_blank');
+            originalCell.appendChild(img);
+          } else {
+            originalCell.textContent = '이미지 없음';
+          }
+          row.appendChild(originalCell);
+          
+          // 수정 이미지 열
+          const modifiedCell = document.createElement('td');
+          modifiedCell.style.padding = '8px';
+          modifiedCell.style.borderBottom = '1px solid #ddd';
+                  if (set.modified_image_url) {
+          const img = document.createElement('img');
+          img.src = set.modified_image_url;
+          img.style.maxHeight = '50px';
+          img.style.cursor = 'pointer';
+          img.title = '클릭하여 이미지 보기';
+          img.onclick = () => window.open(set.modified_image_url, '_blank');
+            modifiedCell.appendChild(img);
+          } else {
+            modifiedCell.textContent = '이미지 없음';
+          }
+          row.appendChild(modifiedCell);
+          
+          // 동작 열
+          const actionCell = document.createElement('td');
+          actionCell.style.padding = '8px';
+          actionCell.style.borderBottom = '1px solid #ddd';
+          
+          const loadBtn = document.createElement('button');
+          loadBtn.textContent = '이 세트 사용하기';
+          loadBtn.className = 'auto-detect';
+          loadBtn.style.padding = '5px 10px';
+          loadBtn.style.fontSize = '12px';
+          loadBtn.onclick = () => loadImageSet(set);
+          
+          actionCell.appendChild(loadBtn);
+          row.appendChild(actionCell);
+          
+          table.appendChild(row);
+        });
+        
+        imageSetsContainer.appendChild(table);
+      }
+      
+      // 이미지 세트 불러오기 함수
+      async function loadImageSet(imageSet) {
+        connectionStatus.textContent = '이미지 세트 불러오는 중...';
+        
+        try {
+          // CORS 문제 해결을 위해 프록시 URL 사용
+          if (imageSet.original_image_url) {
+            // Storage URL인지 확인하고 프록시 사용
+            if (imageSet.original_image_url.includes('/storage/v1/object/public/')) {
+              originalImage.crossOrigin = 'anonymous';
+              originalImage.src = '/api/storage/image/original/original.png';
+            } else {
+              originalImage.src = imageSet.original_image_url;
+            }
+          }
+          
+          if (imageSet.modified_image_url) {
+            // Storage URL인지 확인하고 프록시 사용
+            if (imageSet.modified_image_url.includes('/storage/v1/object/public/')) {
+              modifiedImage.crossOrigin = 'anonymous';
+              modifiedImage.src = '/api/storage/image/modified/modified.png';
+            } else {
+              modifiedImage.src = imageSet.modified_image_url;
+            }
+          }
+          
+          // 이미지 세트 ID 저장
+          imageSetIdInput.value = imageSet.id;
+          localStorage.setItem('imageSetId', imageSet.id);
+          
+          // 기존 점 모두 제거
+          clearPointsBtn.click();
+          
+          // 정답 데이터 불러오기
+          await loadAnswerData(imageSet.id);
+          
+          connectionStatus.textContent = `이미지 세트 ${imageSet.id} 불러오기 완료`;
+          
+          // 이미지 세트 패널 숨기기
+          imageSetsPanel.style.display = 'none';
+        } catch (error) {
+          console.error('이미지 세트 불러오기 오류:', error);
+          connectionStatus.textContent = '이미지 세트 불러오기 실패: ' + error.message;
+        }
+      }
+      
+      // 정답 데이터 불러오기 함수
+      async function loadAnswerData(imageSetId) {
+        try {
+          const response = await fetch(`/api/answer-points/${imageSetId}`);
+          const data = await response.json();
+          
+          if (response.ok) {
+            if (data && data.image_set_id) {
+              // 원본 데이터 형식으로 변환
+              const answerData = {
+                image_set_id: data.image_set_id,
+                image_width: data.image_width,
+                image_height: data.image_height,
+                points: data.points || []
+              };
+              
+              // 화면에 표시
+              console.log('📊 DB에서 불러온 데이터:', {
+                id: answerData.image_set_id,
+                크기: `${answerData.image_width}x${answerData.image_height}`,
+                points: answerData.points.length,
+                regions: data.regions ? data.regions.length : 0
+              });
+              
+              // 이미지 크기 정보 검증 및 설정
+              if (answerData.image_width && answerData.image_height) {
+                imageWidth = answerData.image_width;
+                imageHeight = answerData.image_height;
+              } else {
+                console.warn('⚠️ DB에 이미지 크기 정보가 없습니다. 이미지에서 수집하세요.');
+              }
+              
+              // 정답 데이터 설정
+              if (data.regions) {
+                allRegions = data.regions;
+                detectionStatus.textContent = `${allRegions.length}개의 정답 영역을 불러왔습니다.`;
+                
+                // 게임 섹션 표시
+                gameSection.style.display = 'block';
+              } else {
+                detectionStatus.textContent = '정답 영역 데이터가 없습니다.';
+              }
+              
+              pointsData.value = JSON.stringify(answerData, null, 2);
+            } else {
+              detectionStatus.textContent = '이 이미지 세트에 대한 정답 데이터가 없습니다.';
+            }
+          } else {
+            throw new Error(data.error || 'Unknown error');
+          }
+        } catch (error) {
+          console.error('정답 데이터 불러오기 오류:', error);
+          detectionStatus.textContent = '정답 데이터 불러오기 실패: ' + error.message;
+        }
+      }
+      
+      // 게임 시작 버튼 클릭 이벤트 수정
+      startGameBtn.addEventListener('click', function() {
+        // 정답 데이터가 있는지 확인
+        if (allRegions.length === 0) {
+          alert('먼저 자동으로 틀린 부분을 찾거나 데이터베이스에서 이미지 세트를 로드해주세요!');
+          return;
+        }
+        
+        // 게임 모드 시작
+        gameMode = true;
+        
+        // 정답 영역 설정 (병합 후 영역 사용)
+        answerRegions = [...allRegions];
+        foundAnswers = new Array(answerRegions.length).fill(false);
+        
+        // 카운터 업데이트
+        totalCountElem.textContent = answerRegions.length;
+        foundCountElem.textContent = '0';
+        progressFill.style.width = '0%';
+        
+        // 화면 초기화
+        clearPointsBtn.click();
+        
+        // 버튼 상태 변경
+        startGameBtn.textContent = '게임 재시작';
+        showAnswersBtn.style.display = 'inline-block';
+        
+        // 힌트 표시 옵션 추가
+        const showHintBtn = document.getElementById('show-hint-btn') || document.createElement('button');
+        if (!document.getElementById('show-hint-btn')) {
+          showHintBtn.id = 'show-hint-btn';
+          showHintBtn.textContent = '힌트 보기';
+          showHintBtn.style.marginTop = '15px';
+          showHintBtn.style.marginLeft = '10px';
+          showHintBtn.addEventListener('click', showHintMap);
+          showAnswersBtn.parentNode.insertBefore(showHintBtn, showAnswersBtn.nextSibling);
+        }
+        
+        detectionStatus.textContent = '게임 모드가 시작되었습니다. 틀린 부분을 클릭하여 찾아보세요!';
+      });
+      
+      // 힌트맵 표시 함수
+      function showHintMap() {
+        // 캔버스 생성
+        const canvas = document.createElement('canvas');
+        const rect = modifiedImage.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        canvas.style.position = 'absolute';
+        canvas.style.left = '0';
+        canvas.style.top = '0';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '5';
+        
+        const ctx = canvas.getContext('2d');
+        
+        // 히트맵 그리기
+        for (let i = 0; i < answerRegions.length; i++) {
+          if (!foundAnswers[i]) {
+            const region = answerRegions[i];
+            
+            // 영역의 경계 계산
+            let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
+            
+            for (const pixel of region) {
+              minX = Math.min(minX, pixel.x);
+              minY = Math.min(minY, pixel.y);
+              maxX = Math.max(maxX, pixel.x);
+              maxY = Math.max(maxY, pixel.y);
+            }
+            
+            // 영역의 중심점 계산
+            const centerX = Math.round((minX + maxX) / 2);
+            const centerY = Math.round((minY + maxY) / 2);
+            
+            // 영역의 크기 계산
+            const width = maxX - minX;
+            const height = maxY - minY;
+            
+            // 화면 크기에 맞게 스케일링
+            const scaleX = rect.width / imageWidth;
+            const scaleY = rect.height / imageHeight;
+            
+            // 중심에 가까울수록 빨간색, 멀어질수록 투명해지는 원형 그라데이션
+            const radius = Math.max(width, height) * 0.5 * Math.max(scaleX, scaleY);
+            const gradient = ctx.createRadialGradient(
+              centerX * scaleX, centerY * scaleY, 0,
+              centerX * scaleX, centerY * scaleY, radius
+            );
+            
+            gradient.addColorStop(0, 'rgba(255, 0, 0, 0.3)');
+            gradient.addColorStop(0.5, 'rgba(255, 165, 0, 0.1)');
+            gradient.addColorStop(1, 'rgba(255, 255, 0, 0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX * scaleX, centerY * scaleY, radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        
+        // 기존 힌트맵 제거
+        const oldHintMap = document.getElementById('hint-map');
+        if (oldHintMap) {
+          oldHintMap.remove();
+        }
+        
+        // 힌트맵 추가
+        canvas.id = 'hint-map';
+        modifiedContainer.appendChild(canvas);
+        
+        // 5초 후 힌트맵 제거
+        setTimeout(() => {
+          if (document.getElementById('hint-map')) {
+            document.getElementById('hint-map').remove();
+          }
+        }, 5000);
+        
+        detectionStatus.textContent = '힌트를 표시합니다. 5초 후 자동으로 사라집니다.';
+      }
+
+      // 정답 보기 버튼 클릭 이벤트
+      showAnswersBtn.addEventListener('click', function() {
+        // 모든 정답 표시
+        showAllAnswers();
+      });
+
+      // 모든 정답 표시
+      function showAllAnswers() {
+        // 이미 찾은 정답은 제외하고 나머지만 표시
+        for (let i = 0; i < answerRegions.length; i++) {
+          if (!foundAnswers[i]) {
+            // 정답 표시 방식에 따라 다르게 표시
+            if (answerExactRadio.checked) {
+              // 정확한 영역 표시 모드
+              showExactAnswer(answerRegions[i]);
+            } else if (answerOutlineRadio.checked) {
+              // 외곽선 표시 모드
+              showOutlineAnswer(answerRegions[i]);
+            } else if (answerOutlineDotsRadio.checked) {
+              // 외곽선+내부점 표시 모드
+              showOutlineAnswer(answerRegions[i]);
+            }
+            
+            // 이미 찾은 것으로 표시
+            foundAnswers[i] = true;
+          }
+        }
+        
+        // 게임 종료 상태로 변경
+        foundCountElem.textContent = answerRegions.length;
+        progressFill.style.width = '100%';
+        detectionStatus.textContent = '모든 정답이 표시되었습니다.';
+      }
+
+      // 정확한 영역 모양으로 정답 표시
+      function showExactAnswer(region) {
+        const rect = modifiedImage.getBoundingClientRect();
+        const scaleX = rect.width / imageWidth;
+        const scaleY = rect.height / imageHeight;
+        
+        // 영역의 경계 계산
+        let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
+        
+        for (const pixel of region) {
+          minX = Math.min(minX, pixel.x);
+          minY = Math.min(minY, pixel.y);
+          maxX = Math.max(maxX, pixel.x);
+          maxY = Math.max(maxY, pixel.y);
+        }
+        
+        // 캔버스 생성
+        const canvas = document.createElement('canvas');
+        canvas.width = (maxX - minX + 10) * scaleX;
+        canvas.height = (maxY - minY + 10) * scaleY;
+        canvas.style.position = 'absolute';
+        canvas.style.left = (minX - 5) * scaleX + 'px';
+        canvas.style.top = (minY - 5) * scaleY + 'px';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '10';
+        
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+        
+        // 영역 그리기
+        for (const pixel of region) {
+          const x = (pixel.x - minX + 5) * scaleX;
+          const y = (pixel.y - minY + 5) * scaleY;
+          const pixelSize = Math.max(2, Math.min(scaleX, scaleY) * 2);
+          ctx.fillRect(x - pixelSize/2, y - pixelSize/2, pixelSize, pixelSize);
+        }
+        
+        modifiedContainer.appendChild(canvas);
+      }
+
+      // 외곽선으로 정답 표시 함수 개선
+      function showOutlineAnswer(region) {
+        const rect = modifiedImage.getBoundingClientRect();
+        const scaleX = rect.width / imageWidth;
+        const scaleY = rect.height / imageHeight;
+        
+        // 영역의 경계 계산
+        let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
+        
+        for (const pixel of region) {
+          minX = Math.min(minX, pixel.x);
+          minY = Math.min(minY, pixel.y);
+          maxX = Math.max(maxX, pixel.x);
+          maxY = Math.max(maxY, pixel.y);
+        }
+        
+        // 영역 크기에 약간의 여유 추가
+        const padding = 5;
+        minX = Math.max(0, minX - padding);
+        minY = Math.max(0, minY - padding);
+        maxX = Math.min(imageWidth - 1, maxX + padding);
+        maxY = Math.min(imageHeight - 1, maxY + padding);
+        
+        const width = maxX - minX + 1;
+        const height = maxY - minY + 1;
+        
+        // 픽셀 맵 생성 (해당 위치에 픽셀이 있는지 여부)
+        const pixelMap = new Array(width * height).fill(0);
+        
+        for (const pixel of region) {
+          const x = pixel.x - minX;
+          const y = pixel.y - minY;
+          if (x >= 0 && x < width && y >= 0 && y < height) {
+            pixelMap[y * width + x] = 1;
+          }
+        }
+        
+        // 캔버스 생성
+        const canvas = document.createElement('canvas');
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        canvas.style.position = 'absolute';
+        canvas.style.left = '0';
+        canvas.style.top = '0';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '10';
+        
+        const ctx = canvas.getContext('2d');
+        
+        // 방향 배열 (시계 방향으로 8개 방향)
+        const directions = [
+          {dx: 1, dy: 0},   // 오른쪽
+          {dx: 1, dy: 1},   // 오른쪽 아래
+          {dx: 0, dy: 1},   // 아래
+          {dx: -1, dy: 1},  // 왼쪽 아래
+          {dx: -1, dy: 0},  // 왼쪽
+          {dx: -1, dy: -1}, // 왼쪽 위
+          {dx: 0, dy: -1},  // 위
+          {dx: 1, dy: -1}   // 오른쪽 위
+        ];
+        
+        // 외곽선 추적 알고리즘 (Moore Boundary Tracing)
+        function traceContour(startX, startY) {
+          const contour = [];
+          let x = startX;
+          let y = startY;
+          let dirIndex = 0; // 시작 방향 (오른쪽)
+          
+          // 시작점 추가
+          contour.push({x, y});
+          
+          // 첫 번째 외곽선 픽셀 찾기
+          let foundBoundary = false;
+          for (let i = 0; i < directions.length; i++) {
+            const nx = x + directions[i].dx;
+            const ny = y + directions[i].dy;
+            
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+              if (pixelMap[ny * width + nx] === 1) {
+                x = nx;
+                y = ny;
+                dirIndex = (i + 5) % 8; // 이전 방향의 반대편부터 시작
+                contour.push({x, y});
+                foundBoundary = true;
+                break;
+              }
+            }
+          }
+          
+          if (!foundBoundary) return contour;
+          
+          const startPixel = {x, y};
+          let currentPixel = {x, y};
+          let previousDirIndex = dirIndex;
+          
+          // 외곽선 따라가기
+          do {
+            // 현재 방향부터 반시계 방향으로 인접 픽셀 검사
+            let found = false;
+            
+            for (let i = 0; i < directions.length; i++) {
+              // 이전 방향에서 반시계 방향으로 검색
+              const searchDirIndex = (previousDirIndex + i) % 8;
+              const dir = directions[searchDirIndex];
+              
+              const nx = currentPixel.x + dir.dx;
+              const ny = currentPixel.y + dir.dy;
+              
+              if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                if (pixelMap[ny * width + nx] === 1) {
+                  // 외곽선 픽셀 발견
+                  currentPixel = {x: nx, y: ny};
+                  contour.push(currentPixel);
+                  previousDirIndex = (searchDirIndex + 4) % 8; // 이동한 방향의 반대편
+                  found = true;
+                  break;
+                }
+              }
+            }
+            
+            if (!found) break;
+            
+            // 시작점으로 돌아왔는지 확인
+          } while (!(currentPixel.x === startPixel.x && currentPixel.y === startPixel.y) || contour.length <= 2);
+          
+          return contour;
+        }
+        
+        // 외곽선 찾기
+        const contours = [];
+        const visited = new Array(width * height).fill(0);
+        
+        // 첫 번째 픽셀 찾기
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            const index = y * width + x;
+            
+            if (pixelMap[index] === 1 && visited[index] === 0) {
+              // 외곽선 후보 픽셀 발견
+              // 주변에 빈 픽셀이 있는지 확인 (외곽선 조건)
+              let isBoundary = false;
+              
+              for (const dir of directions) {
+                const nx = x + dir.dx;
+                const ny = y + dir.dy;
+                
+                if (nx < 0 || nx >= width || ny < 0 || ny >= height || pixelMap[ny * width + nx] === 0) {
+                  isBoundary = true;
+                  break;
+                }
+              }
+              
+              if (isBoundary) {
+                const contour = traceContour(x, y);
+                
+                // 너무 작은 외곽선 무시
+                if (contour.length >= 5) {
+                  contours.push(contour);
+                  
+                  // 방문한 픽셀 표시
+                  for (const pixel of contour) {
+                    visited[pixel.y * width + pixel.x] = 1;
+                  }
+                }
+              }
+            }
+          }
+        }
+        
+        // 외곽선 그리기
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(0, 255, 0, 0.9)';
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        for (const contour of contours) {
+          if (contour.length < 2) continue;
+          
+          ctx.beginPath();
+          
+          // 첫 점으로 이동
+          const firstPixel = contour[0];
+          ctx.moveTo(
+            (firstPixel.x + minX) * scaleX,
+            (firstPixel.y + minY) * scaleY
+          );
+          
+          // 나머지 점들 연결
+          for (let i = 1; i < contour.length; i++) {
+            const pixel = contour[i];
+            ctx.lineTo(
+              (pixel.x + minX) * scaleX,
+              (pixel.y + minY) * scaleY
+            );
+          }
+          
+          // 외곽선 닫기
+          ctx.closePath();
+          ctx.stroke();
+          
+          // 옵션에 따라 내부 처리
+          if (answerOutlineDotsRadio && answerOutlineDotsRadio.checked) {
+            // 내부 픽셀 점으로 표시 (내부에 어떤 픽셀이 있는지 보여줌)
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
+            
+            for (let y = 0; y < height; y++) {
+              for (let x = 0; x < width; x++) {
+                if (pixelMap[y * width + x] === 1) {
+                  // 이미 방문한 외곽선 픽셀은 건너뛰기
+                  if (visited[y * width + x] === 1) continue;
+                  
+                  // 내부 픽셀만 작은 점으로 표시
+                  const displayX = (x + minX) * scaleX;
+                  const displayY = (y + minY) * scaleY;
+                  const dotSize = 2;
+                  
+                  ctx.beginPath();
+                  ctx.arc(displayX, displayY, dotSize, 0, Math.PI * 2);
+                  ctx.fill();
+                }
+              }
+            }
+          }
+        }
+        
+        // 결과물이 비어있다면 기존 방식으로 대체
+        if (contours.length === 0) {
+          ctx.fillStyle = 'rgba(0, 255, 0, 0.7)';
+          
+          for (const pixel of region) {
+            const x = pixel.x * scaleX;
+            const y = pixel.y * scaleY;
+            const pixelSize = Math.max(2, Math.min(scaleX, scaleY) * 2);
+            ctx.fillRect(x - pixelSize/2, y - pixelSize/2, pixelSize, pixelSize);
+          }
+        }
+        
+        modifiedContainer.appendChild(canvas);
+      }
+
+      // 두 점 사이의 거리 계산
+      function calculateDistance(point1, point2) {
+        return Math.sqrt(
+          Math.pow(point1.x - point2.x, 2) + 
+          Math.pow(point1.y - point2.y, 2)
+        );
+      }
+
+      // 두 영역이 서로 겹치거나 근접한지 확인
+      function areRegionsClose(region1, region2, maxDistance) {
+        // 모든 점 조합에 대해 최소 거리 찾기
+        for (const pixel1 of region1) {
+          for (const pixel2 of region2) {
+            const distance = calculateDistance(pixel1, pixel2);
+            if (distance <= maxDistance) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+
+      // 영역들을 병합
+      function mergeRegions(regions, maxDistance) {
+        if (regions.length <= 1) return regions;
+        
+        let merged = true;
+        let mergedRegions = [...regions];
+        
+        // 더 이상 병합할 영역이 없을 때까지 반복
+        while (merged) {
+          merged = false;
+          
+          // 현재 영역 목록 복사
+          const currentRegions = [...mergedRegions];
+          mergedRegions = [];
+          
+          // 이미 병합된 영역 추적
+          const processedIndices = new Set();
+          
+          for (let i = 0; i < currentRegions.length; i++) {
+            if (processedIndices.has(i)) continue;
+            
+            let mergedRegion = [...currentRegions[i]];
+            processedIndices.add(i);
+            
+            // 다른 모든 영역과 비교
+            for (let j = 0; j < currentRegions.length; j++) {
+              if (i === j || processedIndices.has(j)) continue;
+              
+              // 두 영역이 충분히 가까우면 병합
+              if (areRegionsClose(mergedRegion, currentRegions[j], maxDistance)) {
+                mergedRegion = [...mergedRegion, ...currentRegions[j]];
+                processedIndices.add(j);
+                merged = true;
+              }
+            }
+            
+            mergedRegions.push(mergedRegion);
+          }
+        }
+        
+        return mergedRegions;
+      }
+
+      // 이미지 차이점 감지 함수 (항상 naturalSize 기준)
+      async function detectDifferences() {
+        // 캔버스 설정 (naturalSize 기준)
+        const ctx = analysisCanvas.getContext('2d');
+        analysisCanvas.width = imageWidth;
+        analysisCanvas.height = imageHeight;
+        
+        console.log('🔍 분석 시작:', {
+          캔버스크기: `${imageWidth}x${imageHeight}`,
+          원본naturalSize: `${originalImage.naturalWidth}x${originalImage.naturalHeight}`,
+          수정naturalSize: `${modifiedImage.naturalWidth}x${modifiedImage.naturalHeight}`,
+          기준: 'naturalSize'
+        });
+        
+        let originalData, modifiedData;
+        
+        try {
+        // 원본 이미지 그리기
+        ctx.drawImage(originalImage, 0, 0, imageWidth, imageHeight);
+          originalData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+        
+        // 수정된 이미지 그리기
+        ctx.clearRect(0, 0, imageWidth, imageHeight);
+        ctx.drawImage(modifiedImage, 0, 0, imageWidth, imageHeight);
+          modifiedData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+        } catch (corsError) {
+          console.log('CORS 오류 발생, 서버 프록시를 통해 이미지 재로드 시도...');
+          
+          // CORS 오류 시 서버에서 이미지를 다시 로드 (동적 URL 처리)
+          const originalProxyUrl = originalImage.src.includes('supabase.co') ? 
+            originalImage.src.replace(/https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\//, '/api/storage/image/') :
+            originalImage.src;
+          const modifiedProxyUrl = modifiedImage.src.includes('supabase.co') ?
+            modifiedImage.src.replace(/https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\//, '/api/storage/image/') :
+            modifiedImage.src;
+          
+          // 임시 이미지 요소 생성
+          const tempOriginal = new Image();
+          const tempModified = new Image();
+          tempOriginal.crossOrigin = "anonymous";
+          tempModified.crossOrigin = "anonymous";
+          
+          // 프록시를 통한 이미지 로드 대기
+          await new Promise((resolve, reject) => {
+            let loadedCount = 0;
+            
+            tempOriginal.onload = () => {
+              loadedCount++;
+              if (loadedCount === 2) resolve();
+            };
+            
+            tempModified.onload = () => {
+              loadedCount++;
+              if (loadedCount === 2) resolve();
+            };
+            
+            tempOriginal.onerror = tempModified.onerror = reject;
+            
+            tempOriginal.src = originalProxyUrl;
+            tempModified.src = modifiedProxyUrl;
+          });
+          
+          // 캔버스에 프록시 이미지 그리기
+          ctx.drawImage(tempOriginal, 0, 0, imageWidth, imageHeight);
+          originalData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+          
+          ctx.clearRect(0, 0, imageWidth, imageHeight);
+          ctx.drawImage(tempModified, 0, 0, imageWidth, imageHeight);
+          modifiedData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+        }
+        
+        // 차이점 감지를 위한 임계값
+        const threshold = parseInt(diffThreshold.value);
+        const minAreaSize = parseInt(minArea.value);
+        const maxMergeDistance = parseInt(mergeDistance.value);
+        
+        // 차이점 감지 맵 생성
+        const differenceMap = new Uint8Array(imageWidth * imageHeight);
+        let totalDiffPixels = 0;
+        
+        // 각 픽셀 비교
+        for (let i = 0; i < originalData.data.length; i += 4) {
+          const r1 = originalData.data[i];
+          const g1 = originalData.data[i + 1];
+          const b1 = originalData.data[i + 2];
+          
+          const r2 = modifiedData.data[i];
+          const g2 = modifiedData.data[i + 1];
+          const b2 = modifiedData.data[i + 2];
+          
+          // 색상 차이 계산
+          const diff = Math.sqrt(
+            Math.pow(r1 - r2, 2) +
+            Math.pow(g1 - g2, 2) +
+            Math.pow(b1 - b2, 2)
+          );
+          
+          const pixelIndex = i / 4;
+          if (diff > threshold) {
+            differenceMap[pixelIndex] = 1;
+            totalDiffPixels++;
+          } else {
+            differenceMap[pixelIndex] = 0;
+          }
+        }
+        
+        console.log(`임계값 ${threshold}로 ${totalDiffPixels}개의 픽셀 차이 감지됨`);
+        
+        // 연결된 영역 찾기 (Flood Fill 알고리즘)
+        let regions = [];
+        const visited = new Uint8Array(imageWidth * imageHeight);
+        
+        for (let y = 0; y < imageHeight; y++) {
+          for (let x = 0; x < imageWidth; x++) {
+            const index = y * imageWidth + x;
+            
+            if (differenceMap[index] === 1 && visited[index] === 0) {
+              // 새로운 연결된 영역 시작
+              const region = [];
+              const queue = [{x, y}];
+              visited[index] = 1;
+              
+              // BFS로 연결된 픽셀 탐색
+              while (queue.length > 0) {
+                const current = queue.shift();
+                region.push(current);
+                
+                // 8방향 인접 픽셀 확인
+                const directions = [
+                  {dx: -1, dy: -1}, {dx: 0, dy: -1}, {dx: 1, dy: -1},
+                  {dx: -1, dy: 0}, {dx: 1, dy: 0},
+                  {dx: -1, dy: 1}, {dx: 0, dy: 1}, {dx: 1, dy: 1}
+                ];
+                
+                for (const dir of directions) {
+                  const nx = current.x + dir.dx;
+                  const ny = current.y + dir.dy;
+                  
+                  if (nx >= 0 && nx < imageWidth && ny >= 0 && ny < imageHeight) {
+                    const neighborIndex = ny * imageWidth + nx;
+                    
+                    if (differenceMap[neighborIndex] === 1 && visited[neighborIndex] === 0) {
+                      queue.push({x: nx, y: ny});
+                      visited[neighborIndex] = 1;
+                    }
+                  }
+                }
+              }
+              
+              // 충분히 큰 영역만 저장
+              if (region.length >= minAreaSize) {
+                regions.push(region);
+              }
+            }
+          }
+        }
+        
+        console.log(`필터링 전 ${regions.length}개의 영역 감지됨`);
+        
+        // 병합 전 원본 영역 저장
+        const originalRegions = [...regions];
+        
+        // 영역 병합 (근접한 영역들을 하나로 합침)
+        regions = mergeRegions(regions, maxMergeDistance);
+        console.log(`영역 병합 후: ${regions.length}개 감지 (병합 전: ${originalRegions.length}개)`);
+        
+        return {
+          count: regions.length,
+          originalRegions: originalRegions, // 병합 전 영역
+          regions: regions,                 // 병합 후 영역
+          differenceMap: differenceMap,
+          pixelCount: totalDiffPixels
+        };
+      }
+
+      saveToDatabaseBtn.addEventListener('click', async function() {
+        // 저장할 데이터가 있는지 확인
+        if (allRegions.length === 0) {
+          alert('먼저 자동으로 틀린 부분을 찾아주세요!');
+          return;
+        }
+        
+        const imageSetId = parseInt(imageSetIdInput.value);
+        if (!imageSetId || imageSetId <= 0) {
+          alert('올바른 이미지 세트 ID를 입력해주세요!');
+          return;
+        }
+        
+        // 이미지 크기 정보 검증
+        if (!imageWidth || !imageHeight || imageWidth <= 0 || imageHeight <= 0) {
+          alert('이미지 크기 정보가 올바르지 않습니다. 이미지를 다시 로드해주세요.');
+          console.error('이미지 크기 오류:', { imageWidth, imageHeight });
+          return;
+        }
+        
+        // 저장할 데이터 구성 (최적화)
+        const optimizedRegions = allRegions.map(region => {
+          // 영역이 너무 크면 샘플링하여 크기 줄이기
+          if (region.length > 1000) {
+            // 영역을 10%로 샘플링
+            const step = Math.ceil(region.length / 100);
+            return region.filter((_, index) => index % step === 0);
+          }
+          return region;
+        });
+        
+        const saveData = {
+          image_set_id: imageSetId,
+          image_width: imageWidth,
+          image_height: imageHeight,
+          points: points,
+          regions: optimizedRegions,
+          created_at: new Date().toISOString()
+        };
+        // 데이터 크기 확인
+        const dataSize = JSON.stringify(saveData).length;
+        console.log('저장할 데이터 크기:', (dataSize / 1024 / 1024).toFixed(2) + 'MB');
+        console.log('💾 DB 저장 데이터:', {
+          imageSetId: saveData.image_set_id,
+          imageSize: `${saveData.image_width}x${saveData.image_height}`,
+          regions: saveData.regions.length + '개',
+          points: saveData.points.length + '개'
+        });
+        
+        try {
+          // 버튼 비활성화 및 로딩 표시
+          saveToDatabaseBtn.disabled = true;
+          saveToDatabaseBtn.textContent = '저장 중...';
+          detectionStatus.textContent = '데이터베이스에 정답 데이터 저장 중...';
+          const response = await fetch('/api/answer-points', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(saveData)
+          });
+          
+          // 응답 상태 확인
+          if (!response.ok) {
+            if (response.status === 413) {
+              throw new Error('데이터가 너무 큽니다. 이미지 크기나 차이점 수를 줄여보세요.');
+            } else if (response.status === 500) {
+              throw new Error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+            } else {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+          }
+          
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('서버에서 올바르지 않은 응답을 받았습니다.');
+          }
+          
+          const result = await response.json();
+          
+          detectionStatus.textContent = `데이터베이스에 정답 데이터가 성공적으로 저장되었습니다! (총 ${optimizedRegions.length}개 영역)`;
+          console.log('저장 성공:', result);
+          alert(`저장 완료!\n이미지 세트 ID: ${imageSetId}\n틀린 부분: ${optimizedRegions.length}개\n원본 영역: ${allRegions.length}개`);
+        } catch (error) {
+          console.error('데이터베이스 저장 오류:', error);
+          detectionStatus.textContent = '데이터베이스 저장 실패: ' + error.message;
+          alert('저장에 실패했습니다. 콘솔을 확인해주세요.');
+        } finally {
+          // 버튼 복원
+          saveToDatabaseBtn.disabled = false;
+          saveToDatabaseBtn.textContent = '데이터베이스에 정답 저장';
+        }
+      });
+
+      // 수정된 이미지 클릭 이벤트
+      modifiedImage.addEventListener('click', function(event) {
+        if (!gameMode) {
+          // 일반 모드: 수동으로 점 추가
+          const rect = this.getBoundingClientRect();
+          const x = Math.round((event.clientX - rect.left) * (imageWidth / rect.width));
+          const y = Math.round((event.clientY - rect.top) * (imageHeight / rect.height));
+          
+          addPoint(x, y);
+          console.log('점 추가됨:', x, y);
+        } else {
+          // 게임 모드: 정답 확인
+          checkAnswer(event);
+        }
+      });
+      
+      // 점 추가 함수
+      function addPoint(x, y) {
+        const point = { x: x, y: y };
+        points.push(point);
+        
+        // 화면에 점 표시
+        const rect = modifiedImage.getBoundingClientRect();
+        const pointElement = document.createElement('div');
+        pointElement.className = 'point';
+        pointElement.style.left = (x * (rect.width / imageWidth)) + 'px';
+        pointElement.style.top = (y * (rect.height / imageHeight)) + 'px';
+        
+        modifiedContainer.appendChild(pointElement);
+        
+        // 데이터 업데이트
+        updatePointsData();
+      }
+      
+      // 게임 모드에서 정답 확인 함수
+      function checkAnswer(event) {
+        const rect = modifiedImage.getBoundingClientRect();
+        const clickX = Math.round((event.clientX - rect.left) * (imageWidth / rect.width));
+        const clickY = Math.round((event.clientY - rect.top) * (imageHeight / rect.height));
+        
+        // 클릭한 위치가 정답 영역에 포함되는지 확인
+        for (let i = 0; i < answerRegions.length; i++) {
+          if (!foundAnswers[i]) {
+            const region = answerRegions[i];
+            
+            // 영역 내의 픽셀들과 비교
+            for (const pixel of region) {
+              const distance = Math.sqrt(Math.pow(clickX - pixel.x, 2) + Math.pow(clickY - pixel.y, 2));
+              
+              if (distance <= 20) { // 20픽셀 내로 클릭하면 정답으로 인정
+                foundAnswers[i] = true;
+                showFoundAnswer(region, i);
+                updateGameProgress();
+                return;
+              }
+            }
+          }
+        }
+        
+        // 정답이 아닌 곳을 클릭한 경우
+        console.log('틀렸습니다!');
+      }
+      
+      // 찾은 정답 표시 함수
+      function showFoundAnswer(region, index) {
+        // 정답 표시 방식에 따라 다르게 표시
+        if (answerExactRadio.checked) {
+          showExactAnswer(region);
+        } else if (answerOutlineRadio.checked) {
+          showOutlineAnswer(region);
+        } else if (answerOutlineDotsRadio.checked) {
+          showOutlineAnswer(region);
+        }
+      }
+      
+      // 게임 진행 상황 업데이트
+      function updateGameProgress() {
+        const foundCount = foundAnswers.filter(found => found).length;
+        foundCountElem.textContent = foundCount;
+        
+        const progress = (foundCount / answerRegions.length) * 100;
+        progressFill.style.width = progress + '%';
+        
+        if (foundCount === answerRegions.length) {
+          detectionStatus.textContent = '축하합니다! 모든 틀린 부분을 찾았습니다!';
+        } else {
+          detectionStatus.textContent = `${foundCount}개의 틀린 부분을 찾았습니다. (${answerRegions.length - foundCount}개 남음)`;
+        }
+      }
+      
+      // 점 데이터 업데이트 함수
+      function updatePointsData() {
+        const data = {
+          image_width: imageWidth,
+          image_height: imageHeight,
+          points: points
+        };
+        pointsData.value = JSON.stringify(data, null, 2);
+      }
+      
+      // 모든 점 지우기 버튼 이벤트
+      clearPointsBtn.addEventListener('click', function() {
+        points = [];
+        const pointElements = modifiedContainer.querySelectorAll('.point');
+        pointElements.forEach(element => element.remove());
+        updatePointsData();
+        console.log('모든 점이 지워졌습니다.');
+      });
+      
+      // 마지막 점 지우기 버튼 이벤트
+      removeLastBtn.addEventListener('click', function() {
+        if (points.length > 0) {
+          points.pop();
+          const pointElements = modifiedContainer.querySelectorAll('.point');
+          if (pointElements.length > 0) {
+            pointElements[pointElements.length - 1].remove();
+          }
+          updatePointsData();
+          console.log('마지막 점이 지워졌습니다.');
+        }
+      });
+      
+      // 좌표 저장하기 버튼 이벤트
+      savePointsBtn.addEventListener('click', function() {
+        if (points.length === 0) {
+          alert('저장할 점이 없습니다!');
+          return;
+        }
+        
+        const data = {
+          image_width: imageWidth,
+          image_height: imageHeight,
+          points: points,
+          timestamp: new Date().toISOString()
+        };
+        
+        // 브라우저 다운로드
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `difference_points_${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        console.log('좌표 데이터가 저장되었습니다.');
+      });
+
+      // 자동 틀린 부분 감지 버튼 이벤트
+      detectDifferencesBtn.addEventListener('click', async function() {
+        if (!originalImage.src || !modifiedImage.src) {
+          alert('먼저 원본 이미지와 수정된 이미지를 선택해주세요!');
+          return;
+        }
+        
+        // 이미지 로드 완료 대기
+        detectionStatus.textContent = '이미지 로드 완료를 기다리는 중...';
+        
+        try {
+          // 이미지가 완전히 로드될 때까지 대기
+          await Promise.all([
+            new Promise((resolve, reject) => {
+              if (originalImage.complete && originalImage.naturalWidth > 0) {
+                resolve();
+              } else {
+                originalImage.onload = resolve;
+                originalImage.onerror = reject;
+                // 5초 타임아웃
+                setTimeout(() => reject(new Error('원본 이미지 로드 타임아웃')), 5000);
+              }
+            }),
+            new Promise((resolve, reject) => {
+              if (modifiedImage.complete && modifiedImage.naturalWidth > 0) {
+                resolve();
+              } else {
+                modifiedImage.onload = resolve;
+                modifiedImage.onerror = reject;
+                // 5초 타임아웃
+                setTimeout(() => reject(new Error('수정 이미지 로드 타임아웃')), 5000);
+              }
+            })
+          ]);
+          
+          // 이미지 크기 업데이트 (항상 naturalSize 기준)
+          imageWidth = Math.max(originalImage.naturalWidth, modifiedImage.naturalWidth);
+          imageHeight = Math.max(originalImage.naturalHeight, modifiedImage.naturalHeight);
+          
+          console.log('🖼️ 이미지 naturalSize 수집 완료:', {
+            원본: `${originalImage.naturalWidth}x${originalImage.naturalHeight}`,
+            수정: `${modifiedImage.naturalWidth}x${modifiedImage.naturalHeight}`,
+            최종: `${imageWidth}x${imageHeight}`
+          });
+          
+          if (imageWidth === 0 || imageHeight === 0) {
+            throw new Error('이미지 크기를 가져올 수 없습니다.');
+          }
+          
+          detectionStatus.textContent = '차이점을 분석하는 중...';
+          
+          const result = await detectDifferences();
+          
+          if (result.count === 0) {
+            detectionStatus.textContent = '차이점이 감지되지 않았습니다. 임계값을 조정해보세요.';
+            return;
+          }
+          
+          // 결과 저장
+          allRegions = result.regions;
+          originalRegions = result.originalRegions;
+          differenceMap = result.differenceMap;
+          
+          // 결과 표시
+          displayDifferences(result);
+          
+          // 게임 섹션 활성화
+          gameSection.style.display = 'block';
+          
+          detectionStatus.textContent = `${result.count}개의 차이점이 감지되었습니다 (총 ${result.pixelCount}개 픽셀).`;
+          
+        } catch (error) {
+          console.error('차이점 감지 오류:', error);
+          detectionStatus.textContent = '차이점 감지 중 오류가 발생했습니다: ' + error.message;
+        }
+      });
+      
+      // 임계값 슬라이더 이벤트
+      diffThreshold.addEventListener('input', function() {
+        thresholdValue.textContent = this.value;
+      });
+      
+      minArea.addEventListener('input', function() {
+        minAreaValue.textContent = this.value;
+      });
+      
+      mergeDistance.addEventListener('input', function() {
+        mergeDistanceValue.textContent = this.value;
+      });
+      
+      // 표시 모드 변경 이벤트
+      [displayCircleRadio, displayPixelRadio, displayPreMergeRadio, displayBothRadio].forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (allRegions.length > 0) {
+            displayDifferences({
+              count: allRegions.length,
+              originalRegions: originalRegions,
+              regions: allRegions,
+              differenceMap: differenceMap
+            });
+          }
+        });
+      });
+      
+      // 차이점 표시 함수
+      function displayDifferences(result) {
+        // 기존 캔버스 제거
+        const existingCanvases = modifiedContainer.querySelectorAll('canvas:not(#result-canvas)');
+        existingCanvases.forEach(canvas => canvas.remove());
+        
+        const rect = modifiedImage.getBoundingClientRect();
+        const scaleX = rect.width / imageWidth;
+        const scaleY = rect.height / imageHeight;
+        
+        if (displayCircleRadio.checked) {
+          // 원형 표시
+          showCircleRegions(result.regions, scaleX, scaleY);
+        } else if (displayPixelRadio.checked) {
+          // 픽셀 표시
+          showPixelRegions(result.regions, scaleX, scaleY);
+        } else if (displayPreMergeRadio.checked) {
+          // 병합 전 영역
+          showPixelRegions(result.originalRegions, scaleX, scaleY, 'rgba(255, 165, 0, 0.7)');
+        } else if (displayBothRadio.checked) {
+          // 병합 전/후 비교
+          showPixelRegions(result.originalRegions, scaleX, scaleY, 'rgba(255, 165, 0, 0.7)');
+          showPixelRegions(result.regions, scaleX, scaleY, 'rgba(255, 0, 0, 0.7)');
+          colorLegend.style.display = 'flex';
+        }
+        
+        if (!displayBothRadio.checked) {
+          colorLegend.style.display = 'none';
+        }
+      }
+      
+      // 원형으로 영역 표시
+      function showCircleRegions(regions, scaleX, scaleY) {
+        regions.forEach(region => {
+          let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
+          
+          for (const pixel of region) {
+            minX = Math.min(minX, pixel.x);
+            minY = Math.min(minY, pixel.y);
+            maxX = Math.max(maxX, pixel.x);
+            maxY = Math.max(maxY, pixel.y);
+          }
+          
+          const centerX = (minX + maxX) / 2;
+          const centerY = (minY + maxY) / 2;
+          const radius = Math.max(maxX - minX, maxY - minY) / 2 + 10;
+          
+          const circle = document.createElement('div');
+          circle.className = 'point';
+          circle.style.left = (centerX * scaleX) + 'px';
+          circle.style.top = (centerY * scaleY) + 'px';
+          circle.style.width = (radius * 2 * scaleX) + 'px';
+          circle.style.height = (radius * 2 * scaleY) + 'px';
+          
+          modifiedContainer.appendChild(circle);
+        });
+      }
+      
+      // 픽셀로 영역 표시
+      function showPixelRegions(regions, scaleX, scaleY, color = 'rgba(255, 0, 0, 0.7)') {
+        const canvas = document.createElement('canvas');
+        canvas.width = modifiedImage.getBoundingClientRect().width;
+        canvas.height = modifiedImage.getBoundingClientRect().height;
+        canvas.style.position = 'absolute';
+        canvas.style.left = '0';
+        canvas.style.top = '0';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '5';
+        
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = color;
+        
+        regions.forEach(region => {
+          region.forEach(pixel => {
+            const x = pixel.x * scaleX;
+            const y = pixel.y * scaleY;
+            const size = Math.max(1, Math.min(scaleX, scaleY));
+            ctx.fillRect(x - size/2, y - size/2, size, size);
+          });
+        });
+        
+        modifiedContainer.appendChild(canvas);
+      }
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,976 @@
+/* ============================================
+   틀린그림찾기 게임 - 컴포넌트 모듈
+   ============================================
+   
+   @author Shrimp Task Manager
+   @version 0.3.0
+   @description 버튼, 모달, 메시지 시스템 등 UI 컴포넌트
+   ============================================ */
+
+/* 이 파일은 게임의 모든 UI 컴포넌트 스타일을 정의합니다 */
+
+/* ============================================
+   Shrimp Task Manager - CSS 모듈화 프로젝트
+   ============================================
+   파일명: components.css
+   설명: 컴포넌트 스타일 모듈 - 버튼, 모달, 메시지 시스템, 게임 컨트롤
+   생성일: 2024년
+   업데이트: 상단 헤더 + 하단 바 컴포넌트 추가 (2025)
+   ============================================ */
+   
+   /* ============================================
+   상단 헤더 컴포넌트 (모던한 글래스 효과)
+   ============================================ */
+   .game-header-top {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-header {
+flex: 1;
+  text-align: center;
+}
+
+.game-title {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  margin: 0;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   사용자 섹션 (상단 헤더용)
+   ============================================ */
+.user-section {
+/* base.css에서 기본 스타일 정의됨 */
+  color: white;
+  min-width: 200px;
+  text-align: right;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-xs);
+  padding: var(--game-spacing-xs);
+  border-radius: var(--game-border-radius-small);
+  transition: background-color var(--game-transition-fast);
+}
+
+.user-info:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+flex-shrink: 0;
+}
+
+.user-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all var(--game-transition-fast);
+}
+
+.user-avatar img:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.user-details {
+  text-align: right;
+  min-width: 0;
+}
+
+.user-name,
+.user-email {
+  margin: 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.user-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.user-email {
+  font-size: 0.65rem;
+  opacity: 0.8;
+  line-height: 1.2;
+}
+
+/* 게스트 사용자 스타일 */
+.guest-info {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-xs);
+  padding: var(--game-spacing-xs);
+  border-radius: var(--game-border-radius-small);
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color var(--game-transition-fast);
+}
+
+.guest-info:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.guest-message {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* 애니메이션 정의 */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* ============================================
+   하단 바 컴포넌트 (3단 그리드)
+   ============================================ */
+.bottom-bar {
+  /* 이미 base.css에서 기본 레이아웃 정의됨 */
+  /* 여기서는 세부 컴포넌트 스타일 추가 */
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 하단 바 세부 섹션들 */
+.bottom-bar-stats,
+.bottom-bar-progress,
+.bottom-bar-controls {
+  display: flex;
+  align-items: center;
+  min-height: 60px; /* 최소 터치 영역 보장 */
+}
+
+/* 왼쪽: 게임 통계 섹션 */
+.bottom-bar-stats {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: var(--game-spacing-sm);
+  padding-right: var(--game-spacing-md);
+}
+
+/* 중앙: 진행바 섹션 */
+.bottom-bar-progress {
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--game-spacing-xs);
+  padding: 0 var(--game-spacing-md);
+}
+
+/* 오른쪽: 컨트롤 버튼 섹션 */
+.bottom-bar-controls {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--game-spacing-sm);
+  padding-left: var(--game-spacing-md);
+}
+/* 하단 바용 게임 통계 스타일 (세밀한 최적화) */
+.bottom-bar .game-stats {
+  /* base.css에서 기본 스타일 정의됨 */
+  gap: var(--game-spacing-xs);
+  flex-wrap: wrap;
+  align-items: stretch; /* 모든 아이템 같은 높이 */
+}
+
+.bottom-bar .stat-item {
+  /* base.css에서 기본 스타일 정의됨 */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: var(--game-border-radius-small);
+  padding: var(--game-spacing-xs) var(--game-spacing-sm);
+  transition: all var(--game-transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 32px;
+}
+
+/* 중요도에 따른 시각적 계층 구조 */
+/* 1순위: 점수 (가장 중요) */
+.bottom-bar .stat-item:has(#score) {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+  border-color: rgba(255, 193, 7, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+  min-width: 60px;
+  font-weight: 700;
+}
+
+.bottom-bar .stat-item:has(#score) .stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #FFC107;
+}
+
+.bottom-bar .stat-item:has(#score) .stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFD54F;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 2순위: 시간 (두 번째로 중요) */
+.bottom-bar .stat-item:has(#timer) {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(3, 169, 244, 0.2));
+  border-color: rgba(33, 150, 243, 0.4);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+  min-width: 60px;
+  font-weight: 600;
+}
+
+.bottom-bar .stat-item:has(#timer) .stat-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #2196F3;
+}
+
+.bottom-bar .stat-item:has(#timer) .stat-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64B5F6;
+  font-family: 'Courier New', monospace; /* 좋은 숫자 가독성 */
+}
+
+/* 3순위: 진행률과 찾은 개수 */
+.bottom-bar .stat-item:has(#progress),
+.bottom-bar .stat-item:has(#found) {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
+  border-color: rgba(76, 175, 80, 0.3);
+  min-width: 50px;
+}
+
+.bottom-bar .stat-item:has(#progress) .stat-label,
+.bottom-bar .stat-item:has(#found) .stat-label {
+  color: #4CAF50;
+  font-weight: 500;
+  font-size: 0.65rem;
+}
+
+.bottom-bar .stat-item:has(#progress) .stat-value,
+.bottom-bar .stat-item:has(#found) .stat-value {
+  color: #81C784;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* 4순위: 목숨 (하트) */
+.bottom-bar .stat-item:has(#lives) {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(233, 30, 99, 0.15));
+  border-color: rgba(244, 67, 54, 0.3);
+  min-width: 60px; /* 하트 이모티콘을 위한 추가 공간 */
+}
+
+.bottom-bar .stat-item:has(#lives) .stat-label {
+  color: #F44336;
+  font-weight: 500;
+  font-size: 0.65rem;
+}
+
+.bottom-bar .stat-item:has(#lives) .stat-value {
+  font-size: 0.85rem;
+  line-height: 1.2;
+  letter-spacing: 1px; /* 하트 사이 간격 */
+}
+
+/* 5순위: 체력바 및 기타 */
+.bottom-bar .stat-item#healthBarSection,
+.bottom-bar .stat-item#bestScoreSection {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  min-width: 70px; /* 체력바를 위한 추가 공간 */
+}
+
+/* 공통 호버 효과 강화 */
+.bottom-bar .stat-item:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+}
+
+/* 점수와 시간 호버 효과 스페셜 */
+.bottom-bar .stat-item:has(#score):hover {
+  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
+  border-color: rgba(255, 193, 7, 0.6);
+}
+
+.bottom-bar .stat-item:has(#timer):hover {
+  box-shadow: 0 4px 20px rgba(33, 150, 243, 0.3);
+  border-color: rgba(33, 150, 243, 0.6);
+}
+.bottom-bar .progress-bar {
+  /* base.css에서 기본 스타일 정의됨 */
+  width: 180px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--game-border-radius);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-bar .progress-fill {
+  /* base.css에서 기본 스타일 정의됨 */
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  border-radius: var(--game-border-radius);
+  transition: width var(--game-transition-normal);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+  position: relative;
+}
+
+.bottom-bar .progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ============================================
+   게임 컨트롤 및 메시지 시스템
+   ============================================ */
+.game-controls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--game-spacing-xs);
+  background: var(--game-white-10);
+  padding: var(--game-spacing-xs);
+  border-radius: var(--game-spacing-xs);
+  justify-content: center;
+  align-items: center;
+}
+
+.message-area {
+  margin-top: var(--game-spacing-xs);
+}
+
+.sidebar-message {
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 2px 0;
+  font-size: 11px;
+  text-align: center;
+  animation: slideIn var(--game-animation-fast) ease-out;
+}
+
+.error-msg {
+  background-color: rgba(231, 76, 60, 0.9);
+  color: white;
+  border-left: 3px solid #e74c3c;
+}
+
+.success-msg {
+  background-color: rgba(39, 174, 96, 0.9);
+  color: white;
+  border-left: 3px solid #27ae60;
+}
+
+.loading-msg {
+  background-color: rgba(52, 152, 219, 0.9);
+  color: white;
+  border-left: 3px solid #3498db;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+/* ============================================
+   버튼 스타일
+   ============================================ */
+.control-btn {
+  padding: 2px var(--game-spacing-xs);
+  margin: 0;
+  border: none;
+  border-radius: var(--game-border-radius-small);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--game-transition-fast);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  min-height: 24px;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.control-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+}
+
+.control-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-primary {
+  background-color: var(--game-color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--game-color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--game-color-secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: var(--game-color-secondary-dark);
+}
+
+/* ============================================
+   상태 메시지 스타일
+   ============================================ */
+.error {
+  background-color: var(--game-color-error);
+  color: white;
+  padding: var(--game-spacing-md);
+  border-radius: var(--game-border-radius-sm);
+  margin: var(--game-spacing-lg) 0;
+  text-align: center;
+}
+
+.success {
+  background-color: var(--game-color-success);
+  color: white;
+  padding: var(--game-spacing-md);
+  border-radius: var(--game-border-radius-sm);
+  margin: var(--game-spacing-lg) 0;
+  text-align: center;
+}
+
+/* ============================================
+   게임 컨트롤 패널
+   ============================================ */
+#gameControls {
+  position: fixed;
+  top: var(--game-spacing-lg);
+  right: var(--game-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+  z-index: 1001;
+}
+
+#gameControls button {
+  padding: var(--game-spacing-sm) var(--game-spacing-md);
+  background: var(--game-white-90);
+  border: 2px solid #4CAF50;
+  border-radius: var(--game-border-radius-md);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all var(--game-animation-fast) ease;
+  box-shadow: var(--game-shadow-sm);
+}
+
+#gameControls button:hover {
+  background: #4CAF50;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--game-shadow-md);
+}
+
+#gameControls button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   모달 시스템 - 게임 완료 모달
+   ============================================ */
+.game-complete-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--game-animation-fast) ease;
+}
+
+.game-complete-modal.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--game-black-80);
+  backdrop-filter: blur(5px);
+  z-index: 10000; /* 모달 콘텐츠보다 낮은 z-index */
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: white;
+  border-radius: var(--game-spacing-lg);
+  box-shadow: var(--game-shadow-lg);
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+  transition: transform var(--game-animation-fast) cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* 모달 콘텐츠가 선명하게 보이도록 블러 효과 명시적 제거 */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  z-index: 10001; /* backdrop보다 높은 z-index */
+}
+
+.game-complete-modal.show .modal-content {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  background: var(--game-gradient-primary);
+  color: white;
+  padding: var(--game-spacing-lg) var(--game-spacing-xl);
+  text-align: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: var(--game-spacing-xl);
+}
+
+.score-summary {
+  margin-bottom: var(--game-spacing-lg);
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--game-spacing-sm) 0;
+  border-bottom: 1px solid #eee;
+}
+
+.score-item:last-child {
+  border-bottom: none;
+}
+
+.score-item.bonus {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1));
+  margin: 8px -15px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+}
+
+.score-item .label {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.score-item .value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.score-item .value.final-score {
+  font-size: 24px;
+  color: #667eea;
+}
+
+.score-item.bonus .value {
+  color: #ffc107;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-text {
+  text-align: center;
+  font-size: 18px;
+  color: #4a5568;
+  font-weight: 500;
+  line-height: 1.5;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.modal-footer {
+  padding: 20px 30px;
+  background: #f8f9fa;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modal-footer button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  min-width: 120px;
+}
+
+.modal-footer .btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.modal-footer .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.modal-footer .btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+}
+
+.modal-footer .btn-success {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.modal-footer .btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+}
+
+/* ============================================
+   게임 오버 모달
+   ============================================ */
+.game-over-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.game-over-modal.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.game-over-modal .modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.game-over-modal .modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.game-over-modal.show .modal-content {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.game-over-modal .modal-header {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  padding: 25px 30px;
+  text-align: center;
+}
+
+.game-over-modal .modal-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.game-over-modal .modal-body {
+  padding: 30px;
+}
+
+.game-over-reason {
+  text-align: center;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #e74c3c;
+}
+
+.game-over-reason p {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.game-over-modal .score-summary {
+  margin-bottom: 25px;
+}
+
+.game-over-modal .score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.game-over-modal .score-item:last-child {
+  border-bottom: none;
+}
+
+.game-over-modal .score-item .label {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.game-over-modal .score-item .value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.game-over-modal .modal-footer {
+  padding: 20px 30px;
+  background: #f8f9fa;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.game-over-modal .modal-footer button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  min-width: 120px;
+}
+
+.game-over-modal .modal-footer .btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.game-over-modal .modal-footer .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.game-over-modal .modal-footer .btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.game-over-modal .modal-footer .btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+}
+
+/* ============================================
+   개발자 도구 (더 컴팩트한 버전)
+   ============================================ */
+.dev-tools {
+  background: rgba(23, 162, 184, 0.1);
+  border: 1px solid rgba(23, 162, 184, 0.3);
+  border-radius: var(--game-border-radius-small);
+  padding: var(--game-spacing-xs);
+  margin-top: var(--game-spacing-xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--game-spacing-xs);
+  justify-content: center;
+  align-items: center;
+}
+
+.dev-tools-header {
+  width: 100%;
+  text-align: center;
+  order: -1;
+}
+
+.dev-tools-header h4 {
+  margin: 0;
+  font-size: 0.65rem;
+  color: #17a2b8;
+  font-weight: 600;
+}
+
+.dev-tools .control-btn {
+  font-size: 9px;
+  padding: 2px var(--game-spacing-xs);
+  min-height: 20px;
+  background: rgba(23, 162, 184, 0.8);
+  color: white;
+  border: 1px solid rgba(23, 162, 184, 1);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dev-tools .control-btn:hover {
+  background: rgba(23, 162, 184, 1);
+  transform: translateY(-1px);
+}
+
+.dev-tools .control-btn:active {
+  background: rgba(23, 162, 184, 0.9);
+  transform: translateY(0);
+}
+
+/* ============================================
+   컴포넌트 애니메이션
+   ============================================ */
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   모바일 반응형 (모달)
+   ============================================ */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95%;
+    margin: 10px;
+  }
+  
+  .modal-header {
+    padding: 20px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-footer {
+    padding: 15px 20px;
+    flex-direction: column;
+  }
+  
+  .modal-footer button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .score-item .label {
+    font-size: 14px;
+  }
+  
+  .score-item .value {
+    font-size: 16px;
+  }
+  
+  .score-item .value.final-score {
+    font-size: 20px;
+  }
+  
+  .achievement-text {
+    font-size: 16px;
+    padding: 15px;
+  }
+}
+
+/* ============================================
+   힌트 정보 섹션 (컴팩트 버전)
+   ============================================ */
+.hint-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--game-border-radius-small);
+  padding: var(--game-spacing-xs);
+  margin-top: var(--game-spacing-xs);
+  text-align: center;
+}
+
+.hint-counter {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #FFC107;
+  margin-bottom: 2px;
+}
+
+.hint-info div:last-child {
+  font-size: 0.55rem;
+  color: #999;
+  line-height: 1.1;
+} 

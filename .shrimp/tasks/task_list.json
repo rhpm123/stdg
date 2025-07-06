@@ -1,0 +1,606 @@
+{
+  "tasks": [
+    {
+      "id": "TASK-2025-0001",
+      "name": "Supabase 프로젝트 설정",
+      "description": "Supabase 프로젝트를 생성하고 기본 설정을 구성합니다.",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-05-20",
+      "dependencies": [],
+      "assignee": "",
+      "verification_criteria": [
+        "Supabase 프로젝트가 생성되어 있음",
+        "프로젝트의 config 폴더에 supabase.js 설정 파일이 생성됨"
+      ],
+      "implementation_guide": "Supabase 프로젝트를 생성하고 프로젝트에 필요한 설정 파일을 구성합니다."
+    },
+    {
+      "id": "TASK-2025-0002",
+      "name": "API 키 관리 및 환경 설정",
+      "description": "Supabase API 키를 안전하게 관리하고 환경 변수를 구성합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0001"],
+      "assignee": "",
+      "verification_criteria": [
+        "API 키가 안전하게 저장됨",
+        ".env.example 파일이 생성됨",
+        "기본 연결 테스트가 성공함"
+      ],
+      "implementation_guide": "환경 변수 파일을 구성하고 API 키를 안전하게 관리합니다. 연결 테스트를 통해 설정이 올바른지 확인합니다."
+    },
+    {
+      "id": "TASK-2025-0003",
+      "name": "프로젝트 기본 폴더 구조 설정",
+      "description": "웹앱 개발에 필요한 기본 폴더 구조를 설정합니다.",
+      "priority": "high",
+      "status": "in_progress",
+      "created_at": "2025-05-20",
+      "dependencies": [],
+      "assignee": "",
+      "verification_criteria": [
+        "src 폴더에 필요한 하위 폴더(js, css, components)가 생성됨",
+        "폴더 구조가 MVC 패턴을 따름"
+      ],
+      "implementation_guide": "MVC 패턴에 따라 프로젝트 폴더 구조를 구성합니다."
+    },
+    {
+      "id": "TASK-2025-0004",
+      "name": "기본 HTML/CSS 템플릿 설정",
+      "description": "웹앱의 기본 HTML 및 CSS 파일을 생성합니다.",
+      "priority": "high",
+      "status": "in_progress",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0003"],
+      "assignee": "",
+      "verification_criteria": [
+        "index.html 파일이 생성됨",
+        "기본 CSS 스타일시트(reset.css, styles.css)가 생성됨",
+        "반응형 디자인이 적용됨"
+      ],
+      "implementation_guide": "메인 HTML 파일과 CSS 스타일시트를 생성하고 반응형 디자인을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0005",
+      "name": "JavaScript 모듈 구조 설정",
+      "description": "JavaScript 모듈화 구조를 설정하고 기본 JS 파일을 생성합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0003"],
+      "assignee": "",
+      "verification_criteria": [
+        "app.js 메인 파일이 생성됨",
+        "모듈화된 JavaScript 구조가 구현됨",
+        "필요한 유틸리티 함수가 구현됨"
+      ],
+      "implementation_guide": "모듈화된 JavaScript 구조를 구현하고 필요한 유틸리티 함수를 생성합니다."
+    },
+    {
+      "id": "TASK-2025-0006",
+      "name": "Google Cloud 프로젝트 설정",
+      "description": "Google Cloud 프로젝트 설정 및 OAuth 설정을 위한 준비 작업을 수행합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": [],
+      "assignee": "",
+      "verification_criteria": [
+        "Google Cloud 프로젝트가 생성됨",
+        "OAuth 동의 화면이 구성됨",
+        "필요한 API가 활성화됨"
+      ],
+      "implementation_guide": "Google Cloud Console에서 새 프로젝트를 생성하고 OAuth 동의 화면을 구성합니다. 필요한 API를 활성화합니다."
+    },
+    {
+      "id": "TASK-2025-0007",
+      "name": "Google OAuth 클라이언트 생성",
+      "description": "Google OAuth 인증을 위한 클라이언트를 생성합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0006"],
+      "assignee": "",
+      "verification_criteria": [
+        "OAuth 클라이언트 ID가 생성됨",
+        "리디렉션 URI가 올바르게 설정됨",
+        "클라이언트 비밀키가 안전하게 저장됨"
+      ],
+      "implementation_guide": "Google Cloud Console에서 OAuth 클라이언트 ID를 생성하고 필요한 리디렉션 URI를 설정합니다."
+    },
+    {
+      "id": "TASK-2025-0008",
+      "name": "Supabase-Google 인증 연동",
+      "description": "Supabase의 인증 시스템과 Google OAuth를 연동합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0001", "TASK-2025-0007"],
+      "assignee": "",
+      "verification_criteria": [
+        "Supabase Auth 설정에 Google 제공자가 추가됨",
+        "OAuth 클라이언트 ID와 비밀키가 Supabase에 설정됨",
+        "리디렉션 URL이 올바르게 설정됨"
+      ],
+      "implementation_guide": "Supabase 대시보드에서 인증 설정에 Google 제공자를 추가하고 OAuth 클라이언트 정보를 설정합니다."
+    },
+    {
+      "id": "TASK-2025-0009",
+      "name": "기본 데이터베이스 테이블 설계",
+      "description": "핵심 데이터베이스 테이블 구조를 설계합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0001"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 세트 테이블이 설계됨",
+        "틀린 부분 좌표 테이블이 설계됨",
+        "사용자 진행 상황 테이블이 설계됨",
+        "테이블 간 관계가 정의됨"
+      ],
+      "implementation_guide": "데이터베이스 테이블 구조와 관계를 설계하고 스키마를 정의합니다."
+    },
+    {
+      "id": "TASK-2025-0010",
+      "name": "데이터베이스 테이블 생성 및 인덱스 설정",
+      "description": "설계한 테이블을 Supabase에 생성하고 필요한 인덱스를 설정합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0009"],
+      "assignee": "",
+      "verification_criteria": [
+        "모든 테이블이 Supabase에 생성됨",
+        "필요한 인덱스가 설정됨",
+        "외래 키 관계가 올바르게 설정됨"
+      ],
+      "implementation_guide": "Supabase SQL 에디터를 사용하여 테이블을 생성하고 필요한 인덱스를 설정합니다."
+    },
+    {
+      "id": "TASK-2025-0011",
+      "name": "데이터베이스 보안 정책 설정",
+      "description": "Supabase RLS(Row Level Security) 정책을 설정합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0010"],
+      "assignee": "",
+      "verification_criteria": [
+        "모든 테이블에 RLS가 활성화됨",
+        "이미지 세트에 대한 접근 정책이 설정됨",
+        "틀린 부분 좌표에 대한 접근 정책이 설정됨",
+        "사용자 진행 상황에 대한 접근 정책이 설정됨"
+      ],
+      "implementation_guide": "Supabase SQL 에디터를 사용하여 RLS 정책을 설정하고 테스트합니다."
+    },
+    {
+      "id": "TASK-2025-0012",
+      "name": "저장 프로시저 및 함수 구현",
+      "description": "데이터 관리를 위한 저장 프로시저와 함수를 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0010"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 세트 등록 프로시저가 구현됨",
+        "틀린 부분 좌표 등록 로직이 구현됨",
+        "기타 필요한 데이터베이스 함수가 구현됨"
+      ],
+      "implementation_guide": "Supabase SQL 에디터를 사용하여 필요한 저장 프로시저와 함수를 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0013",
+      "name": "Supabase Storage 버킷 생성",
+      "description": "이미지 저장을 위한 Supabase Storage 버킷을 생성합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0001"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 저장을 위한 버킷이 생성됨",
+        "버킷에 대한 공개 접근 설정이 구성됨"
+      ],
+      "implementation_guide": "Supabase 대시보드에서 Storage 버킷을 생성하고 접근 설정을 구성합니다."
+    },
+    {
+      "id": "TASK-2025-0014",
+      "name": "Storage 보안 정책 설정",
+      "description": "Supabase Storage에 대한 보안 정책을 설정합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0013"],
+      "assignee": "",
+      "verification_criteria": [
+        "Storage 버킷에 대한 RLS 정책이 설정됨",
+        "공개 이미지 접근 정책이 설정됨",
+        "관리자 업로드 권한이 설정됨"
+      ],
+      "implementation_guide": "Supabase 대시보드에서 Storage 보안 정책을 설정하고 테스트합니다."
+    },
+    {
+      "id": "TASK-2025-0015",
+      "name": "로그인 페이지 UI 구현",
+      "description": "사용자 로그인을 위한 UI를 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0004", "TASK-2025-0008"],
+      "assignee": "",
+      "verification_criteria": [
+        "로그인 페이지 또는 모달이 구현됨",
+        "Google 로그인 버튼이 구현됨",
+        "로그인 상태에 따른 UI 변화가 구현됨"
+      ],
+      "implementation_guide": "HTML, CSS를 사용하여 로그인 UI를 구현하고 상태에 따른 변화를 처리합니다."
+    },
+    {
+      "id": "TASK-2025-0016",
+      "name": "로그인 기능 구현",
+      "description": "Google을 통한 로그인 기능을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0008", "TASK-2025-0015"],
+      "assignee": "",
+      "verification_criteria": [
+        "Google 로그인 기능이 정상 작동함",
+        "로그인 후 사용자 정보가 올바르게 저장됨",
+        "로그인 오류 처리가 구현됨"
+      ],
+      "implementation_guide": "Supabase의 인증 API를 사용하여 Google 로그인 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0017",
+      "name": "세션 관리 및 로그아웃 기능 구현",
+      "description": "사용자 세션 관리 및 로그아웃 기능을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0016"],
+      "assignee": "",
+      "verification_criteria": [
+        "세션 유지 기능이 구현됨",
+        "자동 로그인 기능이 구현됨",
+        "로그아웃 기능이 정상 작동함"
+      ],
+      "implementation_guide": "Supabase의 인증 API를 사용하여 세션 관리 및 로그아웃 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0018",
+      "name": "이미지 업로드 폼 UI 구현",
+      "description": "관리자가 이미지를 업로드할 수 있는 UI를 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0004", "TASK-2025-0014"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 업로드 폼이 구현됨",
+        "원본 이미지와 수정된 이미지 업로드 영역이 구분됨",
+        "이미지 미리보기 기능이 구현됨",
+        "메타데이터 입력 필드가 구현됨"
+      ],
+      "implementation_guide": "HTML, CSS를 사용하여 이미지 업로드 UI를 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0019",
+      "name": "이미지 업로드 기능 구현",
+      "description": "Supabase Storage를 사용하여 이미지 업로드 기능을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0014", "TASK-2025-0018"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 업로드 기능이 정상 작동함",
+        "업로드된 이미지가 Supabase Storage에 저장됨",
+        "이미지 URL이 생성되고 반환됨"
+      ],
+      "implementation_guide": "Supabase Storage API를 사용하여 이미지 업로드 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0020",
+      "name": "이미지 메타데이터 저장 기능 구현",
+      "description": "업로드된 이미지의 메타데이터를 데이터베이스에 저장하는 기능을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0010", "TASK-2025-0019"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 메타데이터가 데이터베이스에 저장됨",
+        "이미지 세트가 올바르게 생성됨",
+        "이미지 메타데이터 수정 기능이 구현됨"
+      ],
+      "implementation_guide": "Supabase 데이터베이스 API를 사용하여 이미지 메타데이터 저장 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0021",
+      "name": "이미지 비교 UI 구현",
+      "description": "두 이미지를 비교하고 틀린 부분을 표시할 UI를 구현합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0004"],
+      "assignee": "",
+      "verification_criteria": [
+        "두 이미지를 나란히 표시하는 UI가 구현됨",
+        "이미지 확대/축소 기능이 구현됨",
+        "틀린 부분 표시 영역이 구현됨"
+      ],
+      "implementation_guide": "HTML, CSS를 사용하여 이미지 비교 UI를 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0022",
+      "name": "이미지 픽셀 비교 알고리즘 구현",
+      "description": "두 이미지의 픽셀을 비교하여 차이점을 찾는 알고리즘을 구현합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": [],
+      "assignee": "",
+      "verification_criteria": [
+        "캔버스를 사용한 이미지 비교 기능이 구현됨",
+        "픽셀 단위 비교 알고리즘이 구현됨",
+        "차이점 감지 정확도가 높음"
+      ],
+      "implementation_guide": "Canvas API를 사용하여 두 이미지의 픽셀을 비교하는 알고리즘을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0023",
+      "name": "차이점 그룹화 및 좌표 추출 기능 구현",
+      "description": "감지된 차이점을 그룹화하고 중심 좌표와 반경을 계산하는 기능을 구현합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0022"],
+      "assignee": "",
+      "verification_criteria": [
+        "차이점 그룹화 알고리즘이 구현됨",
+        "중심 좌표와 반경이 정확히 계산됨",
+        "노이즈 필터링이 구현됨"
+      ],
+      "implementation_guide": "연결된 픽셀을 그룹화하고 각 그룹의 중심 좌표와 반경을 계산하는 알고리즘을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0024",
+      "name": "좌표 데이터 저장 및 검증 UI 구현",
+      "description": "추출된 좌표 데이터를 저장하고 시각적으로 검증할 수 있는 UI를 구현합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0021", "TASK-2025-0023"],
+      "assignee": "",
+      "verification_criteria": [
+        "좌표 데이터 표시 UI가 구현됨",
+        "좌표 데이터 수정 기능이 구현됨",
+        "시각적 검증 도구가 구현됨"
+      ],
+      "implementation_guide": "추출된 좌표를 시각적으로 표시하고 수정할 수 있는 UI를 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0025",
+      "name": "좌표 데이터 저장 기능 구현",
+      "description": "추출된 좌표 데이터를 데이터베이스에 저장하는 기능을 구현합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0010", "TASK-2025-0023"],
+      "assignee": "",
+      "verification_criteria": [
+        "좌표 데이터가 데이터베이스에 저장됨",
+        "좌표 데이터의 이미지 세트 연결이 올바름",
+        "저장된 데이터 조회 기능이 구현됨"
+      ],
+      "implementation_guide": "Supabase 데이터베이스 API를 사용하여 좌표 데이터 저장 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0026",
+      "name": "게임 페이지 레이아웃 구현",
+      "description": "게임 진행을 위한 기본 페이지 레이아웃을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0004", "TASK-2025-0017"],
+      "assignee": "",
+      "verification_criteria": [
+        "게임 페이지 레이아웃이 구현됨",
+        "이미지 표시 영역이 구현됨",
+        "게임 컨트롤 UI가 구현됨",
+        "반응형 디자인이 적용됨"
+      ],
+      "implementation_guide": "HTML, CSS를 사용하여 게임 페이지의 레이아웃을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0027",
+      "name": "게임 데이터 로드 기능 구현",
+      "description": "Supabase에서 게임 데이터를 로드하는 기능을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0010", "TASK-2025-0026"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 세트 데이터 로드 기능이 구현됨",
+        "이미지 URL을 통한 이미지 로드 기능이 구현됨",
+        "좌표 데이터 로드 기능이 구현됨"
+      ],
+      "implementation_guide": "Supabase 데이터베이스 API를 사용하여 게임 데이터 로드 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0028",
+      "name": "게임 클릭 인터랙션 구현",
+      "description": "사용자가 이미지의 틀린 부분을 클릭했을 때의 인터랙션을 구현합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0026", "TASK-2025-0027"],
+      "assignee": "",
+      "verification_criteria": [
+        "클릭 이벤트 처리 기능이 구현됨",
+        "클릭 좌표 계산 기능이 구현됨",
+        "틀린 부분 감지 로직이 구현됨",
+        "시각적 피드백이 구현됨"
+      ],
+      "implementation_guide": "JavaScript 이벤트 리스너를 사용하여 클릭 인터랙션을 구현하고 좌표 비교 로직을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0029",
+      "name": "게임 진행 상태 관리 구현",
+      "description": "게임의 진행 상태를 관리하고 업데이트하는 기능을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0028"],
+      "assignee": "",
+      "verification_criteria": [
+        "발견된 틀린 부분 추적 기능이 구현됨",
+        "게임 진행률 계산 기능이 구현됨",
+        "게임 완료 조건 검사 기능이 구현됨"
+      ],
+      "implementation_guide": "게임 상태를 관리하는 클래스 또는 객체를 구현하고 상태 변화를 추적합니다."
+    },
+    {
+      "id": "TASK-2025-0030",
+      "name": "게임 타이머 및 점수 시스템 구현",
+      "description": "게임의 타이머와 점수 계산 시스템을 구현합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-20",
+      "dependencies": ["TASK-2025-0029"],
+      "assignee": "",
+      "verification_criteria": [
+        "타이머 기능이 구현됨",
+        "점수 계산 로직이 구현됨",
+        "난이도에 따른 점수 조정이 구현됨"
+      ],
+      "implementation_guide": "JavaScript로 타이머 기능을 구현하고 게임 진행 상황에 따라 점수를 계산하는 로직을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0031",
+      "name": "이미지 로드 시 정확한 크기 정보 수집 및 저장",
+      "description": "compare-images.html에서 이미지 로드 시 naturalWidth/naturalHeight를 정확히 수집하고, 이 정보를 DB에 함께 저장하도록 개선합니다.",
+      "priority": "critical",
+            "status": "completed",
+      "created_at": "2025-01-21",
+      "dependencies": [],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 로드 완료 후 naturalWidth/naturalHeight가 정확히 수집됨",
+        "수집된 크기 정보가 콘솔에 로그로 표시됨",
+        "DB 저장 시 이미지 크기 정보가 함께 저장됨",
+        "이미지가 완전히 로드되지 않은 상태에서는 저장이 불가능함"
+      ],
+      "implementation_guide": "compare-images.html의 이미지 로드 로직을 개선하여 이미지가 완전히 로드된 후 naturalSize를 수집하고, 저장 시 이 정보를 포함시킵니다."
+    },
+    {
+      "id": "TASK-2025-0032",
+      "name": "좌표 저장 로직 개선 - naturalSize 기준으로 통일",
+      "description": "모든 좌표 데이터를 이미지의 naturalSize(원본 크기) 기준으로 저장하도록 통일하여, 화면 크기와 무관하게 일관된 좌표를 유지합니다.",
+      "priority": "critical",
+            "status": "completed",
+      "created_at": "2025-01-21",
+      "dependencies": ["TASK-2025-0031"],
+      "assignee": "",
+      "verification_criteria": [
+        "좌표 저장 시 항상 naturalSize 기준으로 변환됨",
+        "compare-images.html의 detectDifferences 함수가 naturalSize 기준으로 작동",
+        "저장된 좌표가 이미지 원본 크기 내에 있음",
+        "server.js의 answer-points API가 이미지 크기 정보를 검증함"
+      ],
+      "implementation_guide": "좌표 수집 및 저장 시 항상 이미지의 naturalSize 기준으로 변환하여 저장합니다. Canvas API 사용 시에도 naturalSize 기준으로 작업합니다."
+    },
+    {
+      "id": "TASK-2025-0033",
+      "name": "게임 플레이 좌표 변환 로직 수정",
+      "description": "game-play.html에서 클릭 좌표를 원본 이미지 크기 기준으로 정확히 변환하는 로직을 개선합니다.",
+      "priority": "critical",
+            "status": "completed",
+      "created_at": "2025-01-21",
+      "dependencies": ["TASK-2025-0032"],
+      "assignee": "",
+      "verification_criteria": [
+        "클릭 좌표가 정확히 원본 이미지 크기로 변환됨",
+        "좌표 변환 과정이 콘솔에 상세히 로그됨",
+        "DB에서 가져온 좌표와 정확히 비교됨",
+        "테스트 시 모든 정답 영역이 올바르게 인식됨"
+      ],
+      "implementation_guide": "handleImageClick 함수의 좌표 변환 로직을 개선하여 container -> display -> natural 크기로의 변환이 정확히 이루어지도록 합니다."
+    },
+    {
+      "id": "TASK-2025-0034",
+      "name": "object-fit: contain 완벽 대응 구현",
+      "description": "CSS의 object-fit: contain 속성으로 인한 이미지 위치 오프셋을 정확히 계산하여 좌표 변환에 반영합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-01-21",
+      "dependencies": ["TASK-2025-0033"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지가 컨테이너 중앙에 위치할 때 오프셋이 정확히 계산됨",
+        "가로/세로 비율에 따른 letterbox/pillarbox 처리가 정확함",
+        "이미지 외부 클릭 시 적절히 무시됨",
+        "정답 표시 점들이 이미지 위에 정확히 표시됨"
+      ],
+      "implementation_guide": "displayAnswerPoints 함수와 handleImageClick 함수에서 object-fit: contain으로 인한 offset을 정확히 계산하여 적용합니다."
+    },
+    {
+      "id": "TASK-2025-0035",
+      "name": "화면 크기 변경 시 실시간 좌표 재계산",
+      "description": "브라우저 창 크기가 변경될 때 정답 표시 점들의 위치를 실시간으로 재계산하여 업데이트합니다.",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-01-21",
+      "dependencies": ["TASK-2025-0034"],
+      "assignee": "",
+      "verification_criteria": [
+        "window resize 이벤트가 적절히 처리됨",
+        "resize 시 정답 점들이 즉시 재배치됨",
+        "debounce를 사용하여 성능이 최적화됨",
+        "모바일에서 화면 회전 시에도 정상 작동함"
+      ],
+      "implementation_guide": "window resize 이벤트 리스너를 추가하고, debounce를 적용하여 정답 점들을 재계산하고 다시 그립니다."
+    },
+    {
+      "id": "TASK-2025-0036",
+      "name": "좌표 검증 및 디버깅 도구 개선",
+      "description": "좌표 문제를 쉽게 디버깅할 수 있도록 시각적 검증 도구와 로깅을 강화합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-01-21",
+      "dependencies": ["TASK-2025-0033"],
+      "assignee": "",
+      "verification_criteria": [
+        "좌표 변환 과정의 각 단계가 상세히 로그됨",
+        "디버그 모드에서 클릭 위치가 시각적으로 표시됨",
+        "저장된 좌표와 실제 표시 위치의 차이를 확인할 수 있음",
+        "관리자 모드에서 좌표 정보를 실시간으로 확인 가능"
+      ],
+      "implementation_guide": "디버그 모드를 추가하여 좌표 변환의 각 단계를 시각화하고, 문제를 쉽게 파악할 수 있도록 합니다."
+    },
+    {
+      "id": "TASK-2025-0037",
+      "name": "기존 좌표 데이터 마이그레이션",
+      "description": "기존에 저장된 좌표 데이터를 새로운 형식으로 마이그레이션하고, 이미지 크기 정보가 없는 데이터를 업데이트합니다.",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-01-21",
+      "dependencies": ["TASK-2025-0032"],
+      "assignee": "",
+      "verification_criteria": [
+        "기존 데이터의 이미지 크기 정보가 확인됨",
+        "누락된 크기 정보가 이미지에서 수집되어 업데이트됨",
+        "좌표가 새로운 기준으로 재계산됨",
+        "마이그레이션 전후 데이터가 백업됨"
+      ],
+      "implementation_guide": "마이그레이션 스크립트를 작성하여 기존 데이터를 검사하고, 필요한 경우 이미지 크기 정보를 수집하여 업데이트합니다."
+    }
+    ]
+    } 
+} 

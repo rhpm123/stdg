@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>틀린그림찾기 게임</title>
+  
+  <!-- CSS 모듈 -->
+  <!-- CSS 기본 모듈들 -->
+  <link rel="stylesheet" href="assets/css/game/variables.css">
+  <link rel="stylesheet" href="assets/css/game/base.css">
+  <link rel="stylesheet" href="assets/css/game/layout.css">
+  <link rel="stylesheet" href="assets/css/game/components.css">
+  <link rel="stylesheet" href="assets/css/game/health-bar.css">
+  <link rel="stylesheet" href="assets/css/game/animations.css">
+  <link rel="stylesheet" href="assets/css/game/responsive.css">
+  
+  <!-- 메인 게임 스타일 -->
+  <link rel="stylesheet" href="assets/css/game-play.css">
+  </head>
+  <body>
+  <!-- 상단 헤더: 게임 제목 + 사용자 정보 -->
+    <header class="game-header-top">
+      <div class="game-header">
+        <h1 class="game-title">틀린그림찾기 게임</h1>
+      </div>
+      
+      <!-- 사용자 정보 영역 -->
+      <div class="user-section" id="userSection">
+        <!-- 인증 관리자가 동적으로 채움 -->
+      </div>
+    </header>
+    
+    <!-- 메인 이미지 영역 -->
+    <main class="main-content">
+      <div class="images-container" id="imagesContainer" style="display: none;">
+        <div class="image-section">
+          <h3>원본 이미지</h3>
+          <div class="image-container" id="originalContainer">
+            <img id="originalImage" class="game-image" src="" alt="원본 이미지">
+          </div>
+        </div>
+        
+        <div class="image-section">
+          <h3>수정 이미지 (여기서 찾으세요!)</h3>
+          <div class="image-container" id="modifiedContainer">
+            <img id="modifiedImage" class="game-image" src="" alt="수정 이미지">
+          </div>
+        </div>
+      </div>
+    </main>
+  
+    <!-- 하단 바: 게임 통계 + 진행바 + 컨트롤 버튼 -->
+    <div class="bottom-bar">
+      <!-- 게임 통계 섹션 -->
+      <div class="bottom-bar-stats">
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-label">점수</div>
+            <div class="stat-value" id="score">0</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-label">시간</div>
+            <div class="stat-value" id="timer">00:00</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-label">진행률</div>
+            <div class="stat-value" id="progress">0%</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-label">찾은 개수</div>
+            <div class="stat-value" id="found">0/0</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-label">목숨</div>
+            <div class="stat-value" id="lives">❤️❤️❤️❤️❤️</div>
+          </div>
+          
+          <!-- 체력바 섹션 -->
+          <div class="stat-item" id="healthBarSection">
+            <div class="stat-label">시간</div>
+            <div class="health-bar-container">
+              <div class="health-bar" id="healthBar">
+                <div class="health-bar-fill" id="healthBarFill"></div>
+                <div class="health-bar-text" id="healthBarText">100%</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 로그인 사용자만 표시되는 최고 점수 -->
+          <div class="stat-item" id="bestScoreSection" style="display: none;">
+            <div class="stat-label">최고 점수</div>
+            <div class="stat-value" id="bestScore">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 진행바 섹션 -->
+      <div class="bottom-bar-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+      </div>
+      
+      <!-- 컨트롤 버튼 섹션 -->
+      <div class="bottom-bar-controls">
+        <div class="game-controls">
+          <button class="control-btn btn-primary" id="startBtn">게임 시작</button>
+          <button class="control-btn btn-secondary" id="pauseBtn" disabled>일시정지</button>
+          <button class="control-btn btn-secondary" id="resetBtn">다시 시작</button>
+          <button class="control-btn hint-btn" id="hintBtn" disabled>💡 힌트 (5/5)</button>
+          <button class="control-btn btn-secondary" id="newGameBtn">다른 게임 선택</button>
+          <button class="control-btn btn-secondary" id="toggleAnswerBtn" style="background-color: #9b59b6; border-color: #8e44ad;">정답 영역 표시</button>
+          <button class="control-btn btn-warning" id="debugModeBtn" style="background-color: #f39c12; border-color: #e67e22;">🔧 디버그 모드</button>
+        </div>
+        
+        <!-- 힌트 정보 섹션 -->
+        <div class="hint-info" id="hintInfo">
+          <div class="hint-counter" id="hintCounter">게임: 3/3 | 일일: 10/10</div>
+          <div style="font-size: 10px; margin-top: 3px; color: #999;">
+            힌트 사용 시 50점 차감됩니다
+          </div>
+        </div>
+          
+          <!-- 개발자 도구 (개발 단계용) -->
+          <div class="dev-tools" id="devTools" style="display: none;">
+            <div class="dev-tools-header">
+              <h4>🛠️ 개발자 도구</h4>
+            </div>
+            <button class="control-btn btn-info" onclick="showAnswerHint()">💡 힌트</button>
+            <button class="control-btn btn-info" onclick="showDifferenceBlinking()">✨ 틀린부분 깜박임</button>
+            <button class="control-btn btn-info" onclick="toggleAnswerPoints()">📍 정답 표시</button>
+            <button class="control-btn btn-warning" onclick="resetDeveloperHints()" style="background-color: #e67e22; border-color: #d35400;">🔄 힌트 리셋</button>
+          </div>
+          
+          <!-- 메시지 영역 -->
+          <div id="messageArea" class="message-area">
+            <div id="errorMessage" class="sidebar-message error-msg" style="display: none;"></div>
+            <div id="successMessage" class="sidebar-message success-msg" style="display: none;"></div>
+            <div id="loading" class="sidebar-message loading-msg" style="display: none;">📊 데이터 로딩중...</div>
+          </div>
+          </div>
+          </div>
+
+  <!-- JavaScript 모듈들 -->
+  <!-- Supabase 클라이언트 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- 게임 스크립트들 -->
+  <script src="assets/js/game-state.js"></script>
+  <script src="assets/js/heart-system.js"></script>
+  <script src="assets/js/health-bar-system.js"></script>
+  <script src="assets/js/coordinate-utils.js"></script>
+  <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/game-logic.js"></script>
+  <script src="assets/js/click-handler.js"></script>
+  <script src="assets/js/answer-display.js"></script>
+  
+  <!-- 메인 게임 초기화 -->
+  <script>
+    console.log('🎮 게임 시작!');
+    
+    // 인증 상태 캐시 변수
+    let authStateCache = null;
+    let lastAuthCheck = 0;
+    const AUTH_CACHE_DURATION = 30000; // 30초 캐시
+    
+    // 인증 상태 캐시 클리어
+    function clearAuthCache() {
+      authStateCache = null;
+      lastAuthCheck = 0;
+      console.log('인증 상태 캐시가 클리어되었습니다.');
+    }
+    // 메시지 표시 함수
+    // 메시지 표시 함수
+    function showMessage(message, type = 'error') {
+      const errorEl = document.getElementById('errorMessage');
+      const successEl = document.getElementById('successMessage');
+      
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+      
+      if (type === 'error') {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      } else {
+        successEl.textContent = message;
+        successEl.style.display = 'block';
+      }
+      
+      setTimeout(() => {
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+      }, 3000);
+    }
+    
+    // 인증 상태 확인 함수 (간단한 대체 구현)
+    async function checkAuthState() {
+      try {
+        // 캐시된 결과가 있고 30초 이내면 사용
+        const now = Date.now();
+        if (authStateCache && (now - lastAuthCheck) < AUTH_CACHE_DURATION) {
+          console.log('📄 캐시된 인증 상태 반환:', authStateCache);
+          return authStateCache;
+        }
+        
+        // 로컬 스토리지에서 토큰 확인
+        const token = localStorage.getItem('supabaseToken');
+        const user = localStorage.getItem('supabaseUser');
+        const expiry = localStorage.getItem('supabaseTokenExpiry');
+        
+        if (!token || !user) {
+          console.log('❌ 토큰 또는 사용자 정보 없음');
+          authStateCache = { isAuthenticated: false, user: null };
+          lastAuthCheck = now;
+          return authStateCache;
+        }
+        
+        // 토큰 만료 확인
+        if (expiry && parseInt(expiry) < now) {
+          console.log('⏰ 토큰 만료됨');
+          localStorage.removeItem('supabaseToken');
+          localStorage.removeItem('supabaseUser');
+          localStorage.removeItem('supabaseTokenExpiry');
+          authStateCache = { isAuthenticated: false, user: null };
+          lastAuthCheck = now;
+          return authStateCache;
+        }
+        
+        // 사용자 정보 파싱
+        let userObj;
+        try {
+          userObj = JSON.parse(user);
+        } catch (parseError) {
+          console.error('사용자 정보 파싱 오류:', parseError);
+          authStateCache = { isAuthenticated: false, user: null };
+          lastAuthCheck = now;
+          return authStateCache;
+        }
+        
+        console.log('✅ 인증된 사용자:', { id: userObj.id, email: userObj.email });
+        authStateCache = { isAuthenticated: true, user: userObj };
+        lastAuthCheck = now;
+        return authStateCache;
+        
+      } catch (error) {
+        console.error('❌ 인증 상태 확인 오류:', error);
+        authStateCache = { isAuthenticated: false, user: null };
+        lastAuthCheck = Date.now();
+        return authStateCache;
+      }
+    }
+    function showLoading(show = true) {
+      const loadingEl = document.getElementById('loading');
+      if (show) {
+        loadingEl.style.display = 'block';
+        setTimeout(() => {
+          loadingEl.style.display = 'none';
+        }, 10000);
+      } else {
+        loadingEl.style.display = 'none';
+      }
+    }
+    
+    // 힌트 기능
+    let hintCount = 0;
+    const maxHints = 5;
+    
+    function showHint() {
+      if (!gameState.isGameActive || gameState.isPaused) {
+        showMessage('게임이 진행 중일 때만 힌트를 사용할 수 있습니다.', 'error');
+        return;
+      }
+      
+      if (hintCount >= maxHints) {
+        showMessage('힌트를 모두 사용했습니다.', 'error');
+        return;
+      }
+      
+      if (!gameState.answerPoints || gameState.answerPoints.length === 0) {
+        showMessage('게임 데이터가 로딩되지 않았습니다.', 'error');
+        return;
+      }
+      
+      // 아직 찾지 못한 영역들 중에서 랜덤하게 하나 선택
+      const unfoundRegions = gameState.answerPoints
+        .map((_, index) => index)
+        .filter(index => !gameState.foundPoints.includes(index));
+      
+      if (unfoundRegions.length === 0) {
+        showMessage('모든 정답을 찾았습니다!', 'success');
+        return;
+      }
+      
+      // 랜덤하게 하나의 영역 선택
+      const randomIndex = Math.floor(Math.random() * unfoundRegions.length);
+      const hintRegionIndex = unfoundRegions[randomIndex];
+      
+      // 힌트 사용 횟수 증가
+      hintCount++;
+      
+      // 선택된 영역을 3초간 깜빡이게 함
+      showDifferenceBlinking(hintRegionIndex, 3000);
+      
+      // 힌트 버튼 텍스트 업데이트
+      updateHintButton();
+      
+      showMessage(`힌트! 깜빡이는 영역을 확인하세요 (${hintCount}/${maxHints})`, 'success');
+      
+      console.log('💡 힌트 사용:', {
+        사용횟수: `${hintCount}/${maxHints}`,
+        힌트영역: hintRegionIndex,
+        남은미발견영역: unfoundRegions.length - 1
+      });
+    }
+    
+    function updateHintButton() {
+      const hintBtn = document.getElementById('hintBtn');
+      if (hintBtn) {
+        const remaining = maxHints - hintCount;
+        hintBtn.textContent = `💡 힌트 (${remaining}/${maxHints})`;
+        
+        if (remaining === 0) {
+          hintBtn.disabled = true;
+          hintBtn.style.opacity = '0.5';
+        } else {
+          hintBtn.disabled = false;
+          hintBtn.style.opacity = '1';
+        }
+      }
+    }
+    
+    // 게임 시작 시 힌트 초기화
+    function resetHintSystem() {
+      hintCount = 0;
+      updateHintButton();
+      console.log('🔄 힌트 시스템 초기화');
+    
+    }
+
+    // 이벤트 리스너 설정
+    function setupEventListeners() {
+      // 게임 제어 버튼들
+      document.getElementById('startBtn')?.addEventListener('click', startGame);
+      document.getElementById('pauseBtn')?.addEventListener('click', pauseGame);
+      document.getElementById('resetBtn')?.addEventListener('click', resetGame);
+      document.getElementById('hintBtn')?.addEventListener('click', showHint);
+      document.getElementById('newGameBtn')?.addEventListener('click', () => {
+        window.location.href = '../index.html';
+      });
+      document.getElementById('toggleAnswerBtn')?.addEventListener('click', toggleAnswerPoints);
+      
+      // 디버그 모드 토글
+      document.getElementById('debugModeBtn')?.addEventListener('click', () => {
+        debugMode = !debugMode;
+        const btn = document.getElementById('debugModeBtn');
+        const devTools = document.getElementById('devTools');
+        
+        // 버튼 텍스트와 색상 동시 업데이트
+        btn.textContent = debugMode ? '🔧 디버그 OFF' : '🔧 디버그 모드';
+        btn.style.backgroundColor = debugMode ? '#e74c3c' : '#f39c12';
+        
+        // 개발자 도구 패널 토글
+        devTools.style.display = debugMode ? 'block' : 'none';
+        
+        showMessage(`디버그 모드 ${debugMode ? 'ON' : 'OFF'}`, 'success');
+        });
+        
+      
+      // 이미지 클릭 이벤트
+      const modifiedImg = document.getElementById('modifiedImage');
+      if (modifiedImg) {
+        modifiedImg.addEventListener('click', (event) => {
+          if (debugMode) {
+            debugClickHandler(event);
+          } else {
+            handleImageClick(event);
+          }
+        });
+      }
+      
+      console.log('✅ 이벤트 리스너 설정 완료');
+    }
+    
+    window.addEventListener('load', async function() {
+      console.log('📱 페이지 로드 완료, 초기화 시작!');
+      
+      try {
+        // 이벤트 리스너 설정
+        setupEventListeners();
+        
+        // 인증 상태 캐시 클리어 (재로그인 문제 해결)
+        clearAuthCache();
+        console.log('인증 상태 캐시가 클리어되었습니다.');
+        
+        // 환경변수를 API에서 가져오는 함수
+        async function loadSupabaseConfig() {
+          try {
+            const response = await fetch('/api/config');
+            const config = await response.json();
+            return {
+              url: config.supabaseUrl,
+              anonKey: config.anon_key
+            };
+          } catch (error) {
+            console.error('설정 로드 오류:', error);
+            // 폴백: 하드코딩된 값 사용
+            return {
+              url: 'https://ysvxjmqdafldfrmdscvd.supabase.co',
+              anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzdnhqbXFkYWZsZGZybWRzY3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxODU5ODMsImV4cCI6MjA1Nzc2MTk4M30.lKRd0cPCFLMJFWT1lMrp7DOAjlx85Q-pbnsXTiE22G4'
+            };
+          }
+        }
+        
+        // URL에서 OAuth 토큰 처리 (Google 로그인 콜백)
+        const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = urlParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token');
+        const expiresIn = urlParams.get('expires_in');
+        const tokenType = urlParams.get('token_type');
+        const expiresAt = urlParams.get('expires_at');
+        
+        if (accessToken && refreshToken) {
+          console.log('🔑 OAuth 토큰 발견, 세션 설정 중...');
+          try {
+            // Supabase 설정을 API에서 가져오기
+            const config = await loadSupabaseConfig();
+            
+            // Supabase 클라이언트 가져오기 (이미 생성된 클라이언트 또는 새로 생성)
+            let supabaseClient = window.supabaseClient;
+            if (!supabaseClient && window.supabase) {
+              supabaseClient = window.supabase.createClient(config.url, config.anonKey);
+              window.supabaseClient = supabaseClient;
+            }
+            
+            const sessionData = {
+              access_token: accessToken,
+              refresh_token: refreshToken,
+              expires_at: expiresAt ? parseInt(expiresAt) : Math.floor(Date.now() / 1000) + 3600,
+              token_type: 'bearer',
+              user: null // Supabase가 자동으로 설정함
+            };
+            console.log('📝 세션 데이터 설정:', {
+              hasAccessToken: !!sessionData.access_token,
+              hasRefreshToken: !!sessionData.refresh_token,
+              expiresAt: new Date(sessionData.expires_at * 1000).toLocaleString()
+            
+            });
+            
+            const { data, error } = await supabaseClient.auth.setSession(sessionData);
+            
+            if (error) {
+              console.error('❌ 세션 설정 실패:', error);
+            } else {
+              console.log('✅ 세션 설정 성공:', data);
+              
+              // 로컬 스토리지에도 토큰 저장
+              localStorage.setItem('supabaseToken', accessToken);
+              localStorage.setItem('supabaseTokenExpiry', String(sessionData.expires_at * 1000));
+              
+              if (data.user) {
+                localStorage.setItem('supabaseUser', JSON.stringify(data.user));
+              }
+            }
+            
+            // URL 정리 (토큰 제거)
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+            console.log('🧹 URL 정리 완료');
+          } catch (tokenError) {
+            console.warn('⚠️ 토큰 처리 중 오류:', tokenError);
+          }
+        }
+        
+        // 인증 상태 변경 리스너 설정 (대체 구현)
+        // console.log('인증 상태 변경 리스너 설정됨');
+        
+        // 토큰 처리가 있었다면 잠시 대기 후 인증 상태 확인
+        if (accessToken && refreshToken) {
+          await new Promise(resolve => setTimeout(resolve, 1000)); // 1초 대기
+        }
+        
+        
+        // 인증 상태 확인 후 사용자 정보 표시 (게스트 모드 허용)
+        try {
+          const authState = await checkAuthState();
+          console.log('🔐 현재 인증 상태:', authState);
+          
+          // 로그인된 사용자의 경우에만 하트 시스템 초기화
+          if (authState.isAuthenticated && authState.user) {
+            try {
+              const heartInitSuccess = await window.heartSystem.init(authState.user.id);
+              if (heartInitSuccess) {
+                console.log('💖 하트 시스템 초기화 성공');
+              } else {
+                console.warn('⚠️ 하트 시스템 초기화 실패, 게스트 모드로 진행');
+              }
+            } catch (heartError) {
+              console.warn('⚠️ 하트 시스템 초기화 중 오류:', heartError.message);
+              console.log('게스트 모드로 진행합니다.');
+            }
+          } else {
+            console.log('👤 게스트 모드로 진행합니다.');
+          }
+          
+          await updateUserInterface();
+        } catch (authError) {
+          console.warn('⚠️ 인증 확인 실패:', authError.message);
+          console.log('게스트 모드로 진행합니다.');
+          await updateUserInterface();
+        }
+        
+        // 시간 제한 시각화 시스템 초기화
+        console.log('🔍 healthBarSystem 존재 여부:', typeof window.healthBarSystem);
+        if (typeof window.healthBarSystem !== 'undefined') {
+          console.log('🔍 healthBarSection DOM 요소 상태:', {
+            요소존재: !!document.getElementById('healthBarSection'),
+            클래스: document.getElementById('healthBarSection')?.className,
+            표시상태: document.getElementById('healthBarSection') ? window.getComputedStyle(document.getElementById('healthBarSection')).display : 'N/A'
+          });
+          
+          const healthBarInitSuccess = window.healthBarSystem.init();
+          if (healthBarInitSuccess) {
+            console.log('⏱️ 시간 제한 시각화 시스템 초기화 성공');
+          } else {
+            console.warn('⚠️ 시간 제한 시각화 시스템 초기화 실패');
+          }
+        } else {
+          console.error('❌ healthBarSystem이 로드되지 않았습니다!');
+        }
+        
+        // 게임 데이터 로딩
+        await loadGameData();
+        
+        // 체력바 시스템 시작 (게임 데이터 로딩 후)
+        if (typeof window.healthBarSystem !== 'undefined') {
+          console.log('🚀 체력바 시스템 수동 시작...');
+          window.healthBarSystem.start();
+          console.log('✅ 체력바 시스템 수동 시작 완료');
+        }
+        
+        // UI 업데이트
+        updateUI();
+        
+        showMessage('게임 준비 완료! 시작 버튼을 눌러주세요.', 'success');
+        
+      } catch (error) {
+        console.error('❌ 게임 초기화 실패:', error);
+        showMessage(`게임 초기화 실패: ${error.message}`, 'error');
+      }
+    });
+    
+    /**
+     * 사용자 인터페이스 업데이트
+     */
+    async function updateUserInterface() {
+      const userSection = document.getElementById('userSection');
+      const bestScoreSection = document.getElementById('bestScoreSection');
+      const bestScoreEl = document.getElementById('bestScore');
+      
+      try {
+                const authState = await checkAuthState();
+        
+        if (userSection) {
+          if (authState.isAuthenticated && authState.user) {
+            // 로그인 상태 UI
+            userSection.innerHTML = `
+              <div class="user-info">
+                <div class="user-avatar">
+                  <img src="${authState.user.user_metadata?.avatar_url || 'https://via.placeholder.com/40x40/4CAF50/FFFFFF?text=U'}" 
+                       alt="프로필" style="width: 40px; height: 40px; border-radius: 50%;">
+                </div>
+                <div class="user-details">
+                  <div class="user-name">👋 ${authState.user.user_metadata?.full_name || authState.user.email}</div>
+                  <div class="user-email">${authState.user.email}</div>
+                </div>
+                <button onclick="logout()" class="control-btn btn-secondary" style="margin-top: 10px;">로그아웃</button>
+              </div>
+            `;
+          } else {
+            // 게스트 상태 UI
+            userSection.innerHTML = `
+              <div class="guest-info">
+                <div class="guest-message">
+                  <span>🎮 게스트 모드</span>
+                  <div style="font-size: 12px; color: #888; margin: 5px 0;">
+                    로그인하면 더 많은 기능을 이용할 수 있습니다!
+                  </div>
+                </div>
+                <button onclick="loginWithGoogle()" class="control-btn btn-primary" style="margin-top: 10px;">
+                  <span>🔑 구글 로그인</span>
+                </button>
+              </div>
+            `;
+          }
+        }
+        
+        // 로그인된 사용자의 최고 점수 표시
+        if (authState.isAuthenticated && bestScoreSection && bestScoreEl) {
+          try {
+            // 최고 점수 기능은 향후 구현 예정
+            if (bestScoreSection) {
+              bestScoreSection.style.display = 'none';
+            }
+          } catch (error) {
+            console.log('최고 점수 API가 구현되지 않음:', error.message);
+            if (bestScoreSection) {
+              bestScoreSection.style.display = 'none';
+            }
+          }
+        }
+      } catch (error) {
+        console.error('사용자 인터페이스 업데이트 실패:', error);
+      }
+    }
+    
+    // 게임 시작 전 정답 영역 숨김
+    window.addEventListener('beforeunload', () => {
+      hideAnswerPoints();
+    });
+
+    /**
+     * 개발자용 힌트 리셋 함수
+     */
+    async function resetDeveloperHints() {
+      try {
+                const authState = await checkAuthState();
+        
+        // 로그인된 사용자인지 확인 (개발자 권한은 향후 구현)
+        if (authState.isAuthenticated) {
+          // 힌트 데이터 리셋 로직 (향후 구현 예정)
+          showMessage('🛠️ 힌트 리셋 기능은 향후 구현 예정입니다.', 'success');
+        } else {
+          showMessage('이 기능을 사용하려면 로그인이 필요합니다.', 'error');
+        }
+      } catch (error) {
+        console.error('개발자 힌트 리셋 오류:', error);
+        showMessage('기능 실행 중 오류가 발생했습니다.', 'error');
+      }
+    }
+
+    // 전역 함수로 노출
+    window.showLoading = showLoading;
+    window.showMessage = showMessage;
+    window.resetDeveloperHints = resetDeveloperHints;
+    
+    // authModule을 전역 authManager로 노출 (대체 구현)
+    // window.authManager = authModule;
+    
+    // 인증 관련 전역 함수
+    window.loginWithGoogle = async () => {
+      try {
+        // 간단한 구글 로그인 대체 구현
+        console.log('구글 로그인 요청');
+        // 로그인 페이지로 리다이렉트
+        window.location.href = '/login.html';
+      } catch (error) {
+        console.error('구글 로그인 중 오류:', error);
+        showMessage('로그인 중 오류가 발생했습니다.', 'error');
+      }
+    };
+    window.logout = async () => {
+      try {
+        // 인증 캐시 먼저 클리어
+        clearAuthCache();
+        
+        // 간단한 로그아웃 대체 구현
+        console.log('로그아웃 처리');
+        localStorage.removeItem('supabaseToken');
+        localStorage.removeItem('supabaseUser');
+        localStorage.removeItem('supabaseTokenExpiry');
+        
+        showMessage('로그아웃 되었습니다. 로그인 페이지로 이동합니다.', 'success');
+        // 2초 후 로그인 페이지로 리다이렉트
+        setTimeout(() => {
+          window.location.href = '/login.html';
+        }, 2000);
+      } catch (error) {
+        console.error('로그아웃 중 오류:', error);
+        showMessage('로그아웃 중 오류가 발생했습니다.', 'error');
+      }
+    };
+    </script>
+    
+    
+    </body>
+    </html>

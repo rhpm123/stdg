@@ -1,0 +1,105 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.cursor/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build files
+/dist
+/build
+.vercel
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*.backup
+*.bak
+
+# 민감정보 파일들
+*.key
+*.token
+*secret*
+mcp-config.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Dependency directories
+vendor/
+
+# IDE 설정
+*.swp
+*.swo
+
+# OS 생성 파일
+.DS_Store
+Thumbs.db
+
+# 개발용 테스트 파일
+test-*.html
+*-test.js
+
+# 프로젝트 정리 - 불필요한 파일들
+test-*.js
+test-*.ps1
+test-*.bat
+*-test.*
+*-backup.*
+*.backup
+server-*.js
+setup-*.js
+create-*.js
+fix-*.js
+check-*.js
+update-*.js
+insert-*.js
+detect-*.js
+apply-*.js
+run-*.js
+debug-*.bat
+start-*.bat
+install-*.bat
+*.sql
+temp.*
+작업지침.txt
+마이그레이션_완료_보고서.md
+WORK_SUMMARY.md
+TASK_MANAGEMENT.md
+tasks.json
+
+# 정리된 불필요한 파일들 보관 폴더 (사용하지 않음)
+_archived_files/

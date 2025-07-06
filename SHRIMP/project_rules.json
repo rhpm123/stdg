@@ -1,0 +1,27 @@
+{
+  "name": "틀린그림찾기 웹앱",
+  "description": "Supabase를 활용한, Google ID로 로그인하는 틀린그림찾기 웹 애플리케이션",
+  "source": ".cursor/rules/PROJECT_GUIDE.edc",
+  "rules": {
+    "coding_style": {
+      "general": "모든 코드는 명확하고 간결하게 작성",
+      "indentation": "2 spaces",
+      "naming": "camelCase 사용"
+    },
+    "architecture": {
+      "frontend": "HTML, CSS, JavaScript",
+      "backend": "Supabase (인증, 데이터베이스, 스토리지)",
+      "auth": "Google OAuth"
+    },
+    "data_models": {
+      "image_sets": "id, title, description, original_image_url, modified_image_url, difficulty",
+      "diff_spots": "id, image_set_id, x_coord, y_coord, radius",
+      "user_progress": "user_id, image_set_id, completed, score, time_spent"
+    },
+    "development_process": {
+      "task_management": "Shrimp Task Manager 사용",
+      "file_editing": "edit_file_lines 사용시 항상 부근 내용 확인",
+      "documentation": "작업 전 항상 프로젝트 가이드 참조"
+    }
+  }
+} 

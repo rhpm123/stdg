@@ -1,0 +1,89 @@
+{
+  "tasks": [
+    {
+      "id": "TASK-2025-0201",
+      "name": "이미지 저장 시스템 구성",
+      "description": "PostgreSQL 직접 연결 방식에서 이미지 저장 및 관리 전략 수립",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-25",
+      "dependencies": ["TASK-2025-0001"],
+      "assignee": "",
+      "verification_criteria": [
+        "Supabase 대시보드를 통한 이미지 업로드 프로세스 문서화",
+        "이미지 URL 구조 정의",
+        "이미지 메타데이터 스키마 설계",
+        "이미지 접근 권한 설정 완료"
+      ],
+      "implementation_guide": "Supabase 대시보드를 통해 이미지를 수동으로 업로드하고 URL을 얻는 프로세스를 구축합니다. 이 URL을 데이터베이스에 저장하는 방식으로 시스템을 설계합니다."
+    },
+    {
+      "id": "TASK-2025-0202",
+      "name": "이미지 저장소 구성 및 접근 방식 설정",
+      "description": "이미지 저장을 위한 Supabase 대시보드 기반 워크플로우 구성",
+      "priority": "high",
+      "status": "backlog",
+      "created_at": "2025-05-25",
+      "dependencies": ["TASK-2025-0201"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 저장용 디렉토리 구조 정의",
+        "이미지 명명 규칙 설정",
+        "이미지 URL 생성 및 관리 방식 문서화",
+        "테스트 이미지 업로드 프로세스 검증"
+      ],
+      "implementation_guide": "Supabase 대시보드에서 이미지를 관리하기 위한 일관된 디렉토리 구조와 명명 규칙을 정의합니다. PostgreSQL에서 이미지 URL을 참조하는 방식을 설계합니다."
+    },
+    {
+      "id": "TASK-2025-0203",
+      "name": "이미지 메타데이터 관리 UI 개발",
+      "description": "이미지 URL 및 메타데이터 입력을 위한 관리자 UI 개발",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-25",
+      "dependencies": ["TASK-2025-0201", "TASK-2025-0102"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 URL 입력 폼 구현",
+        "이미지 메타데이터 입력 폼 구현",
+        "이미지 미리보기 기능 구현",
+        "메타데이터 저장 기능 구현"
+      ],
+      "implementation_guide": "이미지는 Supabase 대시보드를 통해 업로드하고, 그 URL과 메타데이터만 입력할 수 있는 관리자 UI를 개발합니다. PostgreSQL 연결을 통해 메타데이터를 데이터베이스에 저장합니다."
+    },
+    {
+      "id": "TASK-2025-0204",
+      "name": "이미지 URL 및 메타데이터 관리 기능 구현",
+      "description": "PostgreSQL을 통한 이미지 URL 및 메타데이터 관리 기능 구현",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-25",
+      "dependencies": ["TASK-2025-0201", "TASK-2025-0102", "TASK-2025-0203"],
+      "assignee": "",
+      "verification_criteria": [
+        "이미지 URL이 데이터베이스에 저장됨",
+        "메타데이터가 데이터베이스에 저장됨",
+        "URL 및 메타데이터 수정 기능 구현",
+        "URL 및 메타데이터 삭제 기능 구현"
+      ],
+      "implementation_guide": "PostgreSQL 직접 연결을 통해 이미지 URL과 메타데이터를 데이터베이스에 저장하고 관리하는 기능을 구현합니다."
+    },
+    {
+      "id": "TASK-2025-0205",
+      "name": "이미지 접근 및 로드 기능 구현",
+      "description": "저장된 이미지 URL을 통해 이미지를 로드하고 표시하는 기능 구현",
+      "priority": "medium",
+      "status": "backlog",
+      "created_at": "2025-05-25",
+      "dependencies": ["TASK-2025-0204"],
+      "assignee": "",
+      "verification_criteria": [
+        "데이터베이스에서 이미지 URL 조회 기능 구현",
+        "이미지 로드 및 표시 기능 구현",
+        "이미지 로드 실패 시 예외 처리",
+        "이미지 캐싱 메커니즘 구현"
+      ],
+      "implementation_guide": "PostgreSQL 데이터베이스에서 이미지 URL을 조회하고, 이를 통해 이미지를 로드하여 표시하는 기능을 구현합니다."
+    }
+  ]
+} 

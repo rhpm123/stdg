@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>체력바 테스트</title>
+    <link rel="stylesheet" href="assets/css/game-play.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-stats">
+            <!-- 체력바 섹션 -->
+            <div class="stat-item" id="healthBarSection">
+                <div class="stat-label">시간</div>
+                <div class="health-bar-container">
+                    <div class="health-bar" id="healthBar">
+                        <div class="health-bar-fill" id="healthBarFill"></div>
+                        <div class="health-bar-text" id="healthBarText">100%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-controls">
+            <button id="initBtn">체력바 초기화</button>
+            <button id="startBtn">체력바 시작</button>
+            <button id="resetBtn">체력바 리셋</button>
+            <button id="checkBtn">상태 확인</button>
+        </div>
+        
+        <div id="log" style="margin-top: 20px; padding: 10px; background: #f0f0f0; font-family: monospace; white-space: pre-wrap;"></div>
+    </div>
+    
+    <script src="assets/js/game-state.js"></script>
+    <script src="assets/js/health-bar-system.js"></script>
+    
+    <script>
+        const log = document.getElementById('log');
+        
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            log.textContent += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // 초기화 버튼
+        document.getElementById('initBtn').addEventListener('click', () => {
+            addLog('=== 체력바 시스템 초기화 시작 ===');
+            const result = window.healthBarSystem.init();
+            addLog(`초기화 결과: ${result}`);
+        });
+        
+        // 시작 버튼
+        document.getElementById('startBtn').addEventListener('click', () => {
+            addLog('=== 체력바 시스템 시작 ===');
+            window.healthBarSystem.start();
+        });
+        
+        // 리셋 버튼
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            addLog('=== 체력바 시스템 리셋 ===');
+            window.healthBarSystem.reset();
+        });
+        
+        // 상태 확인 버튼
+        document.getElementById('checkBtn').addEventListener('click', () => {
+            const section = document.getElementById('healthBarSection');
+            const fill = document.getElementById('healthBarFill');
+            const text = document.getElementById('healthBarText');
+            
+            addLog('=== 현재 상태 확인 ===');
+            addLog(`healthBarSection 존재: ${!!section}`);
+            addLog(`healthBarSection 클래스: ${section?.className || 'N/A'}`);
+            addLog(`healthBarSection 표시상태: ${section ? window.getComputedStyle(section).display : 'N/A'}`);
+            addLog(`healthBarFill 존재: ${!!fill}`);
+            addLog(`healthBarText 존재: ${!!text}`);
+            addLog(`healthBarSystem 존재: ${typeof window.healthBarSystem}`);
+        });
+        
+        // 페이지 로드 시 자동 확인
+        window.addEventListener('load', () => {
+            addLog('=== 페이지 로드 완료 ===');
+            document.getElementById('checkBtn').click();
+        });
+    </script>
+</body>
+</html> 

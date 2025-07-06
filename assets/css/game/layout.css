@@ -1,0 +1,163 @@
+/* ============================================
+   틀린그림찾기 게임 - 레이아웃 모듈
+   ============================================
+   
+   @author Shrimp Task Manager
+   @version 0.1.0
+   @description 메인 콘텐츠, 이미지 컨테이너, 클릭 마커 레이아웃
+   ============================================ */
+
+/* 이 파일은 게임 플레이 화면의 핵심 레이아웃을 정의합니다 */ 
+
+/* ============================================
+   Shrimp Task Manager - CSS 모듈화 프로젝트
+   ============================================
+   파일명: layout.css
+   설명: 레이아웃 스타일 모듈 - 메인 콘텐츠, 이미지 컨테이너, 클릭 마커
+   생성일: 2024년
+   ============================================ */
+
+/* ============================================
+   메인 콘텐츠 영역 레이아웃
+   ============================================ */
+.main-content {
+  flex: 1;
+  display: flex;
+  background-color: var(--game-background-light);
+  padding: var(--game-spacing-xs);
+  gap: var(--game-spacing-sm);
+  align-items: stretch;
+  justify-content: center;
+  height: calc(100vh - var(--game-header-height) - var(--game-bottom-bar-height));
+  max-height: calc(100vh - var(--game-header-height) - var(--game-bottom-bar-height));
+  overflow: hidden;
+}
+
+/* ============================================
+   이미지 컨테이너 레이아웃
+   ============================================ */
+.images-container {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+  gap: var(--game-spacing-lg);
+  width: 100%;
+  height: 100%;
+  flex-wrap: nowrap !important;
+}
+
+.image-section {
+  flex: 1;
+  max-width: calc(50% - 5px);
+  height: 100%;
+  position: relative;
+  background-color: white;
+  border-radius: var(--game-border-radius);
+  box-shadow: var(--game-shadow-medium);
+  overflow: hidden;
+  transition: transform var(--game-transition-fast);
+  display: flex;
+  flex-direction: column;
+}
+
+.image-section h3 {
+  text-align: center;
+  margin: 0;
+  padding: var(--game-spacing-sm);
+  background: var(--game-primary-gradient);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+  cursor: crosshair;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: var(--game-border-radius-small);
+  transition: transform var(--game-transition-fast);
+}
+
+/* ============================================
+   클릭 마커 스타일
+   ============================================ */
+.click-marker {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid;
+  pointer-events: none;
+  z-index: 10;
+  animation: pulse var(--game-animation-fast) ease-out;
+}
+
+.click-marker.correct {
+  border-color: var(--game-success-color);
+  background-color: var(--game-success-20);
+}
+
+.click-marker.incorrect {
+  border-color: var(--game-error-color);
+  background-color: var(--game-error-20);
+}
+
+/* ============================================
+   정답 영역 시각화 스타일
+   ============================================ */
+.answer-point {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+}
+
+.answer-region-0 { background-color: var(--game-answer-region-0); }
+.answer-region-1 { background-color: var(--game-answer-region-1); }
+.answer-region-2 { background-color: var(--game-answer-region-2); }
+.answer-region-3 { background-color: var(--game-answer-region-3); }
+.answer-region-4 { background-color: var(--game-answer-region-4); }
+.answer-region-5 { background-color: var(--game-answer-region-5); }
+.answer-region-6 { background-color: var(--game-answer-region-6); }
+
+.answer-points-hidden {
+  opacity: 0;
+}
+
+/* ============================================
+   기본 애니메이션 (pulse)
+   ============================================ */
+@keyframes pulse {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================
+   반응형 레이아웃 (태블릿)
+   ============================================ */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .images-container {
+    gap: 20px;
+  }
+  
+  .image-section {
+    min-width: 300px;
+    max-width: 450px;
+  }
+} 

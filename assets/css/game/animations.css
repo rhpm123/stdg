@@ -1,0 +1,503 @@
+/* ============================================
+   Shrimp Task Manager - CSS 모듈화 프로젝트
+   파일: animations.css
+   설명: 게임 애니메이션 효과 모듈
+   ============================================ */
+
+/* ============================================
+   정답 영역 애니메이션
+   ============================================ */
+
+/* 정답 영역 깜빡임 효과 */
+@keyframes blinkAnswer {
+  0% { 
+    background-color: rgba(0, 255, 0, 0.8);
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+  }
+  25% { 
+    background-color: rgba(255, 255, 0, 0.9);
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.9);
+  }
+  50% { 
+    background-color: rgba(0, 255, 0, 0.8);
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+  }
+  75% { 
+    background-color: rgba(255, 255, 0, 0.9);
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.9);
+  }
+  100% { 
+    background-color: rgba(0, 255, 0, 0.8);
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+  }
+}
+
+@keyframes blinkHint {
+  0%, 100% { 
+    opacity: 0.3;
+    background-color: rgba(255, 165, 0, 0.3);
+  }
+  50% { 
+    opacity: 0.7;
+    background-color: rgba(255, 165, 0, 0.7);
+  }
+}
+
+.answer-marker.blink {
+  animation: blinkAnswer 1.5s ease-in-out;
+}
+
+.answer-highlight {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 998;
+}
+  
+.answer-highlight.hint {
+  animation: blinkHint 2s ease-in-out infinite;
+}
+
+/* ============================================
+   틀린부분 강조 애니메이션
+   ============================================ */
+
+/* 틀린부분 이미지 교차 깜빡임 효과 */
+.difference-blink-overlay {
+  position: absolute;
+  pointer-events: none;
+  z-index: 950;
+  border-radius: 4px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 원본 ↔ 수정 이미지 교차 애니메이션 */
+@keyframes blinkDifference {
+  0% {
+    opacity: 1; /* 원본 이미지 보임 */
+  }
+  50% {
+    opacity: 0; /* 수정된 이미지 보임 */
+  }
+  100% {
+    opacity: 1; /* 다시 원본 이미지 보임 */
+  }
+}
+
+/* 틀린부분 강조 테두리 */
+@keyframes glowBorder {
+  0%, 100% {
+    border-color: rgba(255, 0, 0, 0.8);
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+  }
+  25% {
+    border-color: rgba(255, 255, 0, 0.9);
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
+  }
+  50% {
+    border-color: rgba(0, 255, 0, 0.8);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+  }
+  75% {
+    border-color: rgba(0, 255, 255, 0.9);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
+  }
+}
+
+/* 깜빡임 효과가 우선되도록 수정 */
+.difference-blink-overlay.active {
+  animation: blinkDifference 1s ease-in-out infinite !important;
+  background-repeat: no-repeat;
+  background-clip: border-box;
+}
+
+/* ============================================
+   파티클 효과 애니메이션
+   ============================================ */
+
+/* 파티클 효과 스타일 */
+.particle-container {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1100;
+  width: 1px;
+  height: 1px;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 1;
+}
+
+/* 파티클 터지는 애니메이션 (업그레이드 버전!) */
+@keyframes particleExplode1 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-60px, -60px) scale(0.2) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode2 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(60px, -60px) scale(0.2) rotate(-360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-60px, 60px) scale(0.2) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode4 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(60px, 60px) scale(0.2) rotate(-360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode5 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-90px, 0) scale(0.1) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode6 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(90px, 0) scale(0.1) rotate(-720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode7 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -90px) scale(0.1) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplode8 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, 90px) scale(0.1) rotate(-540deg);
+    opacity: 0;
+  }
+}
+
+/* 파티클 색상 및 애니메이션 클래스 (진하고 선명한 색상!) */
+.particle-1 {
+  background-color: #e74c3c;
+  animation: particleExplode1 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #e74c3c;
+}
+
+.particle-2 {
+  background-color: #16a085;
+  animation: particleExplode2 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #16a085;
+}
+
+.particle-3 {
+  background-color: #f39c12;
+  animation: particleExplode3 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #f39c12;
+}
+
+.particle-4 {
+  background-color: #8e44ad;
+  animation: particleExplode4 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #8e44ad;
+}
+
+.particle-5 {
+  background-color: #2980b9;
+  animation: particleExplode5 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #2980b9;
+}
+
+.particle-6 {
+  background-color: #e91e63;
+  animation: particleExplode6 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #e91e63;
+}
+
+.particle-7 {
+  background-color: #27ae60;
+  animation: particleExplode7 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #27ae60;
+}
+
+.particle-8 {
+  background-color: #00b894;
+  animation: particleExplode8 1.0s ease-out forwards;
+  box-shadow: 0 0 10px #00b894;
+  }
+  
+/* ============================================
+   체크 마킹 애니메이션
+   ============================================ */
+
+/* 정답 영역 체크 마킹 스타일 */
+.correct-area-marker {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1001;
+  user-select: none;
+}
+
+/* 체크 마킹 펄스 애니메이션 */
+@keyframes checkPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+}
+
+.correct-area-marker:hover {
+  animation: checkPulse 1s ease-in-out;
+}
+
+/* ============================================
+   하트 깨지기 효과 애니메이션
+   ============================================ */
+
+/* 하트 깨지기 효과 스타일 */
+.heart-container {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1100;
+  animation: heartPulse 0.6s ease-in-out;
+}
+
+@keyframes heartPulse {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(-5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.heart-piece-container {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1100;
+  width: 1px;
+  height: 1px;
+}
+
+.heart-piece {
+  position: absolute;
+  pointer-events: none;
+  opacity: 1;
+  border-radius: 2px;
+}
+
+/* 하트 조각들의 각기 다른 떨어지는 방향 */
+@keyframes heartPiece1 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translate(-15px, -10px) scale(0.8) rotate(-45deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-30px, 20px) scale(0.5) rotate(-90deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-40px, 60px) scale(0.2) rotate(-180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece2 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translate(15px, -15px) scale(0.8) rotate(45deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(30px, 15px) scale(0.5) rotate(90deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(40px, 70px) scale(0.2) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-20px, 80px) scale(0.1) rotate(-90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece4 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(30px, 75px) scale(0.2) rotate(270deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece5 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0px, 90px) scale(0.1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece6 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50px, 45px) scale(0.2) rotate(-270deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece7 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(50px, 50px) scale(0.1) rotate(450deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartPiece8 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-10px, 95px) scale(0.15) rotate(-720deg);
+    opacity: 0;
+  }
+}
+
+/* 하트 조각 애니메이션 클래스 */
+.heart-piece-1 {
+  animation: heartPiece1 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-2 {
+  animation: heartPiece2 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-3 {
+  animation: heartPiece3 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-4 {
+  animation: heartPiece4 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-5 {
+  animation: heartPiece5 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-6 {
+  animation: heartPiece6 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-7 {
+  animation: heartPiece7 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.heart-piece-8 {
+  animation: heartPiece8 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ============================================
+   틀린그림찾기 게임 - 애니메이션 모듈
+   ============================================
+   
+   작성자: Shrimp Task Manager
+   버전: 0.1.0
+   설명: 키프레임, 파티클 효과, 하트 깨지기 등 애니메이션
+   ============================================ */
+
+/* 이 파일은 게임의 모든 애니메이션 효과를 정의합니다 */

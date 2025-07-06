@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 - 틀린그림찾기 앱</title>
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      text-shadow: none;
+    }
+    
+    .welcome-text {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+    
+    /* 구글 로그인 버튼 스타일 */
+    .google-login-section {
+      margin-bottom: 30px;
+    }
+    
+    .google-login-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 2px solid #dadce0;
+      border-radius: 12px;
+      padding: 15px 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #3c4043;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    
+    .google-login-btn:hover {
+      background: #f8f9fa;
+      border-color: #c5c7ca;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .google-logo {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+    }
+    
+    /* 구분선 */
+    .divider {
+      position: relative;
+      margin: 25px 0;
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+    
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e0e0e0;
+      z-index: 1;
+    }
+    
+    .divider span {
+      background: white;
+      padding: 0 15px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* 다른 로그인 방법 토글 섹션 */
+    .alternative-login {
+      text-align: left;
+    }
+    
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: #667eea;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      margin-bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .toggle-btn:hover {
+      color: #5a67d8;
+    }
+    
+    .email-login-form {
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+    
+    .email-login-form.show {
+      display: block;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .email-submit-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s ease;
+      margin-bottom: 10px;
+    }
+    
+    .email-submit-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .signup-btn {
+      background: #6b7280;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.2s ease;
+    }
+    
+    .signup-btn:hover {
+      background: #5b6470;
+    }
+    
+    /* 결과 메시지 스타일 */
+    #result {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+      font-weight: 500;
+    }
+    
+    #result.error {
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      display: block;
+    }
+    
+    #result.success {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #16a34a;
+      display: block;
+    }
+    
+    /* 하단 링크 */
+    .back-link {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.9rem;
+    }
+    
+    .back-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+    
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .welcome-text {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 로그인</h1>
+    <p class="welcome-text">틀린그림찾기 게임에 오신 것을 환영합니다!<br>로그인하고 재미있는 게임을 시작해보세요.</p>
+    
+    <!-- 구글 로그인 섹션 -->
+    <div class="google-login-section">
+      <button id="googleLoginBtn" class="google-login-btn">
+        <svg class="google-logo" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Google로 로그인
+      </button>
+    </div>
+    
+    <!-- 구분선 -->
+    <div class="divider">
+      <span>또는</span>
+    </div>
+    
+    <!-- 다른 로그인 방법 -->
+    <div class="alternative-login">
+      <button id="toggleEmailLogin" class="toggle-btn">이메일로 로그인하기</button>
+      
+      <div id="emailLoginForm" class="email-login-form">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" placeholder="이메일 주소를 입력하세요" required>
+          </div>
+          <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
+          </div>
+          <button type="submit" class="email-submit-btn">로그인</button>
+          <button type="button" id="signupBtn" class="signup-btn">회원가입</button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- 결과 메시지 -->
+    <div id="result"></div>
+    
+    <!-- 하단 링크 -->
+    <div class="back-link">
+      <a href="index.html">← 메인 페이지로 돌아가기</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Supabase 사용 가능 여부 확인
+      console.log('Supabase 사용 가능:', typeof window.supabase !== 'undefined');
+      
+      const googleLoginBtn = document.getElementById('googleLoginBtn');
+      const toggleEmailLoginBtn = document.getElementById('toggleEmailLogin');
+      const emailLoginForm = document.getElementById('emailLoginForm');
+      const loginForm = document.getElementById('loginForm');
+      const signupBtn = document.getElementById('signupBtn');
+      const resultDiv = document.getElementById('result');
+      
+      // URL 파라미터 확인
+      const urlParams = new URLSearchParams(window.location.search);
+      const message = urlParams.get('message');
+      const redirect = urlParams.get('redirect');
+      
+      if (message) {
+        resultDiv.style.display = 'block';
+        resultDiv.className = 'error';
+        switch (message) {
+          case 'login_required':
+            resultDiv.textContent = '이 기능을 사용하려면 로그인이 필요합니다.';
+            break;
+          case 'auth_required':
+            resultDiv.textContent = '인증이 필요합니다. 다시 로그인해 주세요.';
+            break;
+          case 'session_expired':
+            resultDiv.textContent = '세션이 만료되었습니다. 다시 로그인해 주세요.';
+            break;
+          case 'signup_success':
+            resultDiv.textContent = '회원가입이 완료되었습니다. 로그인해 주세요.';
+            resultDiv.className = 'success';
+            break;
+          default:
+            resultDiv.textContent = message;
+        }
+      }
+      
+      // 구글 로그인 버튼 클릭
+      console.log('구글 로그인 버튼 이벤트 리스너 등록 중...');
+      googleLoginBtn.addEventListener('click', async function() {
+        console.log('구글 로그인 버튼 클릭됨!');
+        try {
+          resultDiv.textContent = 'Google 로그인 중...';
+          resultDiv.className = '';
+          resultDiv.style.display = 'block';
+          
+          // API에서 Supabase 설정 가져오기
+          const configResponse = await fetch('/api/config');
+          const config = await configResponse.json();
+          
+          // Supabase 클라이언트 생성
+          const supabaseClient = window.supabase.createClient(config.supabaseUrl, config.anon_key);
+          
+          // Google OAuth 로그인 시작
+          const { data, error } = await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo: window.location.origin + '/game-play.html?id=3'
+            }
+          });
+          
+          if (error) {
+            resultDiv.textContent = `Google 로그인 실패: ${error.message}`;
+            resultDiv.className = 'error';
+          } else {
+            resultDiv.textContent = '로그인 성공! 리디렉션 중...';
+            resultDiv.className = 'success';
+            // OAuth 리다이렉트가 자동으로 발생함
+          }
+        } catch (error) {
+          resultDiv.textContent = `오류 발생: ${error.message}`;
+          resultDiv.className = 'error';
+        }
+      });
+      
+      // 이메일 로그인 토글
+      toggleEmailLoginBtn.addEventListener('click', function() {
+        emailLoginForm.classList.toggle('show');
+        toggleEmailLoginBtn.textContent = emailLoginForm.classList.contains('show') 
+          ? '이메일 로그인 숨기기' 
+          : '이메일로 로그인하기';
+      });
+      
+      // 이메일 로그인 폼 제출
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        try {
+          resultDiv.textContent = '로그인 중...';
+          resultDiv.className = '';
+          resultDiv.style.display = 'block';
+          
+          console.log('인증 요청 전송 중...');
+          const response = await fetch('/api/supabase/auth', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              action: 'signIn',
+              email,
+              password
+            })
+          });
+          
+          console.log('서버 응답 상태:', response.status);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('서버 오류 응답:', errorText);
+            throw new Error(`서버 오류: ${response.status} - ${errorText || '응답 없음'}`);
+          }
+          
+          const data = await response.json();
+          console.log('로그인 응답:', data);
+          
+          if (data.success) {
+            resultDiv.textContent = '로그인 성공! 리디렉션 중...';
+            resultDiv.className = 'success';
+            
+            // 세션 저장
+            localStorage.setItem('supabaseToken', data.data.session.access_token);
+            localStorage.setItem('supabaseTokenExpiry', String(Date.now() + 3600000));
+            
+            if (data.data.user) {
+              localStorage.setItem('supabaseUser', JSON.stringify(data.data.user));
+            }
+            
+            // 리다이렉트
+            setTimeout(() => {
+              const redirectUrl = redirect || 'game-play.html?id=3';
+              window.location.href = redirectUrl;
+            }, 1000);
+          } else {
+            resultDiv.textContent = `로그인 실패: ${data.error}`;
+            resultDiv.className = 'error';
+            console.error('로그인 실패 세부 정보:', data);
+          }
+        } catch (error) {
+          resultDiv.textContent = `오류 발생: ${error.message}`;
+          resultDiv.className = 'error';
+        }
+      });
+      
+      // 회원가입 버튼 클릭
+      signupBtn.addEventListener('click', async function() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+          resultDiv.textContent = '이메일과 비밀번호를 모두 입력해주세요.';
+          resultDiv.className = 'error';
+          resultDiv.style.display = 'block';
+          return;
+        }
+        
+        try {
+          resultDiv.textContent = '회원가입 중...';
+          resultDiv.className = '';
+          resultDiv.style.display = 'block';
+          
+          const response = await fetch('/api/supabase/auth', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              action: 'signUp',
+              email,
+              password
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            resultDiv.textContent = '회원가입 성공! 확인 이메일을 확인해주세요.';
+            resultDiv.className = 'success';
+          } else {
+            resultDiv.textContent = `회원가입 실패: ${data.error}`;
+            resultDiv.className = 'error';
+          }
+        } catch (error) {
+          resultDiv.textContent = `오류 발생: ${error.message}`;
+          resultDiv.className = 'error';
+        }
+      });
+      
+      // 로그인 상태 확인 함수
+      async function checkLoginStatus() {
+        try {
+          const response = await fetch('/api/supabase/auth', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              action: 'getUser'
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success && data.data && data.data.user) {
+            // 이미 로그인된 경우 리다이렉트
+            const redirectUrl = urlParams.get('redirect') || 'game-play.html?id=3';
+            window.location.href = redirectUrl;
+          }
+        } catch (error) {
+          console.error('로그인 상태 확인 오류:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html> 
