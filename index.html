@@ -190,7 +190,7 @@
           const { data, error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-              redirectTo: 'https://stdg.vercel.app/game-play.html?id=3'
+                            redirectTo: 'https://stdg.vercel.app/game-play.html?id=3'  // 강제 배포 트리거
             }
           });
           
