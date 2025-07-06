@@ -36,17 +36,13 @@ module.exports = async (req, res) => {
       .select(`
         id,
         name,
-        title, 
-        description,
-        difficulty_level,
-        time_limit_seconds,
-        max_errors,
+        original_image_url,
+        modified_image_url,
+        difficulty,
         created_at,
-        updated_at,
-        is_active
+        updated_at
       `)
-      .eq('is_active', true)
-      .order('difficulty_level', { ascending: true });
+      .order('created_at', { ascending: true });
 
     if (error) {
       console.error('Supabase 쿼리 오류:', error);
@@ -59,7 +55,7 @@ module.exports = async (req, res) => {
     if (!data || data.length === 0) {
       console.log('조회된 이미지 세트가 없습니다.');
       return res.status(404).json({ 
-        error: '활성화된 이미지 세트를 찾을 수 없습니다.',
+                error: '이미지 세트를 찾을 수 없습니다.',
         count: 0 
       });
     }
