@@ -3,6 +3,12 @@
   "public": true,
   "cleanUrls": true,
   "trailingSlash": false,
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/login.html"
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
