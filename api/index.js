@@ -242,4 +242,6 @@ app.post('/api/save-game-result', async (req, res) => {
 });
 
 // Vercel 서버리스 함수로 내보내기
-module.exports = app;
+module.exports = (req, res) => {
+  return app(req, res);
+};
