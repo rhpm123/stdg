@@ -20,10 +20,6 @@
     {
       "source": "/admin",
       "destination": "/compare-images.html"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
     }
   ],
   "headers": [
