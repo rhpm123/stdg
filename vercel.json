@@ -4,9 +4,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/index.js": {
-      "runtime": "nodejs18.x"
-    }
+    "api/index.js": {}
   },
   "rewrites": [
     {
