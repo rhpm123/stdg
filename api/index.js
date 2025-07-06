@@ -111,6 +111,14 @@ console.log('Vercel 서버리스 함수 초기화:', {
   hasKey: !!supabaseKey
 });
 
+// 공개 설정 제공 API (클라이언트에서 Supabase 설정 가져오기)
+app.get('/api/config', (req, res) => {
+  res.json({
+    supabaseUrl: process.env.SUPABASE_URL,
+    anon_key: process.env.SUPABASE_ANON_KEY
+  });
+});
+
 // 이미지 세트 목록 조회
 app.get('/api/image-sets', async (req, res) => {
   try {
