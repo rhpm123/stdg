@@ -6,12 +6,8 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/login.html"
-    },
-    {
       "source": "/home",
-      "destination": "/index.html"
+      "destination": "/game-home.html"
     },
     {
       "source": "/game-play",
