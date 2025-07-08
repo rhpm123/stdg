@@ -86,11 +86,12 @@ function displayImages(imageSet) {
  * 게임 시작
  */
 function startGame() {
+  console.log('🚀 [DEBUG] startGame 함수 호출됨!');
   if (!gameState.currentImageSet || !gameState.answerPoints.length) {
     showMessage('게임 데이터를 먼저 로딩해주세요.', 'error');
     return;
   }
-  
+    
   startGameState();
   startTimer();
   
@@ -150,6 +151,8 @@ function pauseGame() {
   * 게임 리셋
   */
  function resetGame() {
+   console.log('🔄 [DEBUG] resetGame 함수 호출됨!');
+   console.trace('[DEBUG] resetGame 호출 스택 트레이스:');
    resetGameState();
    removeAnswerPoints();
    
