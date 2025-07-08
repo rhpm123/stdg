@@ -344,10 +344,36 @@
 
     // 이벤트 리스너 설정
     function setupEventListeners() {
+      console.log('🔧 [DEBUG] setupEventListeners 호출됨!');
+      
       // 게임 제어 버튼들
-      document.getElementById('startBtn')?.addEventListener('click', startGame);
+      const startBtn = document.getElementById('startBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      
+      console.log('🎯 [DEBUG] 버튼 요소 확인:', {
+        startBtn: startBtn,
+        resetBtn: resetBtn,
+        startBtnId: startBtn?.id,
+        resetBtnId: resetBtn?.id
+      });
+      
+      if (startBtn) {
+        console.log('🚀 [DEBUG] startBtn에 startGame 이벤트 리스너 등록');
+        startBtn.addEventListener('click', function(event) {
+          console.log('🔴 [DEBUG] START 버튼 클릭 이벤트 발생!', event.target);
+          startGame();
+        });
+      }
+      
+      if (resetBtn) {
+        console.log('🔄 [DEBUG] resetBtn에 resetGame 이벤트 리스너 등록');
+        resetBtn.addEventListener('click', function(event) {
+          console.log('🔵 [DEBUG] RESET 버튼 클릭 이벤트 발생!', event.target);
+          resetGame();
+        });
+      }
+      
       document.getElementById('pauseBtn')?.addEventListener('click', pauseGame);
-      document.getElementById('resetBtn')?.addEventListener('click', resetGame);
       document.getElementById('hintBtn')?.addEventListener('click', showHint);
       document.getElementById('newGameBtn')?.addEventListener('click', () => {
         window.location.href = '../index.html';
