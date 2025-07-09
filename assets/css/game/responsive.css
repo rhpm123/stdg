@@ -437,6 +437,8 @@
     overflow-y: auto !important; /* 세로 스크롤 가능 */
     overflow-x: hidden !important; /* 가로 스크롤 방지 */
     -webkit-overflow-scrolling: touch !important; /* 부드러운 스크롤 (모바일) */
+    word-wrap: break-word !important; /* 긴 텍스트 자동 줄바꿈 */
+    word-break: break-word !important; /* 단어 중간에서도 줄바꿈 허용 */
   }
   
   /* 게임 타이틀 크기 축소 */
@@ -495,4 +497,27 @@
   gap: 12px !important;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+/* ============================================
+   모든 화면 모드에서 텍스트 잘림 방지
+   ============================================ */
+
+/* 전역 텍스트 오버플로우 방지 */
+* {
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* 게임 관련 요소들 오버플로우 방지 */
+.stat-item,
+.health-bar-text,
+.message-display,
+.game-title,
+.hint-display {
+  overflow: visible !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
 }
