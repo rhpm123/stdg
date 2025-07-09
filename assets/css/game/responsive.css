@@ -430,9 +430,13 @@
   
   /* 메인 콘텐츠 영역 높이 조정 (더 많은 공간 확보) */
   .main-content {
-    height: calc(100vh - 30px - 25px) !important;
-    max-height: calc(100vh - 30px - 25px) !important;
-    padding: 1px !important;
+    height: calc(100vh - 55px) !important;
+    max-height: calc(100vh - 55px) !important;
+    min-height: 300px !important; /* 최소 높이 보장 */
+    padding: 2px !important;
+    overflow-y: auto !important; /* 세로 스크롤 가능 */
+    overflow-x: hidden !important; /* 가로 스크롤 방지 */
+    -webkit-overflow-scrolling: touch !important; /* 부드러운 스크롤 (모바일) */
   }
   
   /* 게임 타이틀 크기 축소 */
