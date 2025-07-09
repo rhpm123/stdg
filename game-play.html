@@ -357,6 +357,40 @@
         resetBtnId: resetBtn?.id
       });
       
+      // 버튼 위치 정보 확인
+      if (startBtn && resetBtn) {
+        const startRect = startBtn.getBoundingClientRect();
+        const resetRect = resetBtn.getBoundingClientRect();
+        
+        console.log('📐 [DEBUG] 버튼 위치 정보:', {
+          startBtn: {
+            x: startRect.x,
+            y: startRect.y,
+            width: startRect.width,
+            height: startRect.height,
+            right: startRect.right,
+            bottom: startRect.bottom
+          },
+          resetBtn: {
+            x: resetRect.x,
+            y: resetRect.y,
+            width: resetRect.width,
+            height: resetRect.height,
+            right: resetRect.right,
+            bottom: resetRect.bottom
+          }
+        });
+        
+        // 겹침 여부 확인
+        const isOverlapping = !(
+          startRect.right < resetRect.left || 
+          resetRect.right < startRect.left || 
+          startRect.bottom < resetRect.top || 
+          resetRect.bottom < startRect.top
+        );
+        
+        console.log(`${isOverlapping ? '❌ [WARNING]' : '✅ [OK]'} 버튼 겹침 여부: ${isOverlapping}`);
+      }
       if (startBtn) {
         console.log('🚀 [DEBUG] startBtn에 startGame 이벤트 리스너 등록');
         startBtn.addEventListener('click', function(event) {
