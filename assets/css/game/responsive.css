@@ -312,3 +312,164 @@
     -webkit-touch-callout: none;
   }
 }
+
+/* ============================================
+   모바일 레이아웃 최적화 (세로/가로모드 구분)
+   ============================================ */
+
+/* 모바일 세로모드: 이미지 세로 배치 */
+@media (max-width: 768px) and (orientation: portrait) {
+  .images-container {
+    flex-direction: column !important;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .image-section {
+    max-width: 95% !important;
+    width: 95%;
+    height: auto;
+    min-height: 250px;
+  }
+}
+
+/* 모바일 가로모드: 이미지 좌우 배치 (핵심 수정) */
+@media (orientation: landscape) and (max-width: 1024px) and (min-width: 480px) {
+  .images-container {
+    flex-direction: row !important;
+    gap: 10px !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image-section {
+    max-width: calc(50% - 5px) !important;
+    width: calc(50% - 5px);
+    height: 100%;
+    flex: 1;
+  }
+  
+  /* 가로모드에서 세로 공간 최적화 (더 압축) */
+  .game-header-top {
+    padding: 2px 6px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    font-size: 0.8rem !important;
+    overflow: hidden;
+  }
+  
+  .bottom-bar {
+    padding: 1px 4px !important;
+    min-height: 25px !important;
+    gap: 2px !important;
+    flex-wrap: nowrap;
+    max-height: 25px !important;
+    overflow: hidden;
+  }
+  
+  /* 하단 바 모든 하위 섹션 압축 */
+  .bottom-bar-stats,
+  .bottom-bar-progress, 
+  .bottom-bar-controls {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+    max-height: 20px !important;
+    overflow: hidden;
+  }
+  
+  .bottom-bar-stats .game-stats {
+    gap: 2px !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden;
+  }
+  
+  .bottom-bar-controls .game-controls {
+    gap: 8px !important; /* 2px → 8px로 간격 증가 */
+    flex-wrap: nowrap !important;
+    overflow: hidden;
+  }
+  
+  .bottom-bar .stat-item {
+    padding: 1px 3px !important;
+    min-width: 30px !important;
+    font-size: 0.6rem !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    margin: 0 !important;
+    line-height: 1.1 !important;
+  }
+  
+  .control-btn {
+    padding: 4px 8px !important; /* 2px 4px → 4px 8px로 패딩 증가 */
+    font-size: 0.65rem !important; /* 0.55rem → 0.65rem로 폰트 크기 증가 */
+    min-height: 32px !important; /* 20px → 32px로 버튼 크기 증가 */
+    max-height: 32px !important; /* 20px → 32px로 버튼 크기 증가 */
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin: 0 2px !important; /* 버튼 간 추가 마진으로 터치 영역 명확히 구분 */
+  }
+  
+  /* 진행바도 극단적으로 압축 */
+  .progress-bar {
+    height: 3px !important;
+    margin: 0 !important;
+  }
+  
+  /* 힌트 정보와 기타 불필요한 요소 숨김 */
+  .hint-info {
+    display: none !important;
+  }
+  
+  .dev-tools {
+    display: none !important;
+  }
+  
+  /* 메인 콘텐츠 영역 높이 조정 (더 많은 공간 확보) */
+  .main-content {
+    height: calc(100vh - 30px - 25px) !important;
+    max-height: calc(100vh - 30px - 25px) !important;
+    padding: 1px !important;
+  }
+  
+  /* 게임 타이틀 크기 축소 */
+  .game-title {
+    font-size: 0.7rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* 통계 라벨과 값 텍스트 압축 */
+  .stat-label {
+    font-size: 0.5rem !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .stat-value {
+    font-size: 0.55rem !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* 모든 텍스트 요소 압축 */
+  .bottom-bar * {
+    font-size: inherit !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* 통계 섹션 간격 최소화 */
+  .bottom-bar .stat-section {
+    gap: 4px !important;
+  }
+  
+  /* 모든 버튼 그룹 간격 최소화 */
+  .button-group {
+    gap: 4px !important;
+  }
+}
