@@ -194,8 +194,8 @@ text-overflow: ellipsis;
   transition: all var(--game-transition-fast);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
-  overflow: hidden;
-  min-height: 32px;
+  overflow: visible;
+  min-height: 40px;
 }
 
 /* 중요도에 따른 시각적 계층 구조 */
