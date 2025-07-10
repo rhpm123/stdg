@@ -32,6 +32,13 @@ let gameState = {
     maxDaily: 10,         // 일일 최대 힌트 수
     lastUsedTime: 0,      // 마지막 힌트 사용 시간 (timestamp)
     cooldownMs: 30000     // 쿨다운 시간 (30초)
+  },
+  // 모바일 화면 회전 관리
+  orientation: {
+    isLandscape: false,         // 현재 가로모드 여부
+    isForced: false,           // 가로모드 강제 적용 여부
+    isFullscreen: false,       // 풀스크린 모드 여부
+    controller: null           // OrientationController 인스턴스
   }
 };
 
@@ -44,7 +51,9 @@ function getImageSetId() {
 }
 
 /**
- function resetGameState() {
+ * 게임 상태 초기화
+ */
+function resetGameState() {
    if (gameState.timerInterval) {
      clearInterval(gameState.timerInterval);
    }
@@ -61,6 +70,14 @@ function getImageSetId() {
    // 게임별 힌트 카운터 초기화 (일일 카운터는 유지)
    gameState.hints.used = 0;
    gameState.hints.lastUsedTime = 0;
+   
+   // orientation 상태는 유지 (컨트롤러와 현재 상태는 게임 리셋과 무관)
+   // gameState.orientation.isLandscape - 현재 상태 유지
+   // gameState.orientation.controller - 인스턴스 유지
+   if (gameState.orientation) {
+     gameState.orientation.isForced = false;     // 강제 모드는 해제
+     gameState.orientation.isFullscreen = false; // 풀스크린은 해제
+   }
  }
 
 /**
