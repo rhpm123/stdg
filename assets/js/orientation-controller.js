@@ -190,8 +190,30 @@ class OrientationController {
           isLandscape: this.isLandscape,
           isForced: false,
           isFullscreen: false,
-          controller: this
+          controller: this,
+          
+          // Bottom-bar 상태 관리 (v2.0)
+          bottomBarMode: 'auto',     // 'auto', 'full', 'compact', 'minimal', 'hidden'
+          lastBottomBarMode: 'auto', // 이전 bottom-bar 모드 
+          bottomBarManager: null,    // BottomBarManager 인스턴스
+          
+          // 모드별 설정 프리셋
+          presets: {
+            landscape: {
+              bottomBarMode: 'auto',     // 가로모드에서는 자동 조절
+              enableFullscreen: true,    // 풀스크린 허용
+              showOrientationOverlay: false  // 회전 안내 숨김
+            },
+            portrait: {
+              bottomBarMode: 'hidden',   // 세로모드에서는 bottom-bar 숨김
+              enableFullscreen: false,   // 풀스크린 비활성화
+              showOrientationOverlay: true   // 회전 안내 표시
+            }
+          }
         };
+        
+        // BottomBarManager 연결 설정
+        this.setupBottomBarConnection();
       }
       
       this.initialized = true;
@@ -205,6 +227,69 @@ class OrientationController {
       
     } catch (error) {
       console.error('❌ Orientation Controller 초기화 실패:', error);
+    }
+  }
+  
+  /**
+   * BottomBarManager 연결 설정 (v2.0)
+   */
+  setupBottomBarConnection() {
+    try {
+      console.log('🔗 BottomBarManager 연결 설정 시작...');
+      
+      // 전역 bottomBarManager가 있는지 확인
+      if (typeof window.bottomBarManager !== 'undefined') {
+        gameState.orientation.bottomBarManager = window.bottomBarManager;
+        
+        // BottomBarManager가 활성화되어 있는지 확인
+        if (window.bottomBarManager.isEnabled && window.bottomBarManager.isEnabled()) {
+          // BottomBarManager에 orientation 변경 콜백 등록
+          if (typeof window.bottomBarManager.onModeChange === 'function') {
+            window.bottomBarManager.onModeChange((data) => {
+              console.log('📱 BottomBarManager 모드 변경:', data);
+              
+              // gameState에 모드 변경 반영
+              if (gameState.orientation) {
+                gameState.orientation.lastBottomBarMode = data.previous;
+                gameState.orientation.bottomBarMode = data.current;
+              }
+            });
+            
+            // 초기 모드 설정
+            this.updateBottomBarMode();
+            
+            console.log('✅ BottomBarManager 연결 완료');
+          } else {
+            console.log('ℹ️ BottomBarManager.onModeChange 메소드가 없음 (안전 모드)');
+          }
+        } else {
+          console.log('ℹ️ BottomBarManager가 비활성화됨 (안전 모드)');
+        }
+      
+        
+      } else {
+        // BottomBarManager가 아직 로드되지 않았을 경우 대기
+        let attempts = 0;
+        const maxAttempts = 50; // 5초 대기 (100ms × 50)
+        
+        const waitForBottomBarManager = () => {
+          attempts++;
+          
+          if (typeof window.bottomBarManager !== 'undefined') {
+            console.log(`✅ BottomBarManager 대기 완료 (${attempts}회 시도)`);
+            this.setupBottomBarConnection(); // 재귀 호출
+          } else if (attempts < maxAttempts) {
+            setTimeout(waitForBottomBarManager, 100);
+          } else {
+            console.warn('⚠️ BottomBarManager 로드 대기 시간 초과');
+          }
+        };
+        
+        waitForBottomBarManager();
+      }
+      
+    } catch (error) {
+      console.error('❌ BottomBarManager 연결 설정 실패:', error);
     }
   }
 
@@ -578,6 +663,9 @@ class OrientationController {
         // 게임 상태 업데이트
         if (typeof gameState !== 'undefined' && gameState.orientation) {
           gameState.orientation.isLandscape = this.isLandscape;
+          
+          // Bottom-bar 모드 업데이트 (v2.0)
+          this.updateBottomBarMode();
         }
         
         // 콜백 실행
@@ -590,6 +678,173 @@ class OrientationController {
       
     } catch (error) {
       console.error('❌ Orientation 변경 처리 실패:', error);
+    }
+  }
+  
+  /**
+   * Bottom-bar 모드 업데이트 (v2.0)
+   */
+  updateBottomBarMode() {
+    try {
+      if (typeof gameState === 'undefined' || !gameState.orientation) {
+        return;
+      }
+      
+      const orientation = gameState.orientation;
+      const currentMode = this.isLandscape ? 'landscape' : 'portrait';
+      const preset = orientation.presets[currentMode];
+      
+      // 이전 모드 저장
+      orientation.lastBottomBarMode = orientation.bottomBarMode;
+      
+      // 새로운 모드 설정
+      orientation.bottomBarMode = preset.bottomBarMode;
+      
+      console.log('📱 Bottom-bar 모드 업데이트:', {
+        orientation: currentMode,
+        previousMode: orientation.lastBottomBarMode,
+        newMode: orientation.bottomBarMode,
+        preset: preset
+      });
+      
+      // BottomBarManager가 있으면 모드 적용
+      if (orientation.bottomBarManager && typeof orientation.bottomBarManager.setMode === 'function') {
+        this.applyBottomBarMode(orientation.bottomBarManager, preset);
+      } else if (typeof window.bottomBarManager !== 'undefined') {
+        // 전역 bottomBarManager 사용
+        orientation.bottomBarManager = window.bottomBarManager;
+        this.applyBottomBarMode(window.bottomBarManager, preset);
+      }
+      
+      // Orientation 오버레이 표시/숨김 처리
+      this.updateOrientationOverlay(preset.showOrientationOverlay);
+      
+      // 시각적 피드백 제공
+      this.showOrientationFeedback(currentMode);
+      
+    } catch (error) {
+      console.error('❌ Bottom-bar 모드 업데이트 실패:', error);
+    }
+  }
+  
+  /**
+   * BottomBarManager에 모드 적용
+   */
+  applyBottomBarMode(bottomBarManager, preset) {
+    try {
+      // 모드별 처리
+      if (preset.bottomBarMode === 'hidden') {
+        // 세로모드: bottom-bar 숨김
+        if (bottomBarManager.bottomBar) {
+          bottomBarManager.bottomBar.style.display = 'none';
+          bottomBarManager.bottomBar.classList.add('orientation-hidden');
+        }
+      } else if (preset.bottomBarMode === 'auto') {
+        // 가로모드: 자동 크기 조절
+        if (bottomBarManager.bottomBar) {
+          bottomBarManager.bottomBar.style.display = '';
+          bottomBarManager.bottomBar.classList.remove('orientation-hidden');
+        }
+        
+        // 동적 계산 재실행
+        if (typeof bottomBarManager.calculateOptimalHeight === 'function') {
+          bottomBarManager.calculateOptimalHeight();
+        }
+      } else {
+        // 특정 모드 강제 설정
+        if (bottomBarManager.bottomBar) {
+          bottomBarManager.bottomBar.style.display = '';
+          bottomBarManager.bottomBar.classList.remove('orientation-hidden');
+        }
+        
+        if (typeof bottomBarManager.setMode === 'function') {
+          bottomBarManager.setMode(preset.bottomBarMode);
+        }
+      }
+      
+      console.log('✅ BottomBarManager 모드 적용 완료:', preset.bottomBarMode);
+      
+    } catch (error) {
+      console.error('❌ BottomBarManager 모드 적용 실패:', error);
+    }
+  }
+  
+  /**
+   * Orientation 오버레이 표시/숨김
+   */
+  updateOrientationOverlay(show) {
+    try {
+      const overlay = document.querySelector('.orientation-overlay');
+      
+      if (overlay) {
+        if (show) {
+          overlay.style.display = 'flex';
+          overlay.classList.add('active');
+          console.log('🔄 Orientation 오버레이 표시');
+        } else {
+          overlay.style.display = 'none';
+          overlay.classList.remove('active');
+          console.log('🔄 Orientation 오버레이 숨김');
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Orientation 오버레이 업데이트 실패:', error);
+    }
+  }
+  
+  /**
+   * Orientation 변경 시각적 피드백
+   */
+  showOrientationFeedback(mode) {
+    try {
+      // 임시 피드백 메시지 표시
+      const feedbackElement = document.createElement('div');
+      feedbackElement.className = 'orientation-feedback';
+      feedbackElement.textContent = mode === 'landscape' ? 
+        '📱 가로모드로 최적화됨' : '↻ 가로모드로 회전해주세요';
+      
+      // 스타일 적용
+      Object.assign(feedbackElement.style, {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: 'white',
+        padding: '12px 24px',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '600',
+        zIndex: '10001',
+        opacity: '0',
+        transition: 'opacity 0.3s ease-in-out',
+        textAlign: 'center',
+        maxWidth: '80%',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+      });
+      
+      document.body.appendChild(feedbackElement);
+      
+      // 애니메이션 효과
+      setTimeout(() => {
+        feedbackElement.style.opacity = '1';
+      }, 10);
+      
+      // 2초 후 제거
+      setTimeout(() => {
+        feedbackElement.style.opacity = '0';
+        setTimeout(() => {
+          if (feedbackElement.parentNode) {
+            feedbackElement.parentNode.removeChild(feedbackElement);
+          }
+        }, 300);
+      }, 2000);
+      
+      console.log(`💫 Orientation 피드백 표시: ${mode}`);
+      
+    } catch (error) {
+      console.error('❌ Orientation 피드백 표시 실패:', error);
     }
   }
 
