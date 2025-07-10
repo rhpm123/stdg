@@ -25,19 +25,146 @@ class OrientationController {
       // Screen Orientation API 지원 확인
       this.isSupported = !!(screen && screen.orientation && screen.orientation.lock);
       
+      // 브라우저별 상세 지원 정보 수집
+      const supportInfo = this.getBrowserSupportInfo();
+      
       console.log('🔄 Orientation API 지원 상태:', {
         screenOrientation: !!screen.orientation,
         lockFunction: !!(screen.orientation && screen.orientation.lock),
-        userAgent: navigator.userAgent,
-        isSupported: this.isSupported
+        isSupported: this.isSupported,
+        browser: supportInfo.browser,
+        supportLevel: supportInfo.supportLevel,
+        fallbackMethod: supportInfo.fallbackMethod
       });
       
-      return this.isSupported;
+      // 폴백 메커니즘 우선순위 설정
+      this.setupFallbackPriority(supportInfo);
+      
     } catch (error) {
-      console.warn('⚠️ Orientation API 확인 중 오류:', error);
+      console.error('❌ Orientation API 지원 체크 오류:', error);
       this.isSupported = false;
-      return false;
+      this.setupFallbackPriority({ supportLevel: 'none' });
     }
+  }
+  
+  /**
+   * 브라우저별 상세 지원 정보 수집
+   */
+  getBrowserSupportInfo() {
+    const userAgent = navigator.userAgent;
+    const vendor = navigator.vendor || '';
+    
+    // 브라우저 및 플랫폼 감지
+    const browserInfo = {
+      isIOS: /iPad|iPhone|iPod/.test(userAgent),
+      isSafari: /Safari/.test(userAgent) && /Apple Computer/.test(vendor),
+      isChrome: /Chrome/.test(userAgent) && /Google Inc/.test(vendor),
+      isFirefox: /Firefox/.test(userAgent),
+      isEdge: /Edg/.test(userAgent),
+      isSamsung: /SamsungBrowser/.test(userAgent),
+      isAndroid: /Android/.test(userAgent),
+      isWebView: /wv|WebView/.test(userAgent)
+    };
+    
+    let browser = 'Unknown';
+    let supportLevel = 'none';
+    let fallbackMethod = 'css-only';
+    
+    // iOS Safari 감지 및 지원 정보
+    if (browserInfo.isIOS && browserInfo.isSafari) {
+      browser = 'iOS Safari';
+      // iOS 13+ 에서 제한적 지원, 하지만 사용자 제스처 필요
+      supportLevel = 'limited';
+      fallbackMethod = 'orientationchange-event';
+    }
+    // Android Chrome 감지
+    else if (browserInfo.isAndroid && browserInfo.isChrome) {
+      browser = 'Android Chrome';
+      // Chrome 38+ 에서 Screen Orientation API 지원
+      supportLevel = this.isSupported ? 'full' : 'partial';
+      fallbackMethod = this.isSupported ? 'screen-orientation-api' : 'orientationchange-event';
+    }
+    // Samsung Internet 감지
+    else if (browserInfo.isSamsung) {
+      browser = 'Samsung Internet';
+      // Samsung Internet 일부 버전에서 지원
+      supportLevel = this.isSupported ? 'full' : 'partial';
+      fallbackMethod = this.isSupported ? 'screen-orientation-api' : 'orientationchange-event';
+    }
+    // Firefox Mobile 감지
+    else if (browserInfo.isFirefox && browserInfo.isAndroid) {
+      browser = 'Firefox Mobile';
+      supportLevel = this.isSupported ? 'full' : 'partial';
+      fallbackMethod = 'orientationchange-event';
+    }
+    // Edge Mobile 감지
+    else if (browserInfo.isEdge && (browserInfo.isAndroid || browserInfo.isIOS)) {
+      browser = 'Edge Mobile';
+      supportLevel = this.isSupported ? 'full' : 'partial';
+      fallbackMethod = 'orientationchange-event';
+    }
+    // WebView 감지
+    else if (browserInfo.isWebView) {
+      browser = 'WebView';
+      supportLevel = 'limited';
+      fallbackMethod = 'css-media-query';
+    }
+    // 기타 모바일 브라우저
+    else if (browserInfo.isAndroid || browserInfo.isIOS) {
+      browser = 'Mobile Browser';
+      supportLevel = this.isSupported ? 'partial' : 'none';
+      fallbackMethod = 'css-media-query';
+    }
+    // 데스크탑 브라우저
+    else {
+      browser = 'Desktop Browser';
+      supportLevel = this.isSupported ? 'full' : 'none';
+      fallbackMethod = 'none';
+    }
+    
+    return {
+      browser,
+      supportLevel,
+      fallbackMethod,
+      browserInfo
+    };
+  }
+  
+  /**
+   * 폴백 메커니즘 우선순위 설정
+   */
+  setupFallbackPriority(supportInfo) {
+    this.fallbackMethods = [];
+    
+    // 지원 수준에 따른 폴백 메서드 우선순위 설정
+    switch (supportInfo.supportLevel) {
+      case 'full':
+        this.fallbackMethods = [
+          'screen-orientation-api',
+          'orientationchange-event',
+          'css-media-query'
+        ];
+        break;
+        
+      case 'partial':
+      case 'limited':
+        this.fallbackMethods = [
+          'orientationchange-event',
+          'css-media-query',
+          'visual-indicator-only'
+        ];
+        break;
+        
+      case 'none':
+      default:
+        this.fallbackMethods = [
+          'css-media-query',
+          'visual-indicator-only'
+        ];
+        break;
+    }
+    
+    console.log('🔧 폴백 메서드 우선순위 설정:', this.fallbackMethods);
   }
 
   /**
@@ -82,34 +209,150 @@ class OrientationController {
   }
 
   /**
-   * 현재 orientation 상태 업데이트
+   * 현재 orientation 상태 업데이트 (다중 감지 메서드)
    */
   updateOrientationState() {
     try {
-      // Screen Orientation API 사용 가능 시
-      if (this.isSupported && screen.orientation) {
+      const previousState = this.isLandscape;
+      let detectionMethod = 'unknown';
+      
+      // 방법 1: Screen Orientation API (최우선)
+      if (screen && screen.orientation) {
         const orientation = screen.orientation.type || screen.orientation;
         this.isLandscape = orientation.includes('landscape');
+        detectionMethod = 'screen-orientation-api';
       }
-      // 폴백: window.orientation 사용
+      // 방법 2: window.orientation (iOS Safari 등)
       else if (typeof window.orientation !== 'undefined') {
         // window.orientation: 0(portrait), 90/-90(landscape), 180(portrait upside down)
         this.isLandscape = Math.abs(window.orientation) === 90;
+        detectionMethod = 'window-orientation';
       }
-      // 폴백: CSS 미디어쿼리 사용
-      else {
+      // 방법 3: CSS 미디어쿼리 (폴백)
+      else if (window.matchMedia) {
         this.isLandscape = window.matchMedia('(orientation: landscape)').matches;
+        detectionMethod = 'css-media-query';
+      }
+      // 방법 4: 화면 크기 비교 (최후 폴백)
+      else {
+        this.isLandscape = window.innerWidth > window.innerHeight;
+        detectionMethod = 'window-dimensions';
       }
       
-      console.log('📱 Orientation 상태 업데이트:', {
-        isLandscape: this.isLandscape,
-        method: this.isSupported ? 'Screen API' : 'Fallback'
-      });
+      // 브라우저별 특별 처리
+      this.applyBrowserSpecificFixes();
+      
+      // 상태 변경 감지 및 로깅
+      if (previousState !== this.isLandscape) {
+        console.log('📱 Orientation 상태 변경 감지:', {
+          from: previousState ? 'landscape' : 'portrait',
+          to: this.isLandscape ? 'landscape' : 'portrait',
+          method: detectionMethod,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        // 상태 변경이 없어도 주기적으로 상세 정보 로그 (디버깅용)
+        console.log('📊 Orientation 상태 확인:', {
+          isLandscape: this.isLandscape,
+          method: detectionMethod,
+          screenOrientation: screen.orientation ? screen.orientation.type : 'unknown',
+          windowOrientation: window.orientation || 'unknown',
+          windowSize: `${window.innerWidth}x${window.innerHeight}`,
+          cssMatches: window.matchMedia ? window.matchMedia('(orientation: landscape)').matches : 'unknown'
+        });
+      }
       
     } catch (error) {
-      console.warn('⚠️ Orientation 상태 확인 실패:', error);
-      // 기본값: 가로모드로 가정
+      console.error('❌ Orientation 상태 업데이트 오류:', error);
+      // 오류 발생 시 기본값으로 폴백
       this.isLandscape = window.innerWidth > window.innerHeight;
+    }
+  }
+  
+  /**
+   * 브라우저별 특별 처리 적용
+   */
+  applyBrowserSpecificFixes() {
+    const userAgent = navigator.userAgent;
+    
+    // iOS Safari 특별 처리
+    if (/iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent)) {
+      this.applyIOSSafariFixes();
+    }
+    // Samsung Internet 특별 처리
+    else if (/SamsungBrowser/.test(userAgent)) {
+      this.applySamsungInternetFixes();
+    }
+    // Android Chrome 특별 처리
+    else if (/Android/.test(userAgent) && /Chrome/.test(userAgent)) {
+      this.applyAndroidChromeFixes();
+    }
+    // Firefox Mobile 특별 처리
+    else if (/Firefox/.test(userAgent) && /Mobile/.test(userAgent)) {
+      this.applyFirefoxMobileFixes();
+    }
+  }
+  
+  /**
+   * iOS Safari 특별 처리
+   */
+  applyIOSSafariFixes() {
+    // iOS Safari에서는 때때로 orientation 이벤트가 지연됨
+    // 추가 검증을 위해 100ms 후 재확인
+    if (this.iosFixTimeout) {
+      clearTimeout(this.iosFixTimeout);
+    }
+    
+    this.iosFixTimeout = setTimeout(() => {
+      const recheckLandscape = Math.abs(window.orientation || 0) === 90;
+      if (recheckLandscape !== this.isLandscape) {
+        console.log('🍎 iOS Safari 보정: orientation 상태 재확인');
+        this.isLandscape = recheckLandscape;
+        this.handleOrientationChange('ios-safari-fix');
+      }
+    }, 100);
+  }
+  
+  /**
+   * Samsung Internet 특별 처리
+   */
+  applySamsungInternetFixes() {
+    // Samsung Internet의 경우 화면 크기 기반 추가 검증
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    const isLandscapeByRatio = aspectRatio > 1.0;
+    
+    if (isLandscapeByRatio !== this.isLandscape) {
+      console.log('📱 Samsung Internet 보정: 화면 비율 기반 재조정');
+      this.isLandscape = isLandscapeByRatio;
+    }
+  }
+  
+  /**
+   * Android Chrome 특별 처리
+   */
+  applyAndroidChromeFixes() {
+    // Android Chrome에서는 주소창 숨김/표시로 인한 높이 변화 고려
+    const minDimension = Math.min(window.innerWidth, window.innerHeight);
+    const maxDimension = Math.max(window.innerWidth, window.innerHeight);
+    const ratio = maxDimension / minDimension;
+    
+    // 너무 극단적인 비율 변화는 주소창 효과일 가능성
+    if (ratio > 2.5) {
+      console.log('🤖 Android Chrome 보정: 주소창 효과 고려');
+    }
+  }
+  
+  /**
+   * Firefox Mobile 특별 처리
+   */
+  applyFirefoxMobileFixes() {
+    // Firefox Mobile의 경우 CSS 미디어쿼리 재확인
+    if (window.matchMedia) {
+      const cssLandscape = window.matchMedia('(orientation: landscape)').matches;
+      if (cssLandscape !== this.isLandscape) {
+        console.log('🦊 Firefox Mobile 보정: CSS 미디어쿼리 우선 적용');
+        this.isLandscape = cssLandscape;
+      }
     }
   }
 
@@ -153,61 +396,166 @@ class OrientationController {
   }
 
   /**
-   * 가로모드 강제 전환
+   * 가로모드 강제 전환 시도 (다중 폴백 메커니즘)
    */
   async lockLandscape() {
-    try {
-      console.log('🔒 가로모드 강제 전환 시도');
+    console.log('🔄 가로모드 강제 전환 시도 시작');
+    
+    // 이미 가로모드인 경우
+    if (this.isLandscape) {
+      console.log('ℹ️ 이미 가로모드입니다');
+      return true;
+    }
+    
+    // 폴백 메서드를 순차적으로 시도
+    for (const method of this.fallbackMethods) {
+      console.log(`🔧 ${method} 방법 시도 중...`);
       
-      if (!this.isSupported) {
-        console.warn('⚠️ Screen Orientation API 미지원 - 폴백 모드');
-        this.triggerCallbacks('lockFailed', { reason: 'api-not-supported' });
-        return false;
-      }
-      
-      try {
-        // landscape-primary 우선 시도
-        await screen.orientation.lock('landscape-primary');
-        console.log('✅ 가로모드 잠금 성공 (landscape-primary)');
-        
-        // 게임 상태 업데이트
-        if (typeof gameState !== 'undefined' && gameState.orientation) {
-          gameState.orientation.isForced = true;
-        }
-        
-        this.triggerCallbacks('lockSuccess', { orientation: 'landscape-primary' });
+      const result = await this.tryLockMethod(method);
+      if (result) {
+        console.log(`✅ ${method} 방법으로 가로모드 전환 성공`);
         return true;
-        
-      } catch (primaryError) {
-        console.warn('⚠️ landscape-primary 실패, landscape 시도:', primaryError.message);
-        
-        try {
-          // landscape 시도
-          await screen.orientation.lock('landscape');
-          console.log('✅ 가로모드 잠금 성공 (landscape)');
-          
-          if (typeof gameState !== 'undefined' && gameState.orientation) {
-            gameState.orientation.isForced = true;
-          }
-          
-          this.triggerCallbacks('lockSuccess', { orientation: 'landscape' });
-          return true;
-          
-        } catch (secondaryError) {
-          console.error('❌ 가로모드 잠금 실패:', secondaryError.message);
-          this.triggerCallbacks('lockFailed', { 
-            reason: 'lock-failed', 
-            error: secondaryError.message 
-          });
-          return false;
-        }
+      } else {
+        console.log(`❌ ${method} 방법 실패, 다음 방법 시도`);
       }
-      
+    }
+    
+    console.warn('⚠️ 모든 가로모드 전환 방법 실패, 사용자 수동 회전 필요');
+    return false;
+  }
+  
+  /**
+   * 특정 방법으로 가로모드 강제 시도
+   */
+  async tryLockMethod(method) {
+    try {
+      switch (method) {
+        case 'screen-orientation-api':
+          return await this.tryScreenOrientationAPI();
+          
+        case 'orientationchange-event':
+          return await this.tryOrientationChangePrompt();
+          
+        case 'css-media-query':
+          return this.tryCSSMediaQueryDetection();
+          
+        case 'visual-indicator-only':
+          return this.tryVisualIndicatorOnly();
+          
+        default:
+          console.warn(`⚠️ 알 수 없는 폴백 방법: ${method}`);
+          return false;
+      }
     } catch (error) {
-      console.error('❌ 가로모드 강제 전환 중 오류:', error);
-      this.triggerCallbacks('lockFailed', { reason: 'unexpected-error', error: error.message });
+      console.error(`❌ ${method} 방법 중 오류 발생:`, error);
       return false;
     }
+  }
+  
+  /**
+   * Screen Orientation API 사용 시도
+   */
+  async tryScreenOrientationAPI() {
+    if (!this.isSupported) {
+      return false;
+    }
+    
+    try {
+      // landscape-primary 우선 시도
+      await screen.orientation.lock('landscape-primary');
+      console.log('✅ landscape-primary 모드 설정 성공');
+      return true;
+    } catch (primaryError) {
+      console.log('❌ landscape-primary 실패, landscape 시도');
+      
+      try {
+        // 일반 landscape 시도
+        await screen.orientation.lock('landscape');
+        console.log('✅ landscape 모드 설정 성공');
+        return true;
+      } catch (landscapeError) {
+        console.log('❌ landscape 모드도 실패:', landscapeError.message);
+        
+        // 사용자 제스처 필요한 경우
+        if (landscapeError.name === 'NotAllowedError') {
+          console.warn('⚠️ 사용자 제스처가 필요합니다. 게임 시작 버튼 클릭 시 재시도됩니다.');
+        }
+        return false;
+      }
+    }
+  }
+  
+  /**
+   * orientationchange 이벤트 기반 프롬프트
+   */
+  async tryOrientationChangePrompt() {
+    // CSS 오버레이를 통한 시각적 안내만 제공
+    // 실제 회전은 사용자가 수동으로 해야 함
+    console.log('📱 사용자 수동 회전 유도 - CSS 오버레이 활성화');
+    
+    // 회전 안내 오버레이가 표시되도록 CSS에 의존
+    // orientation.css에서 @media (orientation: portrait) 처리
+    
+    return new Promise((resolve) => {
+      // 10초간 대기하며 회전 감지
+      const timeout = setTimeout(() => {
+        console.log('⏰ 회전 대기 시간 초과');
+        resolve(false);
+      }, 10000);
+      
+      // orientation 변경 감지
+      const checkOrientation = () => {
+        if (this.isLandscape) {
+          clearTimeout(timeout);
+          console.log('✅ 사용자가 가로모드로 회전함');
+          resolve(true);
+        }
+      };
+      
+      // 500ms마다 orientation 상태 확인
+      const checkInterval = setInterval(() => {
+        this.updateOrientationState();
+        checkOrientation();
+        
+        if (this.isLandscape) {
+          clearInterval(checkInterval);
+        }
+      }, 500);
+      
+      // 타임아웃 시 interval 정리
+      setTimeout(() => {
+        clearInterval(checkInterval);
+      }, 10000);
+    });
+  }
+  
+  /**
+   * CSS 미디어쿼리 기반 감지
+   */
+  tryCSSMediaQueryDetection() {
+    // CSS 미디어쿼리로 현재 orientation 감지
+    const isLandscapeByCSS = window.matchMedia('(orientation: landscape)').matches;
+    
+    if (isLandscapeByCSS) {
+      this.isLandscape = true;
+      console.log('✅ CSS 미디어쿼리로 가로모드 감지됨');
+      return true;
+    } else {
+      console.log('📱 CSS 미디어쿼리: 세로모드 감지, 회전 안내 표시');
+      // 회전 안내 오버레이가 자동으로 표시됨 (orientation.css)
+      return false;
+    }
+  }
+  
+  /**
+   * 시각적 안내만 제공
+   */
+  tryVisualIndicatorOnly() {
+    console.log('📱 시각적 회전 안내만 제공 - 사용자 수동 회전 필요');
+    
+    // 회전 안내 오버레이만 표시하고 사용자 수동 회전 유도
+    // 실제 강제 회전은 불가능하므로 false 반환
+    return false;
   }
 
   /**

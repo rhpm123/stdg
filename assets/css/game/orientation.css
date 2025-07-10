@@ -1,9 +1,10 @@
 /**
  * 틀린그림찾기 게임 - 회전 안내 UI 오버레이
  * 세로모드에서 가로모드로 회전 유도하는 시각적 안내 화면
+ * 브라우저 호환성 및 폴백 메커니즘 포함
  * 
  * @author Shrimp Task Manager
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 /* 회전 안내 오버레이 - 세로모드에서만 표시 */
@@ -23,12 +24,86 @@
   pointer-events: none;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  
+  /* 브라우저별 호환성 개선 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  
+  /* iOS Safari 호환성 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  
+  /* 터치 이벤트 비활성화 */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* 세로모드에서만 오버레이 표시 */
-@media (orientation: portrait) {
+/* 세로모드에서만 오버레이 표시 - 다중 미디어쿼리 */
+@media screen and (orientation: portrait) {
   .orientation-overlay {
     display: flex;
+  }
+}
+
+/* iOS Safari 폴백 - 화면 비율 기반 감지 */
+@media screen and (max-aspect-ratio: 1/1) {
+  .orientation-overlay {
+    display: flex;
+  }
+}
+
+/* 추가 폴백 - 높이가 너비보다 큰 경우 */
+@media screen and (max-width: 768px) and (min-height: 769px) {
+  .orientation-overlay {
+    display: flex;
+  }
+}
+
+/* WebView 및 구형 브라우저 폴백 */
+@media screen and (device-width < device-height) {
+  .orientation-overlay {
+    display: flex;
+  }
+}
+
+/* 가로모드에서는 강제 숨김 - 모든 브라우저 대응 */
+@media screen and (orientation: landscape) {
+  .orientation-overlay {
+    display: none !important;
+  }
+}
+
+@media screen and (min-aspect-ratio: 1/1) and (min-width: 769px) {
+  .orientation-overlay {
+    display: none !important;
+  }
+}
+
+/* 브라우저별 특별 처리 */
+/* Samsung Internet Browser */
+@supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
+  .orientation-overlay {
+    /* Samsung Internet 특별 최적화 */
+    will-change: transform, opacity;
+  }
+}
+
+/* Firefox Mobile */
+@-moz-document url-prefix() {
+  .orientation-overlay {
+    /* Firefox Mobile 호환성 */
+    -moz-user-select: none;
+  }
+}
+
+/* Edge Mobile */
+@supports (-ms-accelerator: true) {
+  .orientation-overlay {
+    /* Edge Mobile 호환성 */
+    -ms-user-select: none;
+    -ms-touch-action: none;
   }
 }
 
