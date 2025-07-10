@@ -140,32 +140,30 @@ body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .stat-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1px;
   color: white;
-  padding: 2px 6px;
+  padding: 3px 8px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  min-width: 40px;
+  min-width: auto;
 }
 
+/* 라벨 숨기기 - 값만 표시 */
 .stat-label {
-  font-size: 0.55rem;
-  opacity: 0.9;
-  font-weight: 500;
-  line-height: 1;
+  display: none;
 }
 
 .stat-value {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   line-height: 1;
+  white-space: nowrap;
 }
 /* ============================================
    진행률 바 스타일 (하단 바용)
