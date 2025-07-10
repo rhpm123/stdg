@@ -170,6 +170,14 @@ body {
 /* ============================================
    진행률 바 스타일 (하단 바용)
    ============================================ */
+.bottom-bar-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  min-width: 200px;
+}
+
 .progress-bar {
   width: 200px;
   height: 8px;
