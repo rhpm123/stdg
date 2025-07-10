@@ -65,7 +65,7 @@ body {
   /* 기존 고정값 사용 (안정적) */
   height: 60px;
   min-height: 60px;
-  padding: 8px 16px;
+  padding: 4px 16px 8px 16px; /* 상단 패딩 줄이기 */
   
   /* 기본 레이아웃 */
   display: grid;

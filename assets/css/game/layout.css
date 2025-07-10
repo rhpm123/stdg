@@ -24,7 +24,7 @@
   flex: 1;
   display: flex;
   background-color: var(--game-background-light);
-  padding: var(--game-spacing-xs);
+  padding: var(--game-spacing-xs) var(--game-spacing-xs) 0 var(--game-spacing-xs); /* 하단 패딩 제거 */
   gap: var(--game-spacing-sm);
   align-items: stretch;
   justify-content: center;
