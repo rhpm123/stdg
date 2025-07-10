@@ -68,7 +68,7 @@
   
     <!-- 하단 바: 게임 통계 + 진행바 + 컨트롤 버튼 -->
     <div class="bottom-bar">
-      <!-- 게임 통계 섹션 -->
+      <!-- 간결한 게임 정보 한 줄 표시 -->
       <div class="bottom-bar-stats">
         <div class="game-stats">
           <div class="stat-item">
@@ -95,23 +95,6 @@
             <div class="stat-label">목숨</div>
             <div class="stat-value" id="lives">❤️❤️❤️❤️❤️</div>
           </div>
-          
-          <!-- 체력바 섹션 -->
-          <div class="stat-item" id="healthBarSection">
-            <div class="stat-label">시간</div>
-            <div class="health-bar-container">
-              <div class="health-bar" id="healthBar">
-                <div class="health-bar-fill" id="healthBarFill"></div>
-                <div class="health-bar-text" id="healthBarText">100%</div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- 로그인 사용자만 표시되는 최고 점수 -->
-          <div class="stat-item" id="bestScoreSection" style="display: none;">
-            <div class="stat-label">최고 점수</div>
-            <div class="stat-value" id="bestScore">-</div>
-          </div>
         </div>
       </div>
       
@@ -122,53 +105,24 @@
         </div>
       </div>
       
-      <!-- 컨트롤 버튼 섹션 -->
+      <!-- 핵심 컨트롤 버튼만 -->
       <div class="bottom-bar-controls">
         <div class="game-controls">
           <button class="control-btn btn-primary" id="startBtn">게임 시작</button>
           <button class="control-btn btn-secondary" id="pauseBtn" disabled>일시정지</button>
-          <button class="control-btn btn-secondary" id="resetBtn">다시 시작</button>
-          <button class="control-btn hint-btn" id="hintBtn" disabled>💡 힌트 (5/5)</button>
-          <button class="control-btn btn-secondary" id="newGameBtn">다른 게임 선택</button>
-          <button class="control-btn btn-secondary" id="toggleAnswerBtn" style="background-color: #9b59b6; border-color: #8e44ad;">정답 영역 표시</button>
-          <button class="control-btn btn-warning" id="debugModeBtn" style="background-color: #f39c12; border-color: #e67e22;">🔧 디버그 모드</button>
+          <button class="control-btn hint-btn" id="hintBtn" disabled>💡 힌트</button>
         </div>
-        
-        <!-- 힌트 정보 섹션 -->
-        <div class="hint-info" id="hintInfo">
-          <div class="hint-counter" id="hintCounter">게임: 3/3 | 일일: 10/10</div>
-          <div style="font-size: 10px; margin-top: 3px; color: #999;">
-            힌트 사용 시 50점 차감됩니다
-          </div>
-        </div>
+      </div>
+    </div>
           
-          <!-- 개발자 도구 (개발 단계용) -->
-          <div class="dev-tools" id="devTools" style="display: none;">
-            <div class="dev-tools-header">
-              <h4>🛠️ 개발자 도구</h4>
-            </div>
-            <button class="control-btn btn-info" onclick="showAnswerHint()">💡 힌트</button>
-            <button class="control-btn btn-info" onclick="showDifferenceBlinking()">✨ 틀린부분 깜박임</button>
-            <button class="control-btn btn-info" onclick="toggleAnswerPoints()">📍 정답 표시</button>
-            <button class="control-btn btn-warning" onclick="resetDeveloperHints()" style="background-color: #e67e22; border-color: #d35400;">🔄 힌트 리셋</button>
-          </div>
-          
-          <!-- 메시지 영역 -->
-          <div id="messageArea" class="message-area">
-            <div id="errorMessage" class="sidebar-message error-msg" style="display: none;"></div>
-            <div id="successMessage" class="sidebar-message success-msg" style="display: none;"></div>
-            <div id="loading" class="sidebar-message loading-msg" style="display: none;">📊 데이터 로딩중...</div>
-          </div>
-          </div>
-          </div>
-
-  <!-- JavaScript 모듈들 -->
+            <!-- JavaScript 모듈들 -->
   <!-- Supabase 클라이언트 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <!-- 게임 스크립트들 -->
   <script src="assets/js/game-state.js"></script>
   <script src="assets/js/orientation-controller.js"></script>
+  <script src="assets/js/bottom-bar-manager.js"></script>
   <script src="assets/js/heart-system.js"></script>
   <script src="assets/js/health-bar-system.js"></script>
   <script src="assets/js/coordinate-utils.js"></script>

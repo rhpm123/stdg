@@ -351,10 +351,7 @@ text-overflow: ellipsis;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: var(--game-spacing-xs);
-  background: var(--game-white-10);
-  padding: var(--game-spacing-xs);
-  border-radius: var(--game-spacing-xs);
+  gap: 4px;
   justify-content: center;
   align-items: center;
 }
