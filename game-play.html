@@ -152,6 +152,12 @@
       const errorEl = document.getElementById('errorMessage');
       const successEl = document.getElementById('successMessage');
       
+      // DOM 요소가 없으면 콘솔로 메시지 출력
+      if (!errorEl || !successEl) {
+        console.log(`📱 [${type.toUpperCase()}] ${message}`);
+        return;
+      }
+      
       errorEl.style.display = 'none';
       successEl.style.display = 'none';
       
@@ -164,8 +170,8 @@
       }
       
       setTimeout(() => {
-        errorEl.style.display = 'none';
-        successEl.style.display = 'none';
+        if (errorEl) errorEl.style.display = 'none';
+        if (successEl) successEl.style.display = 'none';
       }, 3000);
     }
     
@@ -227,10 +233,17 @@
     }
     function showLoading(show = true) {
       const loadingEl = document.getElementById('loading');
+      
+      // DOM 요소가 없으면 콘솔로 메시지 출력
+      if (!loadingEl) {
+        console.log(`🔄 [LOADING] ${show ? '로딩 시작' : '로딩 종료'}`);
+        return;
+      }
+      
       if (show) {
         loadingEl.style.display = 'block';
         setTimeout(() => {
-          loadingEl.style.display = 'none';
+          if (loadingEl) loadingEl.style.display = 'none';
         }, 10000);
       } else {
         loadingEl.style.display = 'none';

@@ -40,15 +40,17 @@ const healthBarSystem = {
     
     // DOM 요소 존재 여부 확인
     if (!this.healthBarSection || !this.healthBarFill || !this.healthBarText) {
-      console.error('❌ 체력바 DOM 요소를 찾을 수 없습니다!');
-      console.error('📊 DOM 요소 상태:', {
+      console.log('⚠️ 체력바 DOM 요소가 제거되었거나 찾을 수 없습니다.');
+      console.log('📊 DOM 요소 상태:', {
         healthBarSection: !!this.healthBarSection,
         healthBarFill: !!this.healthBarFill,
         healthBarText: !!this.healthBarText
       });
       
-      // 전체 DOM에서 관련 요소들 검색해보기
-      console.log('🔍 전체 DOM에서 관련 요소 재검색...');
+      // 체력바가 하단 바 간소화로 인해 제거되었음을 알림
+      console.log('💡 체력바가 하단 바 간소화 과정에서 제거되었습니다. 게임은 목숨 시스템으로 계속 진행됩니다.');
+      
+      // 전체 DOM에서 관련 요소들 검색해보기 (디버그용)
       const allHealthSections = document.querySelectorAll('[id*="health"], [class*="health"]');
       console.log('🔍 health 관련 모든 요소들:', allHealthSections);
       
@@ -80,7 +82,7 @@ const healthBarSystem = {
     console.log('🚀 체력바 시스템 시작 요청...');
     
     if (!this.healthBarSection) {
-      console.error('❌ 체력바 시스템이 초기화되지 않았습니다.');
+      console.log('⚠️ 체력바 시스템이 초기화되지 않아 스킵됩니다. (하단 바 간소화로 인해 체력바 제거됨)');
       return;
     }
     
@@ -222,10 +224,7 @@ const healthBarSystem = {
    */
   updateDisplay() {
     if (!this.healthBarFill || !this.healthBarText) {
-      console.error('❌ updateDisplay() 실패 - DOM 요소 누락:', {
-        healthBarFill: !!this.healthBarFill,
-        healthBarText: !!this.healthBarText
-      });
+      // 체력바 DOM 요소가 없어서 화면 업데이트 스킵 (이는 정상적인 동작)
       return;
     }
   
