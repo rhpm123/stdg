@@ -8,78 +8,147 @@ let debugMode = false;
 let showAnswers = false;
 
 /**
- * 게임 데이터 로딩
+ * Orientation 기반 게임 진행 제어
  */
-async function loadGameData() {
-  try {
-    showLoading(true);
-    console.log('🔄 게임 데이터 로딩 시작...');
-    
-    const imageSetId = getImageSetId();
-    console.log('📋 이미지 세트 ID:', imageSetId);
-    
-    // 이미지 세트 정보 가져오기
-    const imageSets = await fetchImageSets();
-    const currentSet = imageSets.find(set => set.id.toString() === imageSetId);
-    
-    if (!currentSet) {
-      throw new Error(`이미지 세트 ID ${imageSetId}를 찾을 수 없습니다.`);
-    }
-    
-    // 정답 데이터 가져오기
-    const answerData = await fetchAnswerPoints(imageSetId);
-    console.log('📊 정답 데이터 로딩 완료:', {
-      regions: answerData.regions.length,
-      imageSize: `${answerData.image_width}x${answerData.image_height}`,
-      samplePoint: answerData.regions[0] ? `(${answerData.regions[0][0].x}, ${answerData.regions[0][0].y})` : 'N/A'
-    });
-    
-    // 게임 상태에 데이터 설정
-    setGameData(currentSet, answerData);
-    
-    // 이미지 표시
-    displayImages(currentSet);
-    
-    showLoading(false);
-    showMessage('게임 데이터 로딩 완료!', 'success');
-    
-  } catch (error) {
-    console.error('❌ 게임 데이터 로딩 실패:', error);
-    showLoading(false);
-    showMessage(`데이터 로딩 실패: ${error.message}`, 'error');
+
+/**
+ * 현재 가로모드 여부 확인
+ */
+function isLandscapeMode() {
+  if (typeof window.orientationController !== 'undefined') {
+    return window.orientationController.isCurrentlyLandscape();
+  }
+  
+  // 폴백: CSS 미디어쿼리 사용
+  if (window.matchMedia) {
+    return window.matchMedia('(orientation: landscape)').matches;
+  }
+  
+  // 최후 폴백: 화면 크기 비교
+  return window.innerWidth > window.innerHeight;
+}
+
+/**
+ * 게임 진행 가능 여부 확인
+ */
+function canStartGame() {
+  const isLandscape = isLandscapeMode();
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  // 모바일이 아니면 항상 게임 진행 가능
+  if (!isMobile) {
+    return { canStart: true, reason: 'desktop' };
+  }
+  
+  // 모바일에서는 가로모드일 때만 게임 진행 가능
+  if (isLandscape) {
+    return { canStart: true, reason: 'landscape-mode' };
+  } else {
+    return { canStart: false, reason: 'portrait-mode' };
   }
 }
 
 /**
- * 이미지 표시
+ * 게임 버튼 상태 업데이트
  */
-function displayImages(imageSet) {
-  const originalImg = document.getElementById('originalImage');
-  const modifiedImg = document.getElementById('modifiedImage');
-  const container = document.getElementById('imagesContainer');
+function updateGameButtonStates() {
+  const gameControl = canStartGame();
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const newGameBtn = document.getElementById('newGameBtn');
   
-  if (!originalImg || !modifiedImg || !container) {
-    throw new Error('이미지 요소를 찾을 수 없습니다.');
+  if (!startBtn) return; // 버튼이 없으면 종료
+  
+  if (gameControl.canStart) {
+    // 가로모드: 정상적인 게임 버튼 상태
+    updateNormalButtonStates();
+    hideOrientationMessage();
+  } else {
+    // 세로모드: 게임 버튼 비활성화
+    disableGameButtons();
+    showOrientationMessage();
   }
   
-  originalImg.src = imageSet.original_image_url;
-  modifiedImg.src = imageSet.modified_image_url;
-  
-  // 이미지 로딩 완료 대기
-  Promise.all([
-    new Promise(resolve => {
-      originalImg.onload = resolve;
-      originalImg.onerror = () => resolve();
-    }),
-    new Promise(resolve => {
-      modifiedImg.onload = resolve;
-      modifiedImg.onerror = () => resolve();
-    })
-  ]).then(() => {
-    container.style.display = 'block';
-    console.log('🖼️ 이미지 표시 완료');
-    updateUI();
+  console.log('🎮 게임 버튼 상태 업데이트:', {
+    canStart: gameControl.canStart,
+    reason: gameControl.reason,
+    isLandscape: isLandscapeMode(),
+    buttonsDisabled: !gameControl.canStart
   });
+}
+
+/**
+ * 정상적인 게임 버튼 상태로 복원
+ */
+function updateNormalButtonStates() {
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const newGameBtn = document.getElementById('newGameBtn');
+  
+  if (startBtn) {
+    startBtn.disabled = !gameState.isGameActive ? false : true;
+    startBtn.style.opacity = '1';
+    startBtn.style.cursor = 'pointer';
+    startBtn.setAttribute('title', '');
+  }
+  
+  if (resetBtn) {
+    resetBtn.disabled = false;
+    resetBtn.style.opacity = '1';
+    resetBtn.style.cursor = 'pointer';
+  }
+  
+  if (newGameBtn) {
+    newGameBtn.disabled = false;
+    newGameBtn.style.opacity = '1';
+    newGameBtn.style.cursor = 'pointer';
+  }
+  
+  // 일시정지된 게임이 있다면 자동 재개
+  if (gameState.isGameActive && gameState.isPaused) {
+    console.log('📱 가로모드 복귀로 인한 게임 자동 재개');
+    resumeGame();
+  }
+}
+
+/**
+ * 게임 버튼 비활성화 (세로모드)
+ */
+function disableGameButtons() {
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const newGameBtn = document.getElementById('newGameBtn');
+  
+  if (startBtn) {
+    startBtn.disabled = true;
+    startBtn.style.opacity = '0.5';
+    startBtn.style.cursor = 'not-allowed';
+    startBtn.setAttribute('title', '가로모드로 회전하세요');
+  }
+  
+  // 진행 중인 게임이 있다면 일시정지
+  if (gameState.isGameActive && !gameState.isPaused) {
+    console.log('📱 세로모드 전환으로 인한 게임 자동 일시정지');
+    pauseGame();
+  }
+}
+
+/**
+ * 회전 안내 메시지 표시
+ */
+function showOrientationMessage() {
+  // 기존 CSS 오버레이가 자동으로 표시되므로, 추가 메시지만 표시
+  if (typeof showMessage === 'function') {
+    showMessage('📱 더 나은 게임 경험을 위해 가로모드로 회전해주세요', 'error');
+  }
+}
+
+/**
+ * 회전 안내 메시지 숨김
+ */
+function hideOrientationMessage() {
+  // CSS 오버레이가 자동으로 숨겨지므로 별도 처리 불필요
+  console.log('✅ 가로모드로 전환됨 - 게임 진행 가능');
 }
 
 /**
@@ -87,10 +156,25 @@ function displayImages(imageSet) {
  */
 function startGame() {
   console.log('🚀 [DEBUG] startGame 함수 호출됨!');
+  
+  // 1단계: Orientation 체크 - 모바일에서 세로모드면 게임 시작 불가
+  const gameControl = canStartGame();
+  if (!gameControl.canStart) {
+    console.log('❌ 게임 시작 차단:', gameControl.reason);
+    showMessage('📱 가로모드로 회전한 후 게임을 시작해주세요', 'error');
+    
+    // 게임 버튼 상태 업데이트
+    updateGameButtonStates();
+    return;
+  }
+  
+  // 2단계: 게임 데이터 확인
   if (!gameState.currentImageSet || !gameState.answerPoints.length) {
     showMessage('게임 데이터를 먼저 로딩해주세요.', 'error');
     return;
   }
+  
+  console.log('✅ Orientation 체크 통과 - 게임 시작 진행');
     
   startGameState();
   startTimer();
@@ -145,26 +229,68 @@ function startGame() {
   console.log('🎮 게임 시작!');
 }
 /**
- * 게임 일시정지/재개
+ * 게임 일시정지 (세로모드 전환 시)
  */
 function pauseGame() {
-  const isPaused = togglePauseState();
-  
-  if (isPaused) {
-    clearInterval(gameState.timerInterval);
-    showMessage('게임이 일시정지되었습니다.', 'success');
-  } else {
-    startTimer();
-    showMessage('게임이 재개되었습니다.', 'success');
+  if (!gameState.isGameActive) {
+    console.log('⚠️ 게임이 활성화되지 않아 일시정지할 수 없음');
+    return;
   }
   
-  // 시간 제한 시각화 시스템은 gameState.isPaused 상태를 자동으로 확인하므로 별도 처리 불필요
+  // 이미 일시정지 상태면 return
+  if (gameState.isPaused) {
+    console.log('ℹ️ 이미 게임이 일시정지된 상태');
+    return;
+  }
   
-  updateUI();
+  // 타이머 일시정지
+  if (gameState.timerInterval) {
+    clearInterval(gameState.timerInterval);
+    gameState.timerInterval = null;
+  }
+  
+  // 일시정지 상태 설정
+  gameState.isPaused = true;
+  
+  console.log('⏸️ 게임 일시정지됨 (Orientation 변경으로 인함)');
+  
+  // UI 업데이트
+  if (typeof updateUI === 'function') {
+    updateUI();
+  }
 }
 
 /**
- /**
+ * 게임 재개 (가로모드 복귀 시)
+ */
+function resumeGame() {
+  if (!gameState.isGameActive) {
+    console.log('⚠️ 게임이 활성화되지 않아 재개할 수 없음');
+    return;
+  }
+  
+  if (!gameState.isPaused) {
+    console.log('ℹ️ 게임이 일시정지된 상태가 아님');
+    return;
+  }
+  
+  // 일시정지 해제
+  gameState.isPaused = false;
+  
+  // 타이머 재시작
+  if (gameState.gameTime > 0) {
+    startTimer();
+  }
+  
+  console.log('▶️ 게임 재개됨 (가로모드 복귀)');
+  
+  // UI 업데이트
+  if (typeof updateUI === 'function') {
+    updateUI();
+  }
+}
+
+/**
   * 게임 리셋
   */
  function resetGame() {
@@ -639,7 +765,7 @@ function getAchievementMessage(finalScore, timeBonus) {
   } else if (finalScore >= gameState.answerPoints.length * 100) {
     return '🎯 완벽! 모든 정답을 찾으셨네요!';
   } else {
-    return '🎉 수고하셨습니다! 다음에는 더 빠르게 도전해보세요!';
+    return ' 수고하셨습니다! 다음에는 더 빠르게 도전해보세요!';
   }
 }
 
