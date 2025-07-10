@@ -333,7 +333,7 @@
   }
 }
 
-/* 모바일 가로모드: 이미지 좌우 배치 (핵심 수정) */
+/* 모바일 가로모드: 이미지 좌우 배치 (동적 레이아웃 시스템) */
 @media (orientation: landscape) and (max-width: 1024px) and (min-width: 480px) {
   .images-container {
     flex-direction: row !important;
@@ -349,135 +349,88 @@
     flex: 1;
   }
   
-  /* 가로모드에서 세로 공간 최적화 (더 압축) */
+  /* 가로모드에서 헤더 높이 최적화 */
   .game-header-top {
     padding: 2px 6px !important;
     min-height: 30px !important;
     max-height: 30px !important;
+    height: 30px !important;
     font-size: 0.8rem !important;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   
+  /* 가로모드에서 bottom-bar 최적화 (기존 구조 유지) */
   .bottom-bar {
-    padding: 1px 4px !important;
+    /* 기존 grid 설정 유지하되 높이만 조정 */
+    height: auto !important;
     min-height: 25px !important;
-    gap: 2px !important;
-    flex-wrap: nowrap;
-    max-height: 25px !important;
-    overflow: hidden;
+    max-height: 35px !important;
+    padding: 1px 8px !important;
+    
+    /* 기존 grid-template-columns 유지 */
+    grid-template-columns: 1fr auto 1fr !important;
+    gap: 4px !important;
   }
   
-  /* 하단 바 모든 하위 섹션 압축 */
-  .bottom-bar-stats,
-  .bottom-bar-progress, 
-  .bottom-bar-controls {
-    padding: 0 !important;
-    margin: 0 !important;
-    min-height: auto !important;
-    max-height: 20px !important;
-    overflow: hidden;
-  }
-  
+  /* bottom-bar 내부 섹션들 압축 */
   .bottom-bar-stats .game-stats {
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden;
+  }
+  
+  .bottom-bar-stats .stat-item {
+    gap: 1px !important;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  
+  .bottom-bar-stats .stat-label {
+    font-size: 0.5rem !important;
+    line-height: 1 !important;
+  }
+  
+  .bottom-bar-stats .stat-value {
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+  }
+  
+  /* 진행바 압축 */
+  .bottom-bar-progress .progress-bar {
+    width: 100px !important;
+    height: 4px !important;
+  }
+  
+  /* 컨트롤 버튼들 압축 */
+  .bottom-bar-controls .game-controls {
     gap: 2px !important;
     flex-wrap: nowrap !important;
     overflow: hidden;
   }
   
-  .bottom-bar-controls .game-controls {
-    gap: 8px !important; /* 2px → 8px로 간격 증가 */
-    flex-wrap: nowrap !important;
-    overflow: hidden;
-  }
-  
-  .bottom-bar .stat-item {
-    padding: 1px 3px !important;
-    min-width: 30px !important;
-    font-size: 0.6rem !important;
+  .bottom-bar-controls .control-btn {
+    padding: 2px 4px !important;
+    font-size: 0.5rem !important;
     min-height: 20px !important;
-    max-height: 20px !important;
-    margin: 0 !important;
-    line-height: 1.1 !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
-  .control-btn {
-    padding: 4px 8px !important; /* 2px 4px → 4px 8px로 패딩 증가 */
-    font-size: 0.65rem !important; /* 0.55rem → 0.65rem로 폰트 크기 증가 */
-    min-height: 32px !important; /* 20px → 32px로 버튼 크기 증가 */
-    max-height: 32px !important; /* 20px → 32px로 버튼 크기 증가 */
-    line-height: 1.1 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    margin: 0 2px !important; /* 버튼 간 추가 마진으로 터치 영역 명확히 구분 */
-  }
-  
-  
-  /* 진행바도 극단적으로 압축 */
-  .progress-bar {
-    height: 3px !important;
-    margin: 0 !important;
-  }
-  
-  /* 힌트 정보와 기타 불필요한 요소 숨김 */
-  .hint-info {
-    display: none !important;
-  }
-  
+  /* 힌트 정보와 개발자 도구 숨김 */
+  .hint-info,
   .dev-tools {
     display: none !important;
   }
   
-  /* 메인 콘텐츠 영역 높이 조정 (더 많은 공간 확보) */
-  .main-content {
-    height: calc(100vh - 55px) !important;
-    max-height: calc(100vh - 55px) !important;
-    min-height: 300px !important; /* 최소 높이 보장 */
-    padding: 2px !important;
-    overflow-y: auto !important; /* 세로 스크롤 가능 */
-    overflow-x: hidden !important; /* 가로 스크롤 방지 */
-    -webkit-overflow-scrolling: touch !important; /* 부드러운 스크롤 (모바일) */
-    word-wrap: break-word !important; /* 긴 텍스트 자동 줄바꿈 */
-    word-break: break-word !important; /* 단어 중간에서도 줄바꿈 허용 */
-  }
-  
-  /* 게임 타이틀 크기 축소 */
-  .game-title {
-    font-size: 0.7rem !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 1.1 !important;
-  }
-  
-  /* 통계 라벨과 값 텍스트 압축 */
-  .stat-label {
+  /* 메시지 영역 압축 */
+  .message-area {
     font-size: 0.5rem !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  
-  .stat-value {
-    font-size: 0.55rem !important;
-    line-height: 1.1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  
-  /* 모든 텍스트 요소 압축 */
-  .bottom-bar * {
-    font-size: inherit !important;
-    line-height: 1.1 !important;
-  }
-  
-  /* 통계 섹션 간격 최소화 */
-  .bottom-bar .stat-section {
-    gap: 4px !important;
-  }
-  
-  /* 모든 버튼 그룹 간격 최소화 */
-  .button-group {
-    gap: 4px !important;
+    padding: 1px !important;
   }
 }
 
@@ -521,3 +474,140 @@
   word-wrap: break-word !important;
   word-break: break-word !important;
 }
+
+/* ============================================
+   적응형 표시 시스템 CSS 클래스
+   ============================================ */
+
+/* 요소 표시/숨김 기본 클래스 */
+.hidden {
+  display: none !important;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.compact {
+  font-size: 0.8em !important;
+  padding: 0.5em !important;
+  margin: 0.25em !important;
+  line-height: 1.1 !important;
+}
+
+/* bottom-bar 모드별 스타일 */
+.bottom-bar.full-mode {
+  /* 전체 모드: 모든 요소 정상 표시 */
+  grid-template-rows: auto auto auto;
+  gap: var(--game-spacing-sm);
+}
+
+.bottom-bar.compact-mode {
+  /* 압축 모드: 중요 요소 축소, 선택적 요소 숨김 */
+  grid-template-rows: minmax(auto, 1fr) auto minmax(auto, 1fr);
+  gap: calc(var(--game-spacing-sm) * 0.5);
+}
+
+.bottom-bar.minimal-mode {
+  /* 최소 모드: 필수 요소만 표시 */
+  grid-template-rows: minmax(auto, 1fr) auto minmax(auto, 1fr);
+  gap: 2px;
+}
+
+/* 압축 모드에서 요소별 특별 처리 */
+.bottom-bar.compact-mode .stat-item {
+  font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.014) !important;
+  padding: 1px 1px !important;
+  min-width: 20px !important;
+}
+
+.bottom-bar.compact-mode .control-btn {
+  font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.016) !important;
+  padding: calc(var(--dynamic-bottom-bar-height, 35px) * 0.04) calc(var(--dynamic-bottom-bar-height, 35px) * 0.1) !important;
+}
+
+.bottom-bar.compact-mode .progress-bar {
+  height: calc(var(--dynamic-bottom-bar-height, 35px) * 0.06) !important;
+}
+
+/* 최소 모드에서 필수 요소 더욱 압축 */
+.bottom-bar.minimal-mode .stat-item {
+  font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.012) !important;
+  padding: 0.5px 1px !important;
+  min-width: 18px !important;
+  margin: 0 !important;
+}
+
+.bottom-bar.minimal-mode .control-btn {
+  font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.014) !important;
+  padding: calc(var(--dynamic-bottom-bar-height, 35px) * 0.03) calc(var(--dynamic-bottom-bar-height, 35px) * 0.08) !important;
+  margin: 0 1px !important;
+}
+
+.bottom-bar.minimal-mode .progress-bar {
+  height: calc(var(--dynamic-bottom-bar-height, 35px) * 0.05) !important;
+}
+
+/* 부드러운 전환 애니메이션 */
+.bottom-bar,
+.bottom-bar * {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.bottom-bar .control-btn,
+.bottom-bar .stat-item,
+.bottom-bar .progress-bar {
+  transition: 
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out,
+    font-size 0.2s ease-in-out,
+    padding 0.2s ease-in-out,
+    margin 0.2s ease-in-out;
+}
+
+/* 요소 fade-in/fade-out 효과 */
+.bottom-bar .control-btn:not(.hidden),
+.bottom-bar .stat-item:not(.hidden),
+.bottom-bar .progress-bar:not(.hidden) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.bottom-bar .hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+/* 특정 우선순위 요소별 애니메이션 지연 */
+.bottom-bar .control-btn:nth-child(1) { transition-delay: 0ms; }
+.bottom-bar .control-btn:nth-child(2) { transition-delay: 50ms; }
+.bottom-bar .control-btn:nth-child(3) { transition-delay: 100ms; }
+.bottom-bar .control-btn:nth-child(4) { transition-delay: 150ms; }
+
+/* 모드 전환 시 bottom-bar 자체 애니메이션 */
+.bottom-bar.mode-transitioning {
+  animation: modeTransition 0.3s ease-in-out;
+}
+
+@keyframes modeTransition {
+  0% { transform: translateY(5px); opacity: 0.9; }
+  50% { transform: translateY(-2px); opacity: 0.95; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* 접근성: 모션 감소 설정 시 애니메이션 비활성화 */
+@media (prefers-reduced-motion: reduce) {
+  .bottom-bar,
+  .bottom-bar *,
+  .bottom-bar .control-btn,
+  .bottom-bar .stat-item,
+  .bottom-bar .progress-bar {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   기존 모바일 가로모드 스타일 (동적 레이아웃 시스템)
+   ============================================ */
+
+/* ============================================\n   브라우저별 호환성 CSS 폴백 (v2.1)\n   ============================================ */\n\n/* iOS Safari Safe Area 대응 */\n@supports (padding: env(safe-area-inset-bottom)) {\n  .bottom-bar {\n    /* Safe Area Inset을 고려한 padding 추가 */\n    padding-bottom: calc(var(--dynamic-bottom-bar-padding, var(--game-spacing-sm)) + env(safe-area-inset-bottom));\n    /* 홈 인디케이터 영역 추가 확보 */\n    min-height: calc(var(--dynamic-bottom-bar-height, var(--game-bottom-bar-height)) + env(safe-area-inset-bottom));\n  }\n  \n  /* iPhone X+ 시리즈의 notch 대응 */\n  .game-header-top {\n    padding-top: calc(var(--dynamic-header-padding, var(--game-spacing-sm)) + env(safe-area-inset-top));\n  }\n}\n\n/* Android Chrome Dynamic Viewport 대응 */\n@supports (height: 100dvh) {\n  @media (orientation: landscape) and (max-width: 1024px) {\n    .main-content {\n      /* Dynamic Viewport Height 활용 */\n      height: calc(100dvh - var(--dynamic-header-height, 45px) - var(--dynamic-bottom-bar-height, 40px));\n      max-height: calc(100dvh - var(--dynamic-header-height, 45px) - var(--dynamic-bottom-bar-height, 40px));\n    }\n    \n    .bottom-bar {\n      /* Chrome 100+의 Dynamic Viewport 지원 */\n      bottom: calc(100vh - 100dvh); /* 주소창 높이만큼 보정 */\n    }\n  }\n}\n\n/* Samsung Internet 특별 대응 */\n@media screen and (-webkit-min-device-pixel-ratio: 1) {\n  @supports (-webkit-appearance: none) {\n    .bottom-bar {\n      /* Samsung Internet의 viewport 보정 */\n      transform: translateZ(0); /* 하드웨어 가속 강제 */\n      will-change: transform; /* 성능 최적화 힌트 */\n    }\n  }\n}\n\n/* Firefox Mobile 호환성 */\n@-moz-document url-prefix() {\n  .bottom-bar {\n    /* Firefox 특유의 렌더링 이슈 해결 */\n    position: -webkit-sticky;\n    position: sticky;\n    bottom: 0;\n  }\n}\n\n/* 구형 브라우저 폴백 (CSS Grid 미지원) */\n@supports not (display: grid) {\n  .bottom-bar {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: space-between;\n  }\n  \n  .bottom-bar .stats-section,\n  .bottom-bar .progress-section,\n  .bottom-bar .controls-section {\n    width: 100%;\n    margin: 2px 0;\n  }\n}\n\n/* 브라우저별 최적화된 애니메이션 */\n@media (prefers-reduced-motion: no-preference) {\n  /* iOS Safari: 60fps 보장을 위한 최적화 */\n  @supports (-webkit-backdrop-filter: blur(1px)) {\n    .bottom-bar {\n      -webkit-transform: translateZ(0);\n      transform: translateZ(0);\n      -webkit-backface-visibility: hidden;\n      backface-visibility: hidden;\n      -webkit-perspective: 1000px;\n      perspective: 1000px;\n    }\n  }\n  \n  /* Android Chrome: GPU 가속 최적화 */\n  @media (-webkit-min-device-pixel-ratio: 1.5) {\n    .adaptive-element {\n      transform: translate3d(0, 0, 0);\n      will-change: opacity, transform;\n    }\n  }\n}\n\n/* 접근성 및 성능 최적화 */\n@media (prefers-contrast: high) {\n  .bottom-bar {\n    border-top: 2px solid currentColor;\n    background: var(--game-color-background);\n  }\n}\n\n@media (prefers-color-scheme: dark) {\n  .bottom-bar {\n    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);\n    color: #ffffff;\n  }\n}\n\n/* 메모리 절약을 위한 최적화 */\n@media (max-width: 480px) and (orientation: landscape) {\n  .bottom-bar .adaptive-element.hidden {\n    display: none !important;\n    /* DOM에서 완전 제거하여 메모리 절약 */\n  }\n}\n\n/* 네트워크 최적화 (저대역폭 대응) */\n@media (prefers-reduced-data: reduce) {\n  .bottom-bar {\n    background: var(--game-color-primary);\n    /* 그라데이션 제거로 렌더링 비용 절약 */\n  }\n  \n  .adaptive-element {\n    transition: none;\n    /* 애니메이션 제거로 성능 향상 */\n  }\n}

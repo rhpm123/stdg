@@ -22,6 +22,15 @@
   --game-border-radius-small: 6px;
   --game-border-radius-large: 20px;
   
+  /* 동적 레이아웃 변수 (안전 모드: 주석처리됨) */
+  /* 
+  --dynamic-bottom-bar-height: 40px;
+  --dynamic-header-height: 45px;
+  --dynamic-available-height: 200px;
+  --dynamic-viewport-height: 100vh;
+  --dynamic-main-content-height: calc(var(--dynamic-viewport-height) - var(--dynamic-header-height) - var(--dynamic-bottom-bar-height));
+  */
+  
   /* 게임 색상 팔레트 */
   --game-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --game-success-gradient: linear-gradient(90deg, #27ae60, #2ecc71);
