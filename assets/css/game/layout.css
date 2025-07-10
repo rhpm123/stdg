@@ -29,7 +29,9 @@
   align-items: stretch;
   justify-content: center;
   height: calc(100vh - var(--game-header-height) - var(--game-bottom-bar-height));
+  height: calc(100dvh - var(--game-header-height) - var(--game-bottom-bar-height));
   max-height: calc(100vh - var(--game-header-height) - var(--game-bottom-bar-height));
+  max-height: calc(100dvh - var(--game-header-height) - var(--game-bottom-bar-height));
   overflow: hidden;
 }
 
