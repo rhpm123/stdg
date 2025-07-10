@@ -152,6 +152,81 @@ function hideOrientationMessage() {
 }
 
 /**
+ * 게임 데이터 로딩
+ */
+async function loadGameData() {
+  try {
+    showLoading(true);
+    console.log('🔄 게임 데이터 로딩 시작...');
+    
+    const imageSetId = getImageSetId();
+    console.log('📋 이미지 세트 ID:', imageSetId);
+    
+    // 이미지 세트 정보 가져오기
+    const imageSets = await fetchImageSets();
+    const currentSet = imageSets.find(set => set.id.toString() === imageSetId);
+    
+    if (!currentSet) {
+      throw new Error(`이미지 세트 ID ${imageSetId}를 찾을 수 없습니다.`);
+    }
+    
+    // 정답 데이터 가져오기
+    const answerData = await fetchAnswerPoints(imageSetId);
+    console.log('📊 정답 데이터 로딩 완료:', {
+      regions: answerData.regions.length,
+      imageSize: `${answerData.image_width}x${answerData.image_height}`,
+      samplePoint: answerData.regions[0] ? `(${answerData.regions[0][0].x}, ${answerData.regions[0][0].y})` : 'N/A'
+    });
+    
+    // 게임 상태에 데이터 설정
+    setGameData(currentSet, answerData);
+    
+    // 이미지 표시
+    displayImages(currentSet);
+    
+    showLoading(false);
+    showMessage('게임 데이터 로딩 완료!', 'success');
+    
+  } catch (error) {
+    console.error('❌ 게임 데이터 로딩 실패:', error);
+    showLoading(false);
+    showMessage(`데이터 로딩 실패: ${error.message}`, 'error');
+  }
+}
+
+/**
+ * 이미지 표시
+ */
+function displayImages(imageSet) {
+  const originalImg = document.getElementById('originalImage');
+  const modifiedImg = document.getElementById('modifiedImage');
+  const container = document.getElementById('imagesContainer');
+  
+  if (!originalImg || !modifiedImg || !container) {
+    throw new Error('이미지 요소를 찾을 수 없습니다.');
+  }
+  
+  originalImg.src = imageSet.original_image_url;
+  modifiedImg.src = imageSet.modified_image_url;
+  
+  // 이미지 로딩 완료 대기
+  Promise.all([
+    new Promise(resolve => {
+      originalImg.onload = resolve;
+      originalImg.onerror = () => resolve();
+    }),
+    new Promise(resolve => {
+      modifiedImg.onload = resolve;
+      modifiedImg.onerror = () => resolve();
+    })
+  ]).then(() => {
+    container.style.display = 'block';
+    console.log('🖼️ 이미지 표시 완료');
+    updateUI();
+  });
+}
+
+/**
  * 게임 시작
  */
 function startGame() {
