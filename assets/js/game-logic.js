@@ -95,6 +95,23 @@ function startGame() {
   startGameState();
   startTimer();
   
+  // 모바일 가로모드에서 풀스크린 진입 시도
+  if (typeof window.orientationController !== 'undefined') {
+    window.orientationController.enterFullscreenForGame()
+      .then(success => {
+        if (success) {
+          console.log('✅ 게임 시작과 함께 풀스크린 모드 진입 성공');
+        } else {
+          console.log('ℹ️ 풀스크린 모드 진입 조건 미충족 또는 실패');
+        }
+      })
+      .catch(error => {
+        console.warn('⚠️ 풀스크린 모드 진입 중 오류:', error);
+      });
+  } else {
+    console.warn('⚠️ OrientationController를 찾을 수 없음');
+  }
+  
   // 힌트 시스템 초기화
   if (typeof resetHintSystem === 'function') {
     resetHintSystem();
@@ -249,6 +266,17 @@ function handleTimeUp() {
   gameState.isGameActive = false;
   clearInterval(gameState.timerInterval);
   
+  // 풀스크린 모드 해제
+  if (typeof window.orientationController !== 'undefined') {
+    window.orientationController.exitFullscreen()
+      .then(() => {
+        console.log('✅ 시간 종료 시 풀스크린 모드 해제 완료');
+      })
+      .catch(error => {
+        console.warn('⚠️ 풀스크린 모드 해제 중 오류:', error);
+      });
+  }
+  
   // 시간 제한 시각화 시스템 정지
   if (typeof window.healthBarSystem !== 'undefined') {
     window.healthBarSystem.stop();
@@ -269,6 +297,17 @@ function handleTimeUp() {
 function handleGameOver() {
   gameState.isGameActive = false;
   clearInterval(gameState.timerInterval);
+  
+  // 풀스크린 모드 해제
+  if (typeof window.orientationController !== 'undefined') {
+    window.orientationController.exitFullscreen()
+      .then(() => {
+        console.log('✅ 게임 오버 시 풀스크린 모드 해제 완료');
+      })
+      .catch(error => {
+        console.warn('⚠️ 풀스크린 모드 해제 중 오류:', error);
+      });
+  }
   
   // 시간 제한 시각화 시스템 정지
   if (typeof window.healthBarSystem !== 'undefined') {

@@ -257,6 +257,17 @@ function showAnswerHint(regionIndex = -1) {
 function celebrateAllAnswers() {
   if (!gameState.answerPoints) return;
   
+  // 게임 완료 시 풀스크린 모드 해제
+  if (typeof window.orientationController !== 'undefined') {
+    window.orientationController.exitFullscreen()
+      .then(() => {
+        console.log('✅ 게임 완료 시 풀스크린 모드 해제 완료');
+      })
+      .catch(error => {
+        console.warn('⚠️ 풀스크린 모드 해제 중 오류:', error);
+      });
+  }
+  
   const container = document.getElementById('modifiedContainer');
   const containerInfo = getImageContainerInfo('modifiedContainer', 'modifiedImage');
   

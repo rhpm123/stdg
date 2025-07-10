@@ -50,9 +50,13 @@ class OrientationController {
       // 현재 orientation 상태 확인
       this.updateOrientationState();
       
-      // 이벤트 리스너 설정
-      this.setupEventListeners();
+      // orientation 이벤트 리스너 설정
+      this.setupOrientationListeners();
       
+      // 풀스크린 이벤트 리스너 설정
+      this.setupFullscreenListeners();
+      
+      // 초기 상태 설정
       // 게임 상태에 orientation 정보 추가
       if (typeof gameState !== 'undefined') {
         gameState.orientation = {
@@ -112,7 +116,7 @@ class OrientationController {
   /**
    * 이벤트 리스너 설정
    */
-  setupEventListeners() {
+  setupOrientationListeners() {
     try {
       console.log('🎧 Orientation 이벤트 리스너 설정');
       
@@ -353,6 +357,198 @@ class OrientationController {
       
     } catch (error) {
       console.error('❌ Orientation Controller 정리 실패:', error);
+    }
+  }
+
+  /**
+   * 유틸리티 메서드들
+   */
+  
+  // 현재 가로모드 여부 반환
+  isCurrentlyLandscape() {
+    return this.isLandscape;
+  }
+  
+  // API 지원 여부 반환
+  isOrientationAPISupported() {
+    return this.isSupported;
+  }
+  
+  // 디바이스가 모바일인지 확인
+  isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+  
+  /**
+   * 풀스크린 모드 관리 시스템
+   */
+  
+  /**
+   * 풀스크린 API 지원 여부 확인
+   */
+  checkFullscreenSupport() {
+    const docElement = document.documentElement;
+    return !!(
+      docElement.requestFullscreen ||
+      docElement.webkitRequestFullscreen ||
+      docElement.mozRequestFullScreen ||
+      docElement.msRequestFullscreen
+    );
+  }
+  
+  /**
+   * 풀스크린 모드 진입
+   */
+  async enterFullscreen() {
+    try {
+      const docElement = document.documentElement;
+      
+      console.log('🖥️ 풀스크린 모드 진입 시도');
+      
+      // 브라우저별 풀스크린 API 호출
+      if (docElement.requestFullscreen) {
+        await docElement.requestFullscreen();
+      } else if (docElement.webkitRequestFullscreen) {
+        await docElement.webkitRequestFullscreen();
+      } else if (docElement.mozRequestFullScreen) {
+        await docElement.mozRequestFullScreen();
+      } else if (docElement.msRequestFullscreen) {
+        await docElement.msRequestFullscreen();
+      } else {
+        console.warn('⚠️ 이 브라우저는 풀스크린 API를 지원하지 않습니다');
+        return false;
+      }
+      
+      // 게임 상태 업데이트
+      if (typeof gameState !== 'undefined' && gameState.orientation) {
+        gameState.orientation.isFullscreen = true;
+      }
+      
+      console.log('✅ 풀스크린 모드 진입 성공');
+      return true;
+      
+    } catch (error) {
+      console.error('❌ 풀스크린 모드 진입 실패:', error);
+      
+      // 사용자 제스처가 필요한 경우의 에러 처리
+      if (error.name === 'NotAllowedError') {
+        console.warn('⚠️ 풀스크린 모드는 사용자 상호작용 후에만 가능합니다');
+      }
+      
+      return false;
+    }
+  }
+  
+  /**
+   * 풀스크린 모드 해제
+   */
+  async exitFullscreen() {
+    try {
+      console.log('🖥️ 풀스크린 모드 해제 시도');
+      
+      // 브라우저별 풀스크린 해제 API 호출
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        await document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        await document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        await document.msExitFullscreen();
+      }
+      
+      // 게임 상태 업데이트
+      if (typeof gameState !== 'undefined' && gameState.orientation) {
+        gameState.orientation.isFullscreen = false;
+      }
+      
+      console.log('✅ 풀스크린 모드 해제 성공');
+      return true;
+      
+    } catch (error) {
+      console.error('❌ 풀스크린 모드 해제 실패:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * 현재 풀스크린 상태 확인
+   */
+  isFullscreen() {
+    return !!(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement
+    );
+  }
+  
+  /**
+   * 풀스크린 변경 이벤트 처리
+   */
+  handleFullscreenChange() {
+    const isCurrentlyFullscreen = this.isFullscreen();
+    
+    console.log('🖥️ 풀스크린 상태 변경:', {
+      isFullscreen: isCurrentlyFullscreen,
+      timestamp: new Date().toISOString()
+    });
+    
+    // 게임 상태 동기화
+    if (typeof gameState !== 'undefined' && gameState.orientation) {
+      gameState.orientation.isFullscreen = isCurrentlyFullscreen;
+    }
+    
+    // 콜백 실행
+    this.triggerCallbacks('fullscreenChange', {
+      isFullscreen: isCurrentlyFullscreen,
+      timestamp: Date.now()
+    });
+    
+    // 풀스크린 해제 시 가로모드 유지 체크
+    if (!isCurrentlyFullscreen && this.isLandscape) {
+      console.log('🔄 풀스크린 해제됨, 가로모드 상태 유지 확인');
+      setTimeout(() => {
+        this.handleOrientationChange('fullscreen-exit');
+      }, 100);
+    }
+  }
+  
+  /**
+   * 풀스크린 이벤트 리스너 설정
+   */
+  setupFullscreenListeners() {
+    // 풀스크린 변경 이벤트 리스너들
+    const fullscreenEvents = [
+      'fullscreenchange',
+      'webkitfullscreenchange',
+      'mozfullscreenchange',
+      'MSFullscreenChange'
+    ];
+    
+    fullscreenEvents.forEach(event => {
+      document.addEventListener(event, () => {
+        this.handleFullscreenChange();
+      });
+    });
+    
+    console.log('🎧 풀스크린 이벤트 리스너 설정 완료');
+  }
+  
+  /**
+   * 게임 시작 시 풀스크린 모드 자동 진입
+   */
+  async enterFullscreenForGame() {
+    // 모바일 기기이고 가로모드일 때만 풀스크린 시도
+    if (this.isMobileDevice() && this.isLandscape) {
+      console.log('🎮 게임 시작: 모바일 가로모드에서 풀스크린 모드 진입 시도');
+      return await this.enterFullscreen();
+    } else {
+      console.log('ℹ️ 풀스크린 조건 미충족:', {
+        isMobile: this.isMobileDevice(),
+        isLandscape: this.isLandscape
+      });
+      return false;
     }
   }
 }
