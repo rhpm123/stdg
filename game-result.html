@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>게임 결과 - 틀린그림찾기</title>
+  
+  <!-- 회전 안내 UI 스타일시트 -->
+  <link rel="stylesheet" href="assets/css/game/orientation.css">
+  
   <style>
     * {
       margin: 0;
@@ -210,6 +214,19 @@
   </style>
 </head>
 <body>
+  <!-- 회전 안내 오버레이 -->
+  <div class="orientation-overlay">
+    <div class="orientation-game-name">틀린그림찾기</div>
+    <div class="rotate-icon-container">
+      <div class="phone-icon"></div>
+      <div class="rotate-arrow">↻</div>
+    </div>
+    <div class="orientation-text">
+      <div class="orientation-title">📱 핸드폰을 회전하세요</div>
+      <div class="orientation-subtitle">게임 결과를 더 잘 보기 위해<br>가로모드로 확인해주세요</div>
+    </div>
+  </div>
+
   <div class="result-container">
     <div class="completion-icon" id="completionIcon">🎉</div>
     

@@ -8,6 +8,9 @@
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
+  <!-- 회전 안내 UI 스타일시트 -->
+  <link rel="stylesheet" href="assets/css/game/orientation.css">
+  
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -138,6 +141,19 @@
   </style>
 </head>
 <body>
+  <!-- 회전 안내 오버레이 -->
+  <div class="orientation-overlay">
+    <div class="orientation-game-name">틀린그림찾기</div>
+    <div class="rotate-icon-container">
+      <div class="phone-icon"></div>
+      <div class="rotate-arrow">↻</div>
+    </div>
+    <div class="orientation-text">
+      <div class="orientation-title">📱 핸드폰을 회전하세요</div>
+      <div class="orientation-subtitle">더 나은 게임 경험을 위해<br>가로모드로 플레이해주세요</div>
+    </div>
+  </div>
+
   <div class="container">
     <h1>🎮 로그인</h1>
     <p class="welcome-text">틀린그림찾기 게임에 오신 것을 환영합니다!<br>로그인하고 재미있는 게임을 시작해보세요.</p>
