@@ -195,7 +195,9 @@ text-overflow: ellipsis;
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: visible;
-  min-height: 40px;
+  min-height: 45px; /* 충분한 높이 확보 */
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬로 잘림 방지 */
 }
 
 /* 중요도에 따른 시각적 계층 구조 */
