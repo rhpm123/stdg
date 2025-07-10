@@ -1,44 +1,128 @@
 /**
  * BottomBarManager - 동적 하단바 관리 시스템
- * 안전 모드: 기존 레이아웃 보호를 위해 비활성화됨
+ * 활성화 모드: 모바일 기기별 반응형 바텀바 시스템
  */
 
 class BottomBarManager {
   constructor() {
-    console.log('⚠️ BottomBarManager: 안전 모드로 실행됨 (기존 레이아웃 보호)');
-    this.enabled = false; // 시스템 비활성화
+    console.log('🚀 BottomBarManager: 동적 시스템 활성화됨');
+    this.enabled = true; // 시스템 활성화
     this.bottomBar = document.querySelector('.bottom-bar');
+    this.minHeight = 35;
+    this.maxHeight = 80;
+    this.defaultHeight = 55;
     
-    // 안전 모드에서는 초기화만 수행하고 실제 기능은 비활성화
-    if (!this.enabled) {
-      console.log('ℹ️ 동적 레이아웃 시스템이 비활성화되었습니다.');
-      return;
+    if (this.enabled) {
+      this.initialize();
+      console.log('✅ 동적 레이아웃 시스템이 활성화되었습니다.');
     }
   }
 
-  // 모든 메서드들을 안전하게 비활성화
+  // 시스템 초기화
   initialize() {
     if (!this.enabled) return;
+    
+    try {
+      this.calculateOptimalHeight();
+      this.setupResizeListener();
+      console.log('📏 BottomBarManager 초기화 완료');
+    } catch (error) {
+      console.error('❌ BottomBarManager 초기화 실패:', error);
+    }
   }
 
+  // 최적 높이 계산
   calculateOptimalHeight() {
     if (!this.enabled) return null;
+    
+    try {
+      const viewportHeight = window.innerHeight;
+      const headerHeight = 45; // CSS 변수와 일치
+      const minMainHeight = 200; // 게임 영역 최소 높이
+      
+      // 사용 가능한 높이에서 최적 바텀바 높이 계산
+      const availableForBottomBar = viewportHeight - headerHeight - minMainHeight;
+      const optimalHeight = Math.max(this.minHeight, Math.min(this.maxHeight, availableForBottomBar * 0.2));
+      
+      // 정수로 반올림
+      const finalHeight = Math.round(optimalHeight);
+      
+      console.log(`📐 높이 계산: viewport=${viewportHeight}px, optimal=${finalHeight}px`);
+      
+      this.updateBottomBarHeight(finalHeight);
+      return finalHeight;
+    } catch (error) {
+      console.error('❌ 높이 계산 실패:', error);
+      return this.defaultHeight;
+    }
   }
 
+  // 바텀바 높이 업데이트
   updateBottomBarHeight(height) {
     if (!this.enabled) return;
+    
+    try {
+      // CSS 변수 업데이트
+      document.documentElement.style.setProperty('--dynamic-bottom-bar-height', `${height}px`);
+      
+      console.log(`🔄 바텀바 높이 업데이트: ${height}px`);
+    } catch (error) {
+      console.error('❌ 바텀바 높이 업데이트 실패:', error);
+    }
   }
 
+  // 브라우저별 변수 설정
   setBrowserSpecificVariables() {
     if (!this.enabled) return;
+    
+    try {
+      // 동적 뷰포트 높이 지원 확인 및 설정
+      if (CSS.supports('height', '100dvh')) {
+        document.documentElement.style.setProperty('--dynamic-viewport-height', '100dvh');
+        console.log('📱 동적 뷰포트 높이(dvh) 지원 확인');
+      } else {
+        document.documentElement.style.setProperty('--dynamic-viewport-height', '100vh');
+        console.log('📱 표준 뷰포트 높이(vh) 사용');
+      }
+    } catch (error) {
+      console.error('❌ 브라우저별 변수 설정 실패:', error);
+    }
   }
 
+  // 리사이즈 이벤트 리스너 설정
+  setupResizeListener() {
+    if (!this.enabled) return;
+    
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.handleResize();
+      }, 100); // 100ms 디바운스
+    });
+  }
+
+  // 리사이즈 처리
   handleResize() {
     if (!this.enabled) return;
+    
+    console.log('📱 화면 크기 변경 감지, 바텀바 재계산 중...');
+    this.calculateOptimalHeight();
+    this.setBrowserSpecificVariables();
   }
 
+  // 시스템 정리
   destroy() {
     if (!this.enabled) return;
+    
+    try {
+      // CSS 변수 초기화
+      document.documentElement.style.removeProperty('--dynamic-bottom-bar-height');
+      document.documentElement.style.removeProperty('--dynamic-viewport-height');
+      console.log('🧹 BottomBarManager 정리 완료');
+    } catch (error) {
+      console.error('❌ BottomBarManager 정리 실패:', error);
+    }
   }
 
   // 상태 확인용 메서드
@@ -47,8 +131,8 @@ class BottomBarManager {
   }
 }
 
-// 전역 인스턴스 생성 (비활성화된 상태)
+// 전역 인스턴스 생성 (활성화된 상태)
 window.bottomBarManager = new BottomBarManager();
 
-// 안전 모드 메시지
-console.log('🛡️ BottomBarManager 안전 모드 활성화: 기존 CSS 레이아웃을 보호합니다.'); 
+// 활성화 모드 메시지
+console.log('🎯 BottomBarManager 활성화 완료: 동적 반응형 바텀바 시스템이 작동합니다.'); 
