@@ -79,7 +79,7 @@
     padding-bottom: env(safe-area-inset-bottom, 0px); /* 아이폰 X 이상 노치 대응 */
   }
   
-  .bottom-bar .stat-item {
+  .bottom-bar .stat-value {
     /* 모바일에서 터치 영역 보장 */
     min-height: 40px;
     min-width: 60px;
@@ -88,7 +88,7 @@
     transition: all 0.2s ease;
   }
   
-  .bottom-bar .stat-item:active {
+  .bottom-bar .stat-value:active {
     transform: scale(0.97);
     opacity: 0.8;
   }
@@ -148,7 +148,7 @@
 /* 애니메이션 요소 GPU 가속 */
 .difference-mark:hover,
 .control-btn:hover,
-.stat-item:hover {
+.stat-value:hover {
   will-change: transform, opacity;
 }
 
@@ -163,7 +163,7 @@
     background-color: rgba(255, 255, 0, 0.9) !important;
   }
   
-  .stat-item {
+  .stat-value {
     border: 2px solid rgba(255, 255, 255, 0.8);
   }
 }
@@ -178,7 +178,7 @@
   
   .difference-mark,
   .control-btn,
-  .stat-item {
+  .stat-value {
     transform: none !important;
   }
 }
@@ -221,7 +221,7 @@
     gap: 4px;
   }
   
-  .bottom-bar .stat-item {
+  .bottom-bar .stat-value {
     min-width: 50px;
     font-size: 0.7rem;
     padding: 4px 6px;
@@ -261,7 +261,7 @@
     min-height: 40px !important;
   }
   
-  .bottom-bar .stat-item {
+  .bottom-bar .stat-value {
     /* 더 여유로운 공간 활용 */
     min-width: 70px;
     padding: 8px 12px;
@@ -382,7 +382,7 @@
     overflow: hidden;
   }
   
-  .bottom-bar-stats .stat-item {
+  .bottom-bar-stats .stat-value {
     gap: 1px !important;
     min-width: 0;
     flex-shrink: 1;
@@ -464,7 +464,7 @@
 }
 
 /* 게임 관련 요소들 오버플로우 방지 */
-.stat-item,
+.stat-value,
 .health-bar-text,
 .message-display,
 .game-title,
@@ -513,7 +513,7 @@
 }
 
 /* 압축 모드에서 요소별 특별 처리 */
-.bottom-bar.compact-mode .stat-item {
+.bottom-bar.compact-mode .stat-value {
   font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.014) !important;
   padding: 1px 1px !important;
   min-width: 20px !important;
@@ -529,7 +529,7 @@
 }
 
 /* 최소 모드에서 필수 요소 더욱 압축 */
-.bottom-bar.minimal-mode .stat-item {
+.bottom-bar.minimal-mode .stat-value {
   font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.012) !important;
   padding: 0.5px 1px !important;
   min-width: 18px !important;
@@ -553,7 +553,7 @@
 }
 
 .bottom-bar .control-btn,
-.bottom-bar .stat-item,
+.bottom-bar .stat-value,
 .bottom-bar .progress-bar {
   transition: 
     opacity 0.2s ease-in-out,
@@ -565,7 +565,7 @@
 
 /* 요소 fade-in/fade-out 효과 */
 .bottom-bar .control-btn:not(.hidden),
-.bottom-bar .stat-item:not(.hidden),
+.bottom-bar .stat-value:not(.hidden),
 .bottom-bar .progress-bar:not(.hidden) {
   opacity: 1;
   transform: scale(1);
@@ -599,7 +599,7 @@
   .bottom-bar,
   .bottom-bar *,
   .bottom-bar .control-btn,
-  .bottom-bar .stat-item,
+  .bottom-bar .stat-value,
   .bottom-bar .progress-bar {
     transition: none !important;
     animation: none !important;
