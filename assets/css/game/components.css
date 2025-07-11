@@ -207,7 +207,8 @@ text-overflow: ellipsis;
   background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
   border-color: rgba(255, 193, 7, 0.4);
   box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
-  min-width: 60px;
+  min-width: 80px;
+  flex-grow: 2; /* 최고 우선순위 공간 배분 */
   font-weight: 700;
   font-size: 1rem;
   color: #FFD54F;
@@ -219,19 +220,31 @@ text-overflow: ellipsis;
   background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(3, 169, 244, 0.2));
   border-color: rgba(33, 150, 243, 0.4);
   box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
-  min-width: 60px;
+  min-width: 70px;
+  flex-grow: 1.5; /* 두 번째 우선순위 공간 배분 */
   font-weight: 600;
   font-size: 0.9rem;
   color: #64B5F6;
   font-family: 'Courier New', monospace; /* 좋은 숫자 가독성 */
 }
 
-/* 3순위: 진행률과 찾은 개수 */
-.bottom-bar .stat-value:has(#progress),
+/* 3순위: 진행률 */
+.bottom-bar .stat-value:has(#progress) {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
+  border-color: rgba(76, 175, 80, 0.3);
+  min-width: 55px;
+  flex-grow: 1; /* 일반 우선순위 공간 배분 */
+  color: #81C784;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* 3순위: 찾은 개수 */
 .bottom-bar .stat-value:has(#found) {
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
   border-color: rgba(76, 175, 80, 0.3);
-  min-width: 50px;
+  min-width: 65px;
+  flex-grow: 1; /* 일반 우선순위 공간 배분 */
   color: #81C784;
   font-weight: 600;
   font-size: 0.85rem;
@@ -241,16 +254,12 @@ text-overflow: ellipsis;
 .bottom-bar .stat-value:has(#lives) {
   background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(233, 30, 99, 0.15));
   border-color: rgba(244, 67, 54, 0.3);
-  min-width: 60px; /* 하트 이모티콘을 위한 추가 공간 */
+  min-width: 85px; /* 하트 이모티콘을 위한 추가 공간 */
+  flex-grow: 1.2; /* 목숨 중요도 반영한 공간 배분 */
   font-weight: 500;
-  font-size: 0.65rem;
-}
-
-/* lives 추가 스타일 (이미 위에서 기본 스타일 적용됨) */
-.bottom-bar .stat-value:has(#lives) {
   font-size: 0.85rem;
   line-height: 1.2;
-  letter-spacing: 1px; /* 하트 사이 간격 */
+  letter-spacing: 2px; /* 하트 사이 간격 최적화 */
 }
 
 /* 5순위: 체력바 및 기타 */
