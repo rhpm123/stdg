@@ -208,6 +208,41 @@
 }
 
 /* ============================================
+   소형 화면 (480px 이하) stat-value 최적화
+   ============================================ */
+@media (max-width: 480px) {
+  .bottom-bar .stat-value {
+    /* 소형 화면에서 flex-grow 기반 유연한 크기 조정 */
+    min-width: 0; /* 유연성 최대화 */
+    font-size: 0.7rem; /* 공간 절약 */
+    padding: 6px 8px; /* 최소 패딩 */
+    
+    /* 텍스트 오버플로우 처리 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+    /* flex-grow가 적용된 상태에서 균형 조정 */
+    flex-shrink: 1; /* 필요시 축소 허용 */
+  }
+  
+  /* 하트 이모티콘 간격 조정 (소형 화면용) */
+  .bottom-bar .stat-value:has(#lives) {
+    letter-spacing: 1px; /* 공간 절약을 위해 간격 줄임 */
+    font-size: 0.65rem; /* 하트 크기 축소 */
+  }
+  
+  /* 점수 칸 공간 활용 최적화 */
+  .bottom-bar .stat-value:has(#score) {
+    flex-grow: 1.8; /* 소형 화면에서 점수 공간 약간 줄임 */
+  }
+  
+  .bottom-bar .stat-value:has(#timer) {
+    flex-grow: 1.3; /* 시간 공간 약간 줄임 */
+  }
+}
+
+/* ============================================
    소형 화면 (아이폰 SE 등) 최적화
    ============================================ */
 @media (max-width: 375px) {
@@ -222,9 +257,37 @@
   }
   
   .bottom-bar .stat-value {
-    min-width: 50px;
-    font-size: 0.7rem;
-    padding: 4px 6px;
+    /* 초소형 화면에서 극한 공간 절약 */
+    min-width: 0; /* 완전 유연화 */
+    font-size: 0.65rem; /* 더 작은 폰트 */
+    padding: 4px 6px; /* 최소 패딩 유지 */
+    
+    /* 텍스트 오버플로우 처리 강화 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
+    
+    /* 초소형 화면용 flex-grow 재조정 */
+  }
+  
+  /* 초소형 화면에서 하트 간격 더 축소 */
+  .bottom-bar .stat-value:has(#lives) {
+    letter-spacing: 0.5px;
+    font-size: 0.6rem;
+  }
+  
+  /* 초소형 화면에서 공간 배분 재조정 */
+  .bottom-bar .stat-value:has(#score) {
+    flex-grow: 1.6; /* 점수 공간 더 줄임 */
+  }
+  
+  .bottom-bar .stat-value:has(#timer) {
+    flex-grow: 1.2; /* 시간 공간 더 줄임 */
+  }
+  
+  .bottom-bar .stat-value:has(#lives) {
+    flex-grow: 1.1; /* 목숨 공간 줄임 */
   }
   
   .control-btn {
@@ -384,8 +447,13 @@
   
   .bottom-bar-stats .stat-value {
     gap: 1px !important;
-    min-width: 0;
-    flex-shrink: 1;
+    min-width: 0 !important; /* 완전 유연화 */
+    flex-shrink: 1 !important;
+    
+    /* 가로 모드에서 flex-grow 재조정 */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
   
   .bottom-bar-stats .stat-label {
@@ -396,6 +464,26 @@
   .bottom-bar-stats .stat-value {
     font-size: 0.6rem !important;
     line-height: 1 !important;
+    padding: 2px 4px !important; /* 최소 패딩 */
+  }
+  
+  /* 가로 모드에서 우선순위 기반 공간 배분 재조정 */
+  .bottom-bar-stats .stat-value:has(#score) {
+    flex-grow: 1.5 !important; /* 가로모드에서 점수 공간 축소 */
+  }
+  
+  .bottom-bar-stats .stat-value:has(#timer) {
+    flex-grow: 1.2 !important; /* 시간 공간 축소 */
+  }
+  
+  .bottom-bar-stats .stat-value:has(#lives) {
+    flex-grow: 1.0 !important; /* 목숨 공간 축소 */
+    letter-spacing: 0.5px !important; /* 하트 간격 축소 */
+  }
+  
+  .bottom-bar-stats .stat-value:has(#progress),
+  .bottom-bar-stats .stat-value:has(#found) {
+    flex-grow: 0.8 !important; /* 진행률/찾은개수 최소 공간 */
   }
   
   /* 진행바 압축 */
@@ -473,6 +561,39 @@
   white-space: normal !important;
   word-wrap: break-word !important;
   word-break: break-word !important;
+}
+
+/* stat-value 특화 오버플로우 방지 */
+.bottom-bar .stat-value {
+  /* flex-grow 환경에서 최적 표시 보장 */
+  text-overflow: clip; /* ellipsis 대신 클립으로 변경 */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  
+  /* 최소 높이 보장 */
+  min-height: calc(var(--dynamic-bottom-bar-height, 38px) * 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 숫자/특수문자 표시 최적화 */
+.bottom-bar .stat-value:has(#score),
+.bottom-bar .stat-value:has(#timer),
+.bottom-bar .stat-value:has(#progress),
+.bottom-bar .stat-value:has(#found) {
+  font-variant-numeric: tabular-nums; /* 숫자 균등 폭 */
+  text-align: center;
+}
+
+/* 하트 이모티콘 표시 최적화 */
+.bottom-bar .stat-value:has(#lives) {
+  font-feature-settings: "kern" 1; /* 커닝 활성화 */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ============================================
