@@ -150,7 +150,7 @@ text-overflow: ellipsis;
 .bottom-bar-controls {
   display: flex;
   align-items: center;
-    min-height: calc(var(--dynamic-bottom-bar-height, 55px) * 0.9); /* 바텀바 높이에 비례한 동적 최소 높이 */
+      min-height: calc(var(--dynamic-bottom-bar-height, 55px) * 0.9) !important; /* 바텀바 높이에 비례한 동적 최소 높이 강제 적용 */
 }
 
 /* 왼쪽: 게임 통계 섹션 */
@@ -196,7 +196,7 @@ text-overflow: ellipsis;
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: visible;
-    min-height: calc(var(--dynamic-bottom-bar-height, 55px) * 0.7); /* 바텀바 높이에 비례한 동적 높이 */
+      min-height: calc(var(--dynamic-bottom-bar-height, 55px) * 0.7) !important; /* 바텀바 높이에 비례한 동적 높이 강제 적용 */
   display: flex;
   align-items: center; /* 세로 중앙 정렬로 잘림 방지 */
 }
