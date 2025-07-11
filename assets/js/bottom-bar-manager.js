@@ -63,9 +63,20 @@ class BottomBarManager {
     
     try {
       // CSS 변수 업데이트
+      // CSS 변수 업데이트
       document.documentElement.style.setProperty('--dynamic-bottom-bar-height', `${height}px`);
       
-      console.log(`🔄 바텀바 높이 업데이트: ${height}px`);
+      // CSS 재계산 강제 트리거 (즉시 시각적 반영 보장)
+      if (this.bottomBar) {
+        // GPU 레이어 강제 생성으로 하드웨어 가속 활성화
+        this.bottomBar.style.transform = 'translateZ(0)';
+        // 강제 리플로우 실행으로 CSS 변경사항 즉시 적용
+        this.bottomBar.offsetHeight; // 읽기 접근으로 브라우저 강제 재계산
+        // GPU 레이어 정리 (메모리 최적화)
+        this.bottomBar.style.transform = '';
+      }
+      
+      console.log(`🔄 바텀바 높이 업데이트 + 재계산 트리거 완료: ${height}px`);
     } catch (error) {
       console.error('❌ 바텀바 높이 업데이트 실패:', error);
     }
