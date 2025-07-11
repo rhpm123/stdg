@@ -514,7 +514,7 @@
 
 /* 압축 모드에서 요소별 특별 처리 */
 .bottom-bar.compact-mode .stat-value {
-  font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.014) !important;
+    font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.012) !important; /* 바텀바 크기 동기화를 위한 미세 조정 */
   padding: 1px 1px !important;
   min-width: 20px !important;
 }
@@ -530,7 +530,7 @@
 
 /* 최소 모드에서 필수 요소 더욱 압축 */
 .bottom-bar.minimal-mode .stat-value {
-  font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.012) !important;
+    font-size: calc(var(--dynamic-bottom-bar-height, 35px) * 0.010) !important; /* 최소 모드 크기 동기화 미세 조정 */
   padding: 0.5px 1px !important;
   min-width: 18px !important;
   margin: 0 !important;
