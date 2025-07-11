@@ -143,22 +143,6 @@ body {
   align-items: center;
 }
 
-.stat-item {
-  display: flex;
-  align-items: center;
-  color: white;
-  
-  /* 기본 반응형 패딩 (기존 유지) */
-  padding: clamp(2px, 0.5vw, 4px) clamp(6px, 1.5vw, 10px);
-  
-  /* 동적 바텀바 높이 기반 크기 계산 (추가) */
-  padding: calc(var(--dynamic-bottom-bar-height, 55px) * 0.05) calc(var(--dynamic-bottom-bar-height, 55px) * 0.1);
-  min-height: calc(var(--dynamic-bottom-bar-height, 55px) * 0.6);
-  
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  min-width: auto;
-}
 
 /* 라벨 숨기기 - 값만 표시 */
 .stat-label {
@@ -173,6 +157,14 @@ body {
   font-size: calc(var(--dynamic-bottom-bar-height, 55px) * 0.018);
   padding: calc(var(--dynamic-bottom-bar-height, 55px) * 0.08) calc(var(--dynamic-bottom-bar-height, 55px) * 0.12);
   
+  /* stat-item 기능 통합 */
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  min-height: calc(var(--dynamic-bottom-bar-height, 55px) * 0.6);
+  min-width: auto;
+  color: white;
+  
+  /* 기존 스타일 유지 */
   font-weight: 600;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   line-height: 1.2; /* 잘림 방지를 위한 여유 */
