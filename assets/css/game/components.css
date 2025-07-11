@@ -184,7 +184,7 @@ text-overflow: ellipsis;
   align-items: stretch; /* 모든 아이템 같은 높이 */
 }
 
-.bottom-bar .stat-item {
+.bottom-bar .stat-value {
   /* base.css에서 기본 스타일 정의됨 */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
@@ -202,111 +202,77 @@ text-overflow: ellipsis;
 
 /* 중요도에 따른 시각적 계층 구조 */
 /* 1순위: 점수 (가장 중요) */
-.bottom-bar .stat-item:has(#score) {
+.bottom-bar .stat-value:has(#score) {
   background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
   border-color: rgba(255, 193, 7, 0.4);
   box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
   min-width: 60px;
   font-weight: 700;
-}
-
-.bottom-bar .stat-item:has(#score) .stat-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #FFC107;
-}
-
-.bottom-bar .stat-item:has(#score) .stat-value {
   font-size: 1rem;
-  font-weight: 700;
   color: #FFD54F;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* 2순위: 시간 (두 번째로 중요) */
-.bottom-bar .stat-item:has(#timer) {
+.bottom-bar .stat-value:has(#timer) {
   background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(3, 169, 244, 0.2));
   border-color: rgba(33, 150, 243, 0.4);
   box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
   min-width: 60px;
   font-weight: 600;
-}
-
-.bottom-bar .stat-item:has(#timer) .stat-label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: #2196F3;
-}
-
-.bottom-bar .stat-item:has(#timer) .stat-value {
   font-size: 0.9rem;
-  font-weight: 600;
   color: #64B5F6;
   font-family: 'Courier New', monospace; /* 좋은 숫자 가독성 */
 }
 
 /* 3순위: 진행률과 찾은 개수 */
-.bottom-bar .stat-item:has(#progress),
-.bottom-bar .stat-item:has(#found) {
+.bottom-bar .stat-value:has(#progress),
+.bottom-bar .stat-value:has(#found) {
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
   border-color: rgba(76, 175, 80, 0.3);
   min-width: 50px;
-}
-
-.bottom-bar .stat-item:has(#progress) .stat-label,
-.bottom-bar .stat-item:has(#found) .stat-label {
-  color: #4CAF50;
-  font-weight: 500;
-  font-size: 0.65rem;
-}
-
-.bottom-bar .stat-item:has(#progress) .stat-value,
-.bottom-bar .stat-item:has(#found) .stat-value {
   color: #81C784;
   font-weight: 600;
   font-size: 0.85rem;
 }
 
 /* 4순위: 목숨 (하트) */
-.bottom-bar .stat-item:has(#lives) {
+.bottom-bar .stat-value:has(#lives) {
   background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(233, 30, 99, 0.15));
   border-color: rgba(244, 67, 54, 0.3);
   min-width: 60px; /* 하트 이모티콘을 위한 추가 공간 */
-}
-
-.bottom-bar .stat-item:has(#lives) .stat-label {
-  color: #F44336;
   font-weight: 500;
   font-size: 0.65rem;
 }
 
-.bottom-bar .stat-item:has(#lives) .stat-value {
+/* lives 추가 스타일 (이미 위에서 기본 스타일 적용됨) */
+.bottom-bar .stat-value:has(#lives) {
   font-size: 0.85rem;
   line-height: 1.2;
   letter-spacing: 1px; /* 하트 사이 간격 */
 }
 
 /* 5순위: 체력바 및 기타 */
-.bottom-bar .stat-item#healthBarSection,
-.bottom-bar .stat-item#bestScoreSection {
+.bottom-bar .stat-value#healthBarSection,
+.bottom-bar .stat-value#bestScoreSection {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
   min-width: 70px; /* 체력바를 위한 추가 공간 */
 }
 
 /* 공통 호버 효과 강화 */
-.bottom-bar .stat-item:hover {
+.bottom-bar .stat-value:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
 }
 
 /* 점수와 시간 호버 효과 스페셜 */
-.bottom-bar .stat-item:has(#score):hover {
+.bottom-bar .stat-value:has(#score):hover {
   box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
   border-color: rgba(255, 193, 7, 0.6);
 }
 
-.bottom-bar .stat-item:has(#timer):hover {
+.bottom-bar .stat-value:has(#timer):hover {
   box-shadow: 0 4px 20px rgba(33, 150, 243, 0.3);
   border-color: rgba(33, 150, 243, 0.6);
 }
