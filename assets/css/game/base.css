@@ -138,9 +138,11 @@ body {
    ============================================ */
 .game-stats {
   display: flex;
-  gap: 8px;
+  gap: calc(var(--dynamic-bottom-bar-height, 55px) * 0.02); /* 바텀바 크기에 비례한 동적 간격 */
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between; /* 가로 공간 최적 분배 */
+  height: 100%; /* 부모 바텀바 높이에 자동 맞춤 */
 }
 
 
@@ -171,6 +173,7 @@ body {
   white-space: nowrap;
   display: flex;
   align-items: center; /* 세로 중앙 정렬 */
+  flex: 1; /* 사용 가능한 공간 균등 분배 */
 }
 /* ============================================
    진행률 바 스타일 (하단 바용)
