@@ -138,7 +138,7 @@ class CacheBuster {
   }
 
   /**
-   * CSS 변수 상태 진단
+   * CSS 변수 상태 진단 (확장된 버전)
    */
   diagnoseCSSVariables() {
     console.log('🔍 CSS 변수 진단 시작...');
@@ -150,8 +150,9 @@ class CacheBuster {
       '--dynamic-header-height'
     ];
 
+    console.log('📊 CSS 변수 현재 값:');
     variables.forEach(varName => {
-      const value = rootStyle.getPropertyValue(varName);
+      const value = rootStyle.getPropertyValue(varName).trim();
       console.log(`  ${varName}: ${value || '❌ 정의되지 않음'}`);
     });
 
@@ -164,6 +165,170 @@ class CacheBuster {
       console.log(`  bottom-bar: ${bottomBar.offsetHeight}px`);
       console.log(`  bottom-bar-stats: ${bottomBarStats.offsetHeight}px`);
       console.log(`  크기 차이: ${Math.abs(bottomBar.offsetHeight - bottomBarStats.offsetHeight)}px`);
+    }
+  }
+
+  /**
+   * 상세 CSS 변수 및 DOM 상태 진단
+   */
+  detailedDiagnosis() {
+    console.log('🔬 상세 진단 시작...');
+    console.log('='.repeat(50));
+    
+    // 1. CSS 변수 상태 확인
+    this.checkCSSVariables();
+    
+    // 2. DOM 요소 상태 확인
+    this.checkDOMElements();
+    
+    // 3. BottomBarManager 상태 확인
+    this.checkBottomBarManager();
+    
+    // 4. CSS 규칙 적용 상태 확인
+    this.checkCSSRules();
+    
+    console.log('='.repeat(50));
+    console.log('🎯 진단 완료!');
+  }
+
+  /**
+   * CSS 변수 상세 확인
+   */
+  checkCSSVariables() {
+    console.log('\n📋 1. CSS 변수 상태 확인');
+    
+    const rootStyle = getComputedStyle(document.documentElement);
+    const variables = [
+      '--dynamic-bottom-bar-height',
+      '--game-bottom-bar-height', 
+      '--dynamic-header-height',
+      '--dynamic-viewport-height'
+    ];
+
+    variables.forEach(varName => {
+      const value = rootStyle.getPropertyValue(varName).trim();
+      const status = value ? '✅' : '❌';
+      console.log(`  ${status} ${varName}: ${value || '정의되지 않음'}`);
+    });
+  }
+
+  /**
+   * DOM 요소 상세 확인
+   */
+  checkDOMElements() {
+    console.log('\n🏗️ 2. DOM 요소 상태 확인');
+    
+    const elements = [
+      { selector: '.bottom-bar', name: 'bottom-bar' },
+      { selector: '.bottom-bar-stats', name: 'bottom-bar-stats' },
+      { selector: '.game-stats', name: 'game-stats' },
+      { selector: '.stat-value', name: 'stat-value (첫 번째)' }
+    ];
+
+    elements.forEach(({ selector, name }) => {
+      const element = document.querySelector(selector);
+      if (element) {
+        const styles = getComputedStyle(element);
+        console.log(`  ✅ ${name}:`);
+        console.log(`     크기: ${element.offsetWidth}×${element.offsetHeight}px`);
+        console.log(`     display: ${styles.display}`);
+        console.log(`     height: ${styles.height}`);
+        console.log(`     min-height: ${styles.minHeight}`);
+        console.log(`     max-height: ${styles.maxHeight}`);
+      } else {
+        console.log(`  ❌ ${name}: 요소를 찾을 수 없음`);
+      }
+    });
+  }
+
+  /**
+   * BottomBarManager 상태 확인
+   */
+  checkBottomBarManager() {
+    console.log('\n🔧 3. BottomBarManager 상태 확인');
+    
+    if (window.bottomBarManager) {
+      const manager = window.bottomBarManager;
+      console.log('  ✅ BottomBarManager 존재');
+      console.log(`     enabled: ${manager.enabled}`);
+      console.log(`     minHeight: ${manager.minHeight}px`);
+      console.log(`     maxHeight: ${manager.maxHeight}px`);
+      console.log(`     defaultHeight: ${manager.defaultHeight}px`);
+      
+      // 현재 높이 계산 실행
+      try {
+        const optimalHeight = manager.calculateOptimalHeight();
+        console.log(`     계산된 최적 높이: ${optimalHeight}px`);
+      } catch (error) {
+        console.log(`     ❌ 높이 계산 오류: ${error.message}`);
+      }
+    } else {
+      console.log('  ❌ BottomBarManager를 찾을 수 없음');
+    }
+  }
+
+  /**
+   * CSS 규칙 적용 상태 확인
+   */
+  checkCSSRules() {
+    console.log('\n📜 4. CSS 규칙 적용 상태 확인');
+    
+    const bottomBarStats = document.querySelector('.bottom-bar-stats');
+    if (bottomBarStats) {
+      const styles = getComputedStyle(bottomBarStats);
+      
+      console.log('  .bottom-bar-stats 적용된 스타일:');
+      console.log(`     height: ${styles.height}`);
+      console.log(`     min-height: ${styles.minHeight}`);
+      console.log(`     max-height: ${styles.maxHeight}`);
+      console.log(`     display: ${styles.display}`);
+      console.log(`     flex-direction: ${styles.flexDirection}`);
+      console.log(`     justify-content: ${styles.justifyContent}`);
+      
+      // calc() 함수 적용 여부 확인
+      const minHeightCalc = styles.minHeight.includes('calc');
+      console.log(`     calc() 함수 적용: ${minHeightCalc ? '✅' : '❌'}`);
+      
+      // CSS 변수 참조 여부 확인
+      const hasVariableRef = styles.minHeight.includes('var(--');
+      console.log(`     CSS 변수 참조: ${hasVariableRef ? '✅' : '❌'}`);
+    }
+  }
+
+  /**
+   * 실시간 크기 모니터링 시작
+   */
+  startSizeMonitoring() {
+    console.log('👁️ 실시간 크기 모니터링 시작...');
+    
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach(entry => {
+        const element = entry.target;
+        const { width, height } = entry.contentRect;
+        console.log(`📏 ${element.className} 크기 변경: ${width.toFixed(1)}×${height.toFixed(1)}px`);
+      });
+    });
+
+    const bottomBar = document.querySelector('.bottom-bar');
+    const bottomBarStats = document.querySelector('.bottom-bar-stats');
+    
+    if (bottomBar) observer.observe(bottomBar);
+    if (bottomBarStats) observer.observe(bottomBarStats);
+    
+    // 전역에 저장하여 중지 가능하게 함
+    window.sizeObserver = observer;
+    
+    console.log('✅ 크기 모니터링 시작됨 (중지: devUtils.stopSizeMonitoring())');
+  }
+
+  /**
+   * 실시간 크기 모니터링 중지
+   */
+  stopSizeMonitoring() {
+    if (window.sizeObserver) {
+      window.sizeObserver.disconnect();
+      window.sizeObserver = null;
+      console.log('⏹️ 크기 모니터링 중지됨');
     }
   }
 }
@@ -182,6 +347,9 @@ window.devUtils = {
   clearCache: () => window.cacheBuster.burstAllCaches(),
   forceRefresh: () => window.cacheBuster.forceRefresh(),
   diagnoseCss: () => window.cacheBuster.diagnoseCSSVariables(),
+  detailedDiagnosis: () => window.cacheBuster.detailedDiagnosis(),
+  startSizeMonitor: () => window.cacheBuster.startSizeMonitoring(),
+  stopSizeMonitor: () => window.cacheBuster.stopSizeMonitoring(),
   hardRefresh: () => {
     console.log('💪 하드 리프레시 실행 중...');
     if ('serviceWorker' in navigator) {
@@ -190,12 +358,83 @@ window.devUtils = {
       });
     }
     window.location.reload(true);
+  },
+  
+  // 즉시 실행용 진단 함수들
+  checkCssVar: (varName) => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    console.log(`CSS 변수 ${varName}: ${value || '정의되지 않음'}`);
+    return value;
+  },
+  
+  measureElement: (selector) => {
+    const element = document.querySelector(selector);
+    if (element) {
+      console.log(`${selector} 크기: ${element.offsetWidth}×${element.offsetHeight}px`);
+      return { width: element.offsetWidth, height: element.offsetHeight };
+    } else {
+      console.log(`${selector} 요소를 찾을 수 없음`);
+      return null;
+    }
+  },
+  
+  compareHeights: () => {
+    const bottomBar = document.querySelector('.bottom-bar');
+    const bottomBarStats = document.querySelector('.bottom-bar-stats');
+    
+    if (bottomBar && bottomBarStats) {
+      const heightDiff = Math.abs(bottomBar.offsetHeight - bottomBarStats.offsetHeight);
+      console.log('높이 비교:');
+      console.log(`  bottom-bar: ${bottomBar.offsetHeight}px`);
+      console.log(`  bottom-bar-stats: ${bottomBarStats.offsetHeight}px`);
+      console.log(`  차이: ${heightDiff}px ${heightDiff === 0 ? '✅ 동일' : '❌ 불일치'}`);
+      return { 
+        bottomBar: bottomBar.offsetHeight, 
+        bottomBarStats: bottomBarStats.offsetHeight, 
+        difference: heightDiff,
+        isEqual: heightDiff === 0
+      };
+    } else {
+      console.log('요소를 찾을 수 없음');
+      return null;
+    }
+  },
+  
+  inspectCSSRules: () => {
+    const element = document.querySelector('.bottom-bar-stats');
+    if (element) {
+      const styles = getComputedStyle(element);
+      console.log('.bottom-bar-stats 현재 CSS 규칙:');
+      console.log(`  height: ${styles.height}`);
+      console.log(`  min-height: ${styles.minHeight}`);
+      console.log(`  max-height: ${styles.maxHeight}`);
+      console.log(`  display: ${styles.display}`);
+      console.log(`  flex: ${styles.flex}`);
+      return {
+        height: styles.height,
+        minHeight: styles.minHeight,
+        maxHeight: styles.maxHeight,
+        display: styles.display
+      };
+    }
+    return null;
   }
 };
 
 console.log('🛠️ 캐시 무력화 도구 로드 완료');
 console.log('사용법:');
-console.log('  - devUtils.clearCache(): 캐시 클리어');
-console.log('  - devUtils.forceRefresh(): 강제 새로고침');
-console.log('  - devUtils.diagnoseCss(): CSS 변수 진단');
-console.log('  - devUtils.hardRefresh(): 하드 리프레시'); 
+console.log('  기본 도구:');
+console.log('    - devUtils.clearCache(): 캐시 클리어');
+console.log('    - devUtils.forceRefresh(): 강제 새로고침');
+console.log('    - devUtils.hardRefresh(): 하드 리프레시');
+console.log('  진단 도구:');
+console.log('    - devUtils.diagnoseCss(): 기본 CSS 변수 진단');
+console.log('    - devUtils.detailedDiagnosis(): 상세 진단 (추천!)');
+console.log('    - devUtils.compareHeights(): 높이 비교');
+console.log('    - devUtils.inspectCSSRules(): CSS 규칙 검사');
+console.log('  모니터링 도구:');
+console.log('    - devUtils.startSizeMonitor(): 실시간 크기 모니터링');
+console.log('    - devUtils.stopSizeMonitor(): 모니터링 중지');
+console.log('  개별 확인:');
+console.log('    - devUtils.checkCssVar("--dynamic-bottom-bar-height"): 특정 CSS 변수');
+console.log('    - devUtils.measureElement(".bottom-bar"): 특정 요소 크기'); 
