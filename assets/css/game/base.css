@@ -63,8 +63,8 @@ body {
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   
   /* 기존 고정값 사용 (안정적) */
-  height: 55px;
-  min-height: 55px;
+  height: var(--dynamic-bottom-bar-height, 55px) !important; /* 동적 바텀바 높이 강제 적용 */
+  min-height: var(--dynamic-bottom-bar-height, 55px) !important; /* 동적 최소 높이 강제 적용 */
   padding: 2px 16px 8px 16px; /* 상단 패딩 최소화 */
   
   /* 기본 레이아웃 */
