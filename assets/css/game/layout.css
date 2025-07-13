@@ -41,7 +41,7 @@
 .images-container {
   display: flex !important;
   flex-direction: row !important;
-  justify-content: center;
+    justify-content: space-between;
   align-items: center;
   gap: var(--game-spacing-lg);
   width: 100%;
