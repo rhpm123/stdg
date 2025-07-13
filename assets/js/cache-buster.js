@@ -331,6 +331,275 @@ class CacheBuster {
       console.log('⏹️ 크기 모니터링 중지됨');
     }
   }
+
+  /**
+   * PC 환경 바텀바 통합 검증 시스템
+   */
+  runPCBottomBarIntegratedTest() {
+    console.log('🧪 PC 환경 바텀바 통합 검증 시스템 시작...');
+    console.log('='.repeat(80));
+    
+    const testResults = {
+      environmentCheck: false,
+      classApplication: false,
+      cssVariables: false,
+      domDimensions: false,
+      positionVerification: false,
+      purpleSpaceRemoval: false,
+      overall: false
+    };
+
+    // 1단계: PC 환경 확인
+    testResults.environmentCheck = this.verifyPCEnvironment();
+    
+    // 2단계: .pc-bottom-bar 클래스 적용 확인
+    testResults.classApplication = this.verifyPCBottomBarClass();
+    
+    // 3단계: CSS 변수 설정 상태 확인
+    testResults.cssVariables = this.verifyBottomBarCSSVariables();
+    
+    // 4단계: DOM 크기 및 상태 확인
+    testResults.domDimensions = this.verifyBottomBarDimensions();
+    
+    // 5단계: 화면 위치 검증
+    testResults.positionVerification = this.verifyBottomBarPosition();
+    
+    // 6단계: 보라색 빗금 영역 제거 확인
+    testResults.purpleSpaceRemoval = this.verifyPurpleSpaceRemoval();
+    
+    // 종합 결과 계산
+    const passedTests = Object.values(testResults).filter(result => result === true).length - 1; // overall 제외
+    const totalTests = Object.keys(testResults).length - 1; // overall 제외
+    testResults.overall = passedTests >= 5; // 6개 중 5개 이상 통과 시 성공
+    
+    // 결과 출력
+    this.displayIntegratedTestResults(testResults, passedTests, totalTests);
+    
+    console.log('='.repeat(80));
+    console.log(`🎯 통합 검증 결과: ${testResults.overall ? '✅ 성공' : '❌ 실패'} (${passedTests}/${totalTests})`);
+    
+    return testResults;
+  }
+
+  /**
+   * PC 환경 확인
+   */
+  verifyPCEnvironment() {
+    console.log('\n🖥️ 1단계: PC 환경 확인');
+    
+    const isPC = window.innerWidth >= 1024;
+    const hasOrientationController = typeof window.orientationController !== 'undefined';
+    const isDesktopMethod = hasOrientationController && 
+                           window.orientationController.isDesktopEnvironment &&
+                           window.orientationController.isDesktopEnvironment();
+
+    console.log(`  화면 너비: ${window.innerWidth}px (PC 기준: ≥1024px)`);
+    console.log(`  기본 PC 감지: ${isPC ? '✅' : '❌'}`);
+    console.log(`  OrientationController: ${hasOrientationController ? '✅' : '❌'}`);
+    console.log(`  isDesktopEnvironment(): ${isDesktopMethod ? '✅' : '❌'}`);
+    
+    const result = isPC && isDesktopMethod;
+    console.log(`  🎯 PC 환경 확인: ${result ? '✅ 통과' : '❌ 실패'}`);
+    
+    return result;
+  }
+
+  /**
+   * .pc-bottom-bar 클래스 적용 확인
+   */
+  verifyPCBottomBarClass() {
+    console.log('\n📝 2단계: .pc-bottom-bar 클래스 적용 확인');
+    
+    const bottomBar = document.querySelector('.bottom-bar');
+    if (!bottomBar) {
+      console.log('  ❌ .bottom-bar 요소를 찾을 수 없음');
+      return false;
+    }
+
+    const hasPCClass = bottomBar.classList.contains('pc-bottom-bar');
+    const computedStyle = getComputedStyle(bottomBar);
+    const hasFixedPosition = computedStyle.position === 'fixed';
+    const hasHighZIndex = parseInt(computedStyle.zIndex) >= 9999;
+
+    console.log(`  .pc-bottom-bar 클래스 존재: ${hasPCClass ? '✅' : '❌'}`);
+    console.log(`  position: ${computedStyle.position} ${hasFixedPosition ? '✅' : '❌'}`);
+    console.log(`  z-index: ${computedStyle.zIndex} ${hasHighZIndex ? '✅' : '❌'}`);
+    
+    const result = hasPCClass && hasFixedPosition && hasHighZIndex;
+    console.log(`  🎯 클래스 적용 확인: ${result ? '✅ 통과' : '❌ 실패'}`);
+    
+    return result;
+  }
+
+  /**
+   * CSS 변수 설정 상태 확인
+   */
+  verifyBottomBarCSSVariables() {
+    console.log('\n📋 3단계: CSS 변수 설정 상태 확인');
+    
+    const rootStyle = getComputedStyle(document.documentElement);
+    const variables = [
+      '--dynamic-bottom-bar-height',
+      '--game-bottom-bar-height',
+      '--main-content-height'
+    ];
+
+    let validVariables = 0;
+    variables.forEach(varName => {
+      const value = rootStyle.getPropertyValue(varName).trim();
+      const isValid = value && value !== 'initial' && value !== 'unset';
+      console.log(`  ${varName}: ${value || '정의되지 않음'} ${isValid ? '✅' : '❌'}`);
+      if (isValid) validVariables++;
+    });
+
+    const result = validVariables >= 2; // 3개 중 2개 이상 설정되어야 함
+    console.log(`  🎯 CSS 변수 확인: ${result ? '✅ 통과' : '❌ 실패'} (${validVariables}/3)`);
+    
+    return result;
+  }
+
+  /**
+   * DOM 크기 및 상태 확인
+   */
+  verifyBottomBarDimensions() {
+    console.log('\n📐 4단계: DOM 크기 및 상태 확인');
+    
+    const bottomBar = document.querySelector('.bottom-bar');
+    if (!bottomBar) {
+      console.log('  ❌ .bottom-bar 요소를 찾을 수 없음');
+      return false;
+    }
+
+    const height = bottomBar.offsetHeight;
+    const width = bottomBar.offsetWidth;
+    const isVisible = bottomBar.offsetParent !== null;
+    const computedStyle = getComputedStyle(bottomBar);
+    const opacity = parseFloat(computedStyle.opacity);
+
+    console.log(`  높이: ${height}px (목표: 50-60px) ${height >= 50 && height <= 60 ? '✅' : '❌'}`);
+    console.log(`  너비: ${width}px (화면 너비와 비교: ${window.innerWidth}px) ${width >= window.innerWidth * 0.9 ? '✅' : '❌'}`);
+    console.log(`  가시성: ${isVisible ? '표시됨' : '숨겨짐'} ${isVisible ? '✅' : '❌'}`);
+    console.log(`  투명도: ${opacity} ${opacity >= 0.9 ? '✅' : '❌'}`);
+    
+    const result = height >= 50 && height <= 60 && width >= window.innerWidth * 0.9 && isVisible && opacity >= 0.9;
+    console.log(`  🎯 크기 및 상태 확인: ${result ? '✅ 통과' : '❌ 실패'}`);
+    
+    return result;
+  }
+
+  /**
+   * 화면 위치 검증 (getBoundingClientRect 사용)
+   */
+  verifyBottomBarPosition() {
+    console.log('\n📍 5단계: 화면 위치 검증');
+    
+    const bottomBar = document.querySelector('.bottom-bar');
+    if (!bottomBar) {
+      console.log('  ❌ .bottom-bar 요소를 찾을 수 없음');
+      return false;
+    }
+
+    const rect = bottomBar.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    
+    const isAtBottom = Math.abs(rect.bottom - windowHeight) <= 5; // 5px 오차 허용
+    const isFullyVisible = rect.top >= 0 && rect.bottom <= windowHeight + 5;
+    const hasCorrectLeft = rect.left <= 5; // 좌측 여백 5px 이하
+    const hasCorrectRight = rect.right >= window.innerWidth - 5; // 우측 여백 5px 이하
+
+    console.log(`  바텀바 위치: top=${Math.round(rect.top)}, bottom=${Math.round(rect.bottom)}, left=${Math.round(rect.left)}, right=${Math.round(rect.right)}`);
+    console.log(`  화면 크기: ${window.innerWidth}×${windowHeight}px`);
+    console.log(`  하단 정렬: ${isAtBottom ? '✅' : '❌'} (차이: ${Math.abs(rect.bottom - windowHeight)}px)`);
+    console.log(`  완전 표시: ${isFullyVisible ? '✅' : '❌'}`);
+    console.log(`  좌우 정렬: 좌측=${hasCorrectLeft ? '✅' : '❌'}, 우측=${hasCorrectRight ? '✅' : '❌'}`);
+    
+    const result = isAtBottom && isFullyVisible && hasCorrectLeft && hasCorrectRight;
+    console.log(`  🎯 위치 검증: ${result ? '✅ 통과' : '❌ 실패'}`);
+    
+    return result;
+  }
+
+  /**
+   * 보라색 빗금 영역 제거 확인
+   */
+  verifyPurpleSpaceRemoval() {
+    console.log('\n🎨 6단계: 보라색 빗금 영역 제거 확인');
+    
+    const mainContent = document.querySelector('main, .main-content, .game-container');
+    const bottomBar = document.querySelector('.bottom-bar');
+    
+    if (!mainContent || !bottomBar) {
+      console.log('  ❌ 필요한 요소를 찾을 수 없음');
+      return false;
+    }
+
+    const mainRect = mainContent.getBoundingClientRect();
+    const bottomRect = bottomBar.getBoundingClientRect();
+    const gap = bottomRect.top - mainRect.bottom;
+    
+    // 메인 콘텐츠가 viewport를 적절히 사용하는지 확인
+    const mainUsesViewport = mainRect.height >= window.innerHeight * 0.6; // 최소 60% 사용
+    const gapIsMinimal = Math.abs(gap) <= 10; // 10px 이하의 간격
+
+    console.log(`  메인 콘텐츠 크기: ${Math.round(mainRect.width)}×${Math.round(mainRect.height)}px`);
+    console.log(`  메인-바텀바 간격: ${Math.round(gap)}px`);
+    console.log(`  viewport 사용률: ${Math.round((mainRect.height / window.innerHeight) * 100)}% (목표: ≥60%)`);
+    console.log(`  viewport 활용: ${mainUsesViewport ? '✅' : '❌'}`);
+    console.log(`  간격 최소화: ${gapIsMinimal ? '✅' : '❌'}`);
+    
+    const result = mainUsesViewport && gapIsMinimal;
+    console.log(`  🎯 보라색 빗금 영역 제거: ${result ? '✅ 통과' : '❌ 실패'}`);
+    
+    return result;
+  }
+
+  /**
+   * 통합 테스트 결과 출력
+   */
+  displayIntegratedTestResults(results, passedTests, totalTests) {
+    console.log('\n📊 통합 테스트 결과 요약');
+    console.log('-'.repeat(50));
+    
+    const tests = [
+      { name: 'PC 환경 확인', key: 'environmentCheck' },
+      { name: '.pc-bottom-bar 클래스 적용', key: 'classApplication' },
+      { name: 'CSS 변수 설정', key: 'cssVariables' },
+      { name: 'DOM 크기 및 상태', key: 'domDimensions' },
+      { name: '화면 위치 검증', key: 'positionVerification' },
+      { name: '보라색 빗금 영역 제거', key: 'purpleSpaceRemoval' }
+    ];
+
+    tests.forEach((test, index) => {
+      const status = results[test.key] ? '✅ 통과' : '❌ 실패';
+      console.log(`  ${index + 1}. ${test.name}: ${status}`);
+    });
+    
+    console.log('-'.repeat(50));
+    console.log(`전체 성공률: ${Math.round((passedTests / totalTests) * 100)}%`);
+    
+    if (results.overall) {
+      console.log('🎉 축하합니다! PC 환경 바텀바 문제가 완전히 해결되었습니다!');
+    } else {
+      console.log('⚠️ 일부 테스트가 실패했습니다. 추가 조치가 필요합니다.');
+      console.log('💡 해결 방법:');
+      console.log('  - emergencyUtils.fix(): 응급 CSS 주입');
+      console.log('  - devFallbackUtils.runFallback(): 자동 fallback 실행');
+      console.log('  - devUtils.detailedDiagnosis(): 상세 진단');
+    }
+  }
+
+  /**
+   * 자동 통합 테스트 (페이지 로드 시 실행)
+   */
+  autoRunPCBottomBarTest() {
+    // PC 환경에서만 자동 실행
+    if (window.innerWidth >= 1024) {
+      setTimeout(() => {
+        console.log('🚀 PC 환경 감지 - 자동 통합 테스트 실행');
+        this.runPCBottomBarIntegratedTest();
+      }, 2000); // 2초 후 실행하여 모든 시스템 로드 대기
+    }
+  }
 }
 
 // 전역 캐시 무력화 인스턴스
@@ -418,8 +687,49 @@ window.devUtils = {
       };
     }
     return null;
+  },
+
+  // === PC 환경 바텀바 통합 테스트 도구 ===
+  runPCTest: () => window.cacheBuster.runPCBottomBarIntegratedTest(),
+  autoTest: () => window.cacheBuster.autoRunPCBottomBarTest(),
+  
+  // 개별 검증 도구들
+  verifyPCEnv: () => window.cacheBuster.verifyPCEnvironment(),
+  verifyPCClass: () => window.cacheBuster.verifyPCBottomBarClass(),
+  verifyCSSVars: () => window.cacheBuster.verifyBottomBarCSSVariables(),
+  verifyDimensions: () => window.cacheBuster.verifyBottomBarDimensions(),
+  verifyPosition: () => window.cacheBuster.verifyBottomBarPosition(),
+  verifyPurpleSpace: () => window.cacheBuster.verifyPurpleSpaceRemoval(),
+  
+  // 빠른 문제 해결 도구
+  quickFix: () => {
+    console.log('🚀 빠른 문제 해결 시도...');
+    console.log('1. 통합 테스트 실행...');
+    const result = window.cacheBuster.runPCBottomBarIntegratedTest();
+    
+    if (!result.overall) {
+      console.log('2. Emergency CSS 주입 시도...');
+      if (window.emergencyUtils && window.emergencyUtils.fix) {
+        window.emergencyUtils.fix();
+      }
+      
+      console.log('3. 자동 fallback 실행...');
+      if (window.devFallbackUtils && window.devFallbackUtils.runFallback) {
+        window.devFallbackUtils.runFallback();
+      }
+      
+      console.log('4. 재검증...');
+      setTimeout(() => {
+        window.cacheBuster.runPCBottomBarIntegratedTest();
+      }, 1000);
+    }
+    
+    return result;
   }
 };
+
+// 자동 통합 테스트 실행 (PC 환경에서만)
+window.cacheBuster.autoRunPCBottomBarTest();
 
 console.log('🛠️ 캐시 무력화 도구 로드 완료');
 console.log('사용법:');
@@ -432,6 +742,13 @@ console.log('    - devUtils.diagnoseCss(): 기본 CSS 변수 진단');
 console.log('    - devUtils.detailedDiagnosis(): 상세 진단 (추천!)');
 console.log('    - devUtils.compareHeights(): 높이 비교');
 console.log('    - devUtils.inspectCSSRules(): CSS 규칙 검사');
+console.log('  🧪 PC 바텀바 통합 테스트 도구:');
+console.log('    - devUtils.runPCTest(): 완전한 통합 테스트 실행 (추천!)');
+console.log('    - devUtils.quickFix(): 빠른 문제 해결 시도');
+console.log('    - devUtils.verifyPCEnv(): PC 환경 확인');
+console.log('    - devUtils.verifyPCClass(): .pc-bottom-bar 클래스 확인');
+console.log('    - devUtils.verifyPosition(): 화면 위치 검증');
+console.log('    - devUtils.verifyPurpleSpace(): 보라색 빗금 영역 확인');
 console.log('  모니터링 도구:');
 console.log('    - devUtils.startSizeMonitor(): 실시간 크기 모니터링');
 console.log('    - devUtils.stopSizeMonitor(): 모니터링 중지');
