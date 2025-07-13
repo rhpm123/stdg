@@ -610,18 +610,10 @@ function updateUI() {
   const scoreEl = document.getElementById('score');
   if (scoreEl) scoreEl.textContent = gameState.score;
   
-  // 진행률 업데이트
-  const progressEl = document.getElementById('progress');
-  
+  // 발견한 틀린부분 업데이트
   const foundEl = document.getElementById('found');
   
-    if (progressEl && foundEl) {
-    const progress = gameState.answerPoints.length > 0 
-      ? Math.round((gameState.foundPoints.length / gameState.answerPoints.length) * 100) 
-      : 0;
-    
-    progressEl.textContent = `${progress}%`;
-    
+  if (foundEl) {
     foundEl.textContent = `${gameState.foundPoints.length}/${gameState.answerPoints.length}`;
   }
   

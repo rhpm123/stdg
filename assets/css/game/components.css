@@ -228,16 +228,7 @@ text-overflow: ellipsis;
   font-family: 'Courier New', monospace; /* 좋은 숫자 가독성 */
 }
 
-/* 3순위: 진행률 */
-.bottom-bar .stat-value:has(#progress) {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
-  border-color: rgba(76, 175, 80, 0.3);
-  min-width: 55px;
-  flex-grow: 1; /* 일반 우선순위 공간 배분 */
-  color: #81C784;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
+
 
 /* 3순위: 찾은 개수 */
 .bottom-bar .stat-value:has(#found) {

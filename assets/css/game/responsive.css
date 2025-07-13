@@ -554,9 +554,8 @@
     letter-spacing: 0.5px !important; /* 하트 간격 축소 */
   }
   
-  .bottom-bar-stats .stat-value:has(#progress),
   .bottom-bar-stats .stat-value:has(#found) {
-    flex-grow: 0.8 !important; /* 진행률/찾은개수 최소 공간 */
+    flex-grow: 0.8 !important; /* 찾은개수 최소 공간 */
   }
   
   
@@ -667,7 +666,6 @@
 /* 숫자/특수문자 표시 최적화 */
 .bottom-bar .stat-value:has(#score),
 .bottom-bar .stat-value:has(#timer),
-.bottom-bar .stat-value:has(#progress),
 .bottom-bar .stat-value:has(#found) {
   font-variant-numeric: tabular-nums; /* 숫자 균등 폭 */
   text-align: center;
