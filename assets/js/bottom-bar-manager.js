@@ -36,6 +36,18 @@ class BottomBarManager {
     if (!this.enabled) return null;
     
     try {
+      // PC 환경 체크 - OrientationController의 isDesktopEnvironment() 활용
+      if (typeof window.orientationController !== 'undefined' && 
+          window.orientationController.isDesktopEnvironment && 
+          window.orientationController.isDesktopEnvironment()) {
+        
+        console.log('🖥️ PC 환경 감지 - 고정 높이 적용:', this.defaultHeight + 'px');
+        this.updateBottomBarHeight(this.defaultHeight);
+        return this.defaultHeight;
+      }
+      
+      // 모바일 환경 - 기존 동적 계산 로직 유지
+      console.log('📱 모바일 환경 - 동적 높이 계산 실행');
       const viewportHeight = window.innerHeight;
       const headerHeight = 45; // CSS 변수와 일치
       const minMainHeight = 200; // 게임 영역 최소 높이
@@ -47,7 +59,7 @@ class BottomBarManager {
       // 정수로 반올림
       const finalHeight = Math.round(optimalHeight);
       
-      console.log(`📐 높이 계산: viewport=${viewportHeight}px, optimal=${finalHeight}px`);
+      console.log(`📐 동적 높이 계산: viewport=${viewportHeight}px, optimal=${finalHeight}px`);
       
       this.updateBottomBarHeight(finalHeight);
       return finalHeight;
@@ -63,8 +75,31 @@ class BottomBarManager {
     
     try {
       // CSS 변수 업데이트
-      // CSS 변수 업데이트
       document.documentElement.style.setProperty('--dynamic-bottom-bar-height', `${height}px`);
+      
+      // PC 환경에서는 추가로 인라인 스타일도 동시 설정 (최고 우선순위 보장)
+      if (typeof window.orientationController !== 'undefined' && 
+          window.orientationController.isDesktopEnvironment && 
+          window.orientationController.isDesktopEnvironment()) {
+        
+        if (this.bottomBar) {
+          // PC 환경: 인라인 스타일로 강제 설정
+          this.bottomBar.style.setProperty('height', `${height}px`, 'important');
+          this.bottomBar.style.setProperty('min-height', `${height}px`, 'important');
+          this.bottomBar.style.setProperty('max-height', `${height}px`, 'important');
+          
+          console.log(`🖥️ PC 환경: 인라인 스타일 강제 적용 - ${height}px`);
+        }
+        
+        // force-js-execution.js의 forceCSSVariables() 연계 호출
+        if (window.forceJSExecution && window.forceJSExecution.forceCSSVariables) {
+          // PC 환경 전용 CSS 변수 강제 설정
+          document.documentElement.style.setProperty('--dynamic-bottom-bar-height', `${height}px`);
+          document.documentElement.style.setProperty('--game-bottom-bar-height', `${height}px`);
+          
+          console.log(`🔗 force-js-execution 연계: CSS 변수 동기화 완료`);
+        }
+      }
       
       // CSS 재계산 강제 트리거 (즉시 시각적 반영 보장)
       if (this.bottomBar) {
