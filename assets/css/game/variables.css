@@ -23,9 +23,9 @@
   --game-border-radius-large: 20px;
   
   /* 게임 하단바 그리드 비율 */
-    --grid-stats-ratio: 35%;
-  --grid-progress-ratio: 35%;
-    --grid-controls-ratio: 30%;
+  --grid-stats-ratio: 50%;
+  --grid-progress-ratio: 30%;
+  --grid-controls-ratio: 20%;
   /* 동적 레이아웃 변수 (활성화) */
   --dynamic-bottom-bar-height: 55px;
   --dynamic-header-height: 45px;

@@ -106,7 +106,7 @@
     min-height: 60px;
     
     /* 모바일 최적화 그리드 비율 - stats 영역 확대로 가독성 개선 */
-    grid-template-columns: 30% 30% 40% !important;
+    grid-template-columns: 50% 30% 20% !important;
     padding-bottom: env(safe-area-inset-bottom, 0px); /* 아이폰 X 이상 노치 대응 */
   }
   
@@ -244,7 +244,7 @@
 @media (max-width: 480px) {
   /* 소형 화면 그리드 비율 최적화 */
   .bottom-bar {
-        grid-template-columns: 25% 35% 40% !important;
+        grid-template-columns: 45% 30% 25% !important;
   }
   
   .bottom-bar .stat-value {
@@ -292,7 +292,7 @@
     gap: 4px;
     
     /* 초소형 화면 그리드 비율 최적화 */
-        grid-template-columns: 20% 35% 45% !important;
+        grid-template-columns: 40% 35% 25% !important;
   }
   
   .bottom-bar .stat-value {
@@ -507,7 +507,7 @@
     padding: 1px 8px !important;
     
     /* 세로모드와 일관된 레이아웃 비율 적용 */
-    grid-template-columns: 35% 35% 30% !important; /* 가로모드 일관성 유지 */
+    grid-template-columns: 50% 30% 20% !important; /* 가로모드 일관성 유지 */
     gap: 4px !important;
   }
   
@@ -817,5 +817,42 @@
   .main-content {
     height: calc(100vh - 100px);
     min-height: 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* 데스크톱에서 CSS 변수 기반 그리드 비율 명시적 적용 */
+  .bottom-bar {
+    grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
+    padding: 12px 32px;
+  }
+  
+  .game-image-container {
+    /* 데스크톱에서 이미지 최적화 */
+    max-width: 70%;
+    margin: 0 auto;
+  }
+  
+  .difference-mark {
+    /* 데스크톱에서 마우스 클릭 최적화 */
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+  
+  /* 데스크톱에서 대형 버튼 최적화 */
+  .btn-primary-large {
+    font-size: 20px;
+    padding: 18px 36px;
+    min-height: 60px;
+    min-width: 160px;
+  }
+  
+  /* 데스크톱에서 힌트 버튼 최적화 */
+  .hint-btn-compact {
+    font-size: 16px;
+    padding: 12px 20px;
+    min-height: 44px;
+    min-width: 100px;
+    margin-left: 16px;
   }
 }
