@@ -186,21 +186,7 @@ body {
   min-width: 200px;
 }
 
-.progress-bar {
-  width: 200px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: var(--game-border-radius-small);
-  overflow: hidden;
-}
 
-.progress-fill {
-  height: 100%;
-  background: var(--game-gradient-success);
-  border-radius: var(--game-border-radius-small);
-  transition: width var(--game-transition-normal);
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-} 
 
 /* ============================================
    레거시 사이드바 스타일 (더 이상 사용 안 함)

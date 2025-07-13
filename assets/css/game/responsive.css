@@ -486,11 +486,7 @@
     flex-grow: 0.8 !important; /* 진행률/찾은개수 최소 공간 */
   }
   
-  /* 진행바 압축 */
-  .bottom-bar-progress .progress-bar {
-    width: 100px !important;
-    height: 4px !important;
-  }
+  
   
   /* 컨트롤 버튼들 압축 */
   .bottom-bar-controls .game-controls {
@@ -645,9 +641,6 @@
   padding: calc(var(--dynamic-bottom-bar-height, 35px) * 0.04) calc(var(--dynamic-bottom-bar-height, 35px) * 0.1) !important;
 }
 
-.bottom-bar.compact-mode .progress-bar {
-  height: calc(var(--dynamic-bottom-bar-height, 35px) * 0.06) !important;
-}
 
 /* 최소 모드에서 필수 요소 더욱 압축 */
 .bottom-bar.minimal-mode .stat-value {
@@ -663,9 +656,6 @@
   margin: 0 1px !important;
 }
 
-.bottom-bar.minimal-mode .progress-bar {
-  height: calc(var(--dynamic-bottom-bar-height, 35px) * 0.05) !important;
-}
 
 /* 부드러운 전환 애니메이션 */
 .bottom-bar,
@@ -674,8 +664,7 @@
 }
 
 .bottom-bar .control-btn,
-.bottom-bar .stat-value,
-.bottom-bar .progress-bar {
+.bottom-bar .stat-value {
   transition: 
     opacity 0.2s ease-in-out,
     transform 0.2s ease-in-out,
@@ -686,8 +675,7 @@
 
 /* 요소 fade-in/fade-out 효과 */
 .bottom-bar .control-btn:not(.hidden),
-.bottom-bar .stat-value:not(.hidden),
-.bottom-bar .progress-bar:not(.hidden) {
+.bottom-bar .stat-value:not(.hidden) {
   opacity: 1;
   transform: scale(1);
 }
@@ -720,8 +708,7 @@
   .bottom-bar,
   .bottom-bar *,
   .bottom-bar .control-btn,
-  .bottom-bar .stat-value,
-  .bottom-bar .progress-bar {
+  .bottom-bar .stat-value {
     transition: none !important;
     animation: none !important;
   }

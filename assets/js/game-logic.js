@@ -612,16 +612,16 @@ function updateUI() {
   
   // 진행률 업데이트
   const progressEl = document.getElementById('progress');
-  const progressBarEl = document.getElementById('progressBar');
+  
   const foundEl = document.getElementById('found');
   
-  if (progressEl && progressBarEl && foundEl) {
+    if (progressEl && foundEl) {
     const progress = gameState.answerPoints.length > 0 
       ? Math.round((gameState.foundPoints.length / gameState.answerPoints.length) * 100) 
       : 0;
     
     progressEl.textContent = `${progress}%`;
-    progressBarEl.style.width = `${progress}%`;
+    
     foundEl.textContent = `${gameState.foundPoints.length}/${gameState.answerPoints.length}`;
   }
   
