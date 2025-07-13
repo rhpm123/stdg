@@ -470,7 +470,7 @@
 }
 
 /* 모바일 가로모드: 이미지 좌우 배치 (동적 레이아웃 시스템) */
-@media (orientation: landscape) and (max-width: 1024px) and (min-width: 480px) {
+@media (orientation: landscape) and (max-width: 1023px) and (min-width: 480px) {
   .images-container {
     flex-direction: row !important;
     gap: 10px !important;
@@ -819,10 +819,29 @@
 }
 
 @media (min-width: 1024px) {
-  /* 데스크톱에서 CSS 변수 기반 그리드 비율 명시적 적용 */
+  /* PC 환경 전용 강제 표시 규칙 - 최고 우선순위 */
   .bottom-bar {
+    /* 기존 규칙 유지 */
     grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
-    padding: 12px 32px;
+    padding: 12px 32px !important;
+    
+    /* PC 환경에서 강제 표시 및 고정 높이 - 55px 고정 */
+    height: 55px !important;
+    min-height: 55px !important;
+    max-height: 55px !important;
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    bottom: 0 !important;
+    z-index: 1000 !important;
+  }
+  
+  /* PC에서 회전 안내 오버레이 완전 숨김 */
+  .orientation-overlay {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
   
   .game-image-container {
