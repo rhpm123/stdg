@@ -38,26 +38,93 @@ class EmergencyCSSInjection {
   }
 
   /**
-   * 강력한 CSS 규칙 생성
+   * 강력한 CSS 규칙 생성 (브라우저별 호환성 포함)
    */
   generateForceCSSRules() {
-    console.log('🎨 강력한 CSS 규칙 생성 중...');
+    console.log('🎨 강력한 CSS 규칙 생성 중 (브라우저 호환성 포함)...');
+    
+    // PC 환경 감지
+    const isPC = window.innerWidth >= 1024;
+    const pcHeight = isPC ? '55px' : this.targetHeight;
+    
+    console.log(`🖥️ 환경 감지: ${isPC ? 'PC' : '모바일'}, 타겟 높이: ${pcHeight}`);
     
     const rules = `
-      /* 응급 CSS 주입: bottom-bar 높이 강제 동기화 */
+      /* =====================================
+         응급 CSS 주입: 브라우저별 호환성 확보
+         ===================================== */
+      
+      /* 기본 바텀바 규칙 */
       .bottom-bar {
-        height: ${this.targetHeight} !important;
-        min-height: ${this.targetHeight} !important;
-        max-height: ${this.targetHeight} !important;
+        height: ${pcHeight} !important;
+        min-height: ${pcHeight} !important;
+        max-height: ${pcHeight} !important;
+        
+        /* 브라우저별 호환성 속성 */
+        -webkit-box-sizing: border-box !important;
+        -moz-box-sizing: border-box !important;
+        box-sizing: border-box !important;
+        
+        /* WebKit 브라우저 (Safari, Chrome) 최적화 */
+        -webkit-transform: translateZ(0) !important;
+        -webkit-backface-visibility: hidden !important;
+        
+        /* Firefox 최적화 */
+        -moz-backface-visibility: hidden !important;
+        
+        /* Edge/IE 호환성 */
+        -ms-transform: translateZ(0) !important;
       }
       
+      /* PC 환경 전용 .pc-bottom-bar 응급 규칙 */
+      ${isPC ? `
+      .pc-bottom-bar,
+      .bottom-bar.pc-bottom-bar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+        width: 100% !important;
+        height: 55px !important;
+        min-height: 55px !important;
+        max-height: 55px !important;
+        display: grid !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        
+        /* 브라우저별 위치 고정 강화 */
+        -webkit-position: fixed !important;
+        -moz-position: fixed !important;
+        -ms-position: fixed !important;
+        
+        /* 하드웨어 가속 강제 활성화 */
+        -webkit-transform: translate3d(0, 0, 0) !important;
+        -moz-transform: translate3d(0, 0, 0) !important;
+        -ms-transform: translate3d(0, 0, 0) !important;
+        transform: translate3d(0, 0, 0) !important;
+        
+        /* 렌더링 최적화 */
+        will-change: transform !important;
+        contain: layout style paint !important;
+      }` : ''}
+      
       .bottom-bar-stats {
-        height: ${this.targetHeight} !important;
-        min-height: ${this.targetHeight} !important;
-        max-height: ${this.targetHeight} !important;
+        height: ${pcHeight} !important;
+        min-height: ${pcHeight} !important;
+        max-height: ${pcHeight} !important;
         display: flex !important;
         align-items: center !important;
         overflow: hidden !important;
+        
+        /* 브라우저별 Flexbox 호환성 */
+        -webkit-display: -webkit-flex !important;
+        -moz-display: -moz-flex !important;
+        -ms-display: -ms-flexbox !important;
+        
+        -webkit-align-items: center !important;
+        -moz-align-items: center !important;
+        -ms-flex-align: center !important;
       }
       
       .game-stats {
@@ -66,30 +133,64 @@ class EmergencyCSSInjection {
         align-items: center !important;
         justify-content: space-between !important;
         padding: 0 15px !important;
+        
+        /* 브라우저별 Flexbox 호환성 */
+        -webkit-display: -webkit-flex !important;
+        -webkit-align-items: center !important;
+        -webkit-justify-content: space-between !important;
+        
+        -moz-display: -moz-flex !important;
+        -moz-align-items: center !important;
+        -moz-justify-content: space-between !important;
+        
+        -ms-display: -ms-flexbox !important;
+        -ms-flex-align: center !important;
+        -ms-flex-pack: justify !important;
       }
       
       .stat-value {
-        height: calc(${this.targetHeight} * 0.7) !important;
-        line-height: calc(${this.targetHeight} * 0.7) !important;
-        font-size: calc(${this.targetHeight} * 0.35) !important;
+        height: calc(${pcHeight} * 0.7) !important;
+        line-height: calc(${pcHeight} * 0.7) !important;
+        font-size: calc(${pcHeight} * 0.35) !important;
         display: flex !important;
         align-items: center !important;
+        
+        /* 브라우저별 calc() 호환성 */
+        height: -webkit-calc(${pcHeight} * 0.7) !important;
+        height: -moz-calc(${pcHeight} * 0.7) !important;
+        height: calc(${pcHeight} * 0.7) !important;
+        
+        line-height: -webkit-calc(${pcHeight} * 0.7) !important;
+        line-height: -moz-calc(${pcHeight} * 0.7) !important;
+        line-height: calc(${pcHeight} * 0.7) !important;
       }
       
-      /* 추가 보험: 모든 하위 요소들도 강제 조정 */
-      .bottom-bar * {
+      /* 모든 하위 요소 브라우저 호환성 */
+      .bottom-bar *,
+      .pc-bottom-bar * {
+        -webkit-box-sizing: border-box !important;
+        -moz-box-sizing: border-box !important;
         box-sizing: border-box !important;
       }
       
       .bottom-bar-progress,
       .bottom-bar-controls {
+        -webkit-flex-shrink: 0 !important;
+        -moz-flex-shrink: 0 !important;
+        -ms-flex-negative: 0 !important;
         flex-shrink: 0 !important;
+      }
+      
+      /* 브라우저별 CSS 변수 폴백 */
+      :root {
+        --emergency-bottom-bar-height: ${pcHeight} !important;
+        --emergency-pc-height: 55px !important;
       }
     `;
     
-    console.log(`📏 타겟 높이: ${this.targetHeight}`);
-    console.log('📝 생성된 CSS 규칙:');
-    console.log(rules);
+    console.log(`📏 적용 높이: ${pcHeight}`);
+    console.log(`🌐 PC 환경: ${isPC ? '활성화' : '비활성화'}`);
+    console.log('📝 브라우저 호환성 CSS 규칙 생성 완료');
     
     return rules;
   }
@@ -318,11 +419,198 @@ console.log('  - emergencyUtils.restore(): 원상복구');
 console.log('  - emergencyUtils.setHeight(35): 다른 높이로 설정');
 console.log('  - emergencyUtils.backup(): 응급 백업 계획');
 
-// 자동 실행 (개발 환경에서만)
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  console.log('🏠 개발 환경 감지 - 3초 후 자동 수정 실행');
+/**
+ * 브라우저별 호환성 확인 및 자동 fallback 시스템
+ */
+class BrowserCompatibilityFallback {
+  constructor() {
+    this.compatibilityChecks = {
+      flexbox: false,
+      cssVariables: false,
+      calc: false,
+      transform3d: false,
+      position: false
+    };
+    
+    this.browserInfo = this.detectBrowser();
+    this.checkAllCompatibility();
+  }
+
+  /**
+   * 브라우저 감지
+   */
+  detectBrowser() {
+    const ua = navigator.userAgent;
+    let browser = 'Unknown';
+    
+    if (ua.includes('Chrome') && !ua.includes('Edge')) {
+      browser = 'Chrome';
+    } else if (ua.includes('Firefox')) {
+      browser = 'Firefox';
+    } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+      browser = 'Safari';
+    } else if (ua.includes('Edge')) {
+      browser = 'Edge';
+    } else if (ua.includes('Trident')) {
+      browser = 'Internet Explorer';
+    }
+    
+    console.log(`🌐 브라우저 감지: ${browser}`);
+    return browser;
+  }
+
+  /**
+   * 모든 CSS 호환성 확인
+   */
+  checkAllCompatibility() {
+    console.log('🔍 브라우저 CSS 호환성 확인 중...');
+    
+    // CSS.supports 사용 가능한지 확인
+    if (typeof CSS !== 'undefined' && CSS.supports) {
+      this.compatibilityChecks.flexbox = CSS.supports('display', 'flex');
+      this.compatibilityChecks.cssVariables = CSS.supports('--custom-property', 'value');
+      this.compatibilityChecks.calc = CSS.supports('height', 'calc(100vh - 55px)');
+      this.compatibilityChecks.transform3d = CSS.supports('transform', 'translate3d(0,0,0)');
+      this.compatibilityChecks.position = CSS.supports('position', 'fixed');
+    } else {
+      // CSS.supports 미지원 브라우저 대응
+      this.fallbackCompatibilityCheck();
+    }
+    
+    console.log('🔍 호환성 확인 결과:', this.compatibilityChecks);
+    
+    return this.compatibilityChecks;
+  }
+
+  /**
+   * 폴백 호환성 확인 (CSS.supports 미지원용)
+   */
+  fallbackCompatibilityCheck() {
+    console.log('⚠️ CSS.supports 미지원 - 폴백 확인 실행');
+    
+    // 대부분의 모던 브라우저는 이 기능들을 지원
+    this.compatibilityChecks.flexbox = true;
+    this.compatibilityChecks.cssVariables = !this.browserInfo.includes('Internet Explorer');
+    this.compatibilityChecks.calc = true;
+    this.compatibilityChecks.transform3d = true;
+    this.compatibilityChecks.position = true;
+  }
+
+  /**
+   * 바텀바 상태 자동 검증
+   */
+  async verifyBottomBarStatus() {
+    console.log('🔍 바텀바 상태 자동 검증 시작...');
+    
+    return new Promise((resolve) => {
+      // DOM 로드 완료 대기
+      const checkBottomBar = () => {
+        const bottomBar = document.querySelector('.bottom-bar');
+        const isPC = window.innerWidth >= 1024;
+        
+        if (!bottomBar) {
+          console.log('❌ 바텀바 요소를 찾을 수 없음');
+          resolve(false);
+          return;
+        }
+        
+        const rect = bottomBar.getBoundingClientRect();
+        const isVisible = rect.bottom <= window.innerHeight && rect.top >= 0;
+        const hasCorrectHeight = isPC ? (rect.height >= 50 && rect.height <= 60) : rect.height >= 30;
+        
+        console.log('📊 바텀바 상태 검증:', {
+          isPC,
+          height: rect.height,
+          bottom: rect.bottom,
+          windowHeight: window.innerHeight,
+          isVisible,
+          hasCorrectHeight,
+          needsFix: !isVisible || !hasCorrectHeight
+        });
+        
+        const needsFix = !isVisible || !hasCorrectHeight;
+        resolve(!needsFix);
+      };
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkBottomBar);
+      } else {
+        setTimeout(checkBottomBar, 100);
+      }
+    });
+  }
+
+  /**
+   * 자동 fallback 시스템 실행
+   */
+  async executeAutoFallback() {
+    console.log('🚀 자동 fallback 시스템 실행...');
+    
+    // 1단계: 바텀바 상태 확인
+    const isBottomBarOK = await this.verifyBottomBarStatus();
+    
+    if (isBottomBarOK) {
+      console.log('✅ 바텀바 상태 정상 - fallback 불필요');
+      return true;
+    }
+    
+    console.log('⚠️ 바텀바 문제 감지 - emergency CSS 주입 실행');
+    
+    // 2단계: Emergency CSS 주입
+    const emergencySuccess = window.emergencyCSSInjection.injectForceCSSRules();
+    
+    if (emergencySuccess) {
+      // 3단계: 재검증
+      setTimeout(async () => {
+        const recheck = await this.verifyBottomBarStatus();
+        if (recheck) {
+          console.log('🎉 Emergency CSS 주입으로 문제 해결 완료!');
+        } else {
+          console.log('⚠️ Emergency CSS 후에도 문제 지속 - 백업 계획 실행');
+          window.emergencyCSSInjection.emergencyBackupPlan();
+        }
+      }, 500);
+      
+      return true;
+    }
+    
+    return false;
+  }
+}
+
+// 전역 브라우저 호환성 시스템 인스턴스
+window.browserCompatibilityFallback = new BrowserCompatibilityFallback();
+
+// 자동 실행 시스템 (모든 환경에서)
+console.log('🔧 브라우저 호환성 자동 fallback 시스템 활성화');
+
+// 페이지 로드 완료 후 자동 검증 실행
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      window.browserCompatibilityFallback.executeAutoFallback();
+    }, 1000);
+  });
+} else {
   setTimeout(() => {
-    console.log('🚀 자동 수정 실행...');
-    window.emergencyCSSInjection.injectForceCSSRules();
-  }, 3000);
+    window.browserCompatibilityFallback.executeAutoFallback();
+  }, 1000);
+}
+
+// 개발 환경에서는 추가 디버깅 정보 제공
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  console.log('🏠 개발 환경 감지 - 확장된 디버깅 모드 활성화');
+  
+  // 개발자 도구용 추가 유틸리티
+  window.devFallbackUtils = {
+    checkCompatibility: () => window.browserCompatibilityFallback.checkAllCompatibility(),
+    verifyBottomBar: () => window.browserCompatibilityFallback.verifyBottomBarStatus(),
+    runFallback: () => window.browserCompatibilityFallback.executeAutoFallback(),
+    getBrowserInfo: () => window.browserCompatibilityFallback.browserInfo
+  };
+  
+  console.log('🛠️ 개발자 도구 추가 명령어:');
+  console.log('  - devFallbackUtils.checkCompatibility(): 브라우저 호환성 확인');
+  console.log('  - devFallbackUtils.verifyBottomBar(): 바텀바 상태 검증');
+  console.log('  - devFallbackUtils.runFallback(): 수동 fallback 실행');
 } 

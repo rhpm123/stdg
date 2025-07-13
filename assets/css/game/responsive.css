@@ -882,6 +882,10 @@
 .pc-bottom-bar {
   /* 핵심 위치 및 표시 속성 - 최고 우선순위 */
   position: fixed !important;
+  -webkit-position: fixed !important; /* Safari, Chrome 호환성 */
+  -moz-position: fixed !important;    /* Firefox 호환성 */
+  -ms-position: fixed !important;     /* Edge, IE 호환성 */
+  
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
@@ -893,33 +897,71 @@
   max-height: 55px !important;
   width: 100% !important;
   
+  /* 박스 모델 브라우저 호환성 */
+  -webkit-box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+  
   /* 표시 및 가시성 강제 설정 */
   display: grid !important;
+  -ms-display: grid !important;       /* IE 11 grid 지원 */
   visibility: visible !important;
   opacity: 1 !important;
   
   /* 레이아웃 및 스타일 유지 */
   grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
+  -ms-grid-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
+  
   padding: 12px 32px !important;
   gap: var(--game-spacing-sm) !important;
+  grid-gap: var(--game-spacing-sm) !important; /* 구버전 브라우저 호환성 */
+  
   align-items: center !important;
+  -webkit-align-items: center !important;
+  -moz-align-items: center !important;
+  -ms-flex-align: center !important;
   
   /* 배경 및 테마 유지 */
   background: var(--game-gradient-primary) !important;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+  -webkit-box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+  -moz-box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+  
   color: white !important;
+  
+  /* 백드롭 필터 브라우저 호환성 */
   backdrop-filter: blur(10px) !important;
   -webkit-backdrop-filter: blur(10px) !important;
+  -moz-backdrop-filter: blur(10px) !important;
+  
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
   
   /* 오버플로우 및 유연성 처리 */
   overflow: visible !important;
   flex-shrink: 0 !important;
+  -webkit-flex-shrink: 0 !important;
+  -moz-flex-shrink: 0 !important;
+  -ms-flex-negative: 0 !important;
   
-  /* 브라우저별 호환성 */
-  -webkit-transform: translateZ(0) !important;
-  transform: translateZ(0) !important;
+  /* 브라우저별 하드웨어 가속 및 렌더링 최적화 */
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  -moz-transform: translate3d(0, 0, 0) !important;
+  -ms-transform: translate3d(0, 0, 0) !important;
+  transform: translate3d(0, 0, 0) !important;
+  
+  /* 성능 최적화 */
   will-change: transform !important;
+  -webkit-backface-visibility: hidden !important;
+  -moz-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  
+  /* 렌더링 격리 */
+  contain: layout style paint !important;
+  
+  /* 브라우저별 특수 처리 */
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
 }
 
 /* PC 전용 바텀바의 하위 요소들도 강제 표시 */
