@@ -172,7 +172,7 @@ text-overflow: ellipsis;
 
 /* 오른쪽: 컨트롤 버튼 섹션 */
 .bottom-bar-controls {
-  justify-content: flex-end;
+    justify-content: center;
   flex-wrap: wrap;
   gap: var(--game-spacing-sm);
   padding-left: var(--game-spacing-md);
