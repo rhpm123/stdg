@@ -67,6 +67,34 @@
     transition: all 0.15s ease-out;
   }
   
+  /* 대형 버튼 모바일 최적화 */
+  .btn-primary-large {
+    /* 모바일에서도 충분히 큰 터치 영역 */
+    min-height: 48px;
+    min-width: 120px;
+    padding: 14px 20px;
+    font-size: 14px;
+    
+    /* 터치 피드백 강화 */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+    transition: all 0.15s ease-out;
+  }
+  
+  /* 컴팩트 힌트 버튼 모바일 최적화 */
+  .hint-btn-compact {
+    /* 모바일에서 적절한 터치 영역 */
+    min-height: 36px;
+    min-width: 60px;
+    padding: 8px 12px;
+    font-size: 11px;
+    
+    /* 터치 피드백 */
+    -webkit-tap-highlight-color: rgba(255, 193, 7, 0.2);
+    touch-action: manipulation;
+    transition: all 0.15s ease-out;
+  }
+  
   .control-btn:active, .btn-primary:active, .btn-secondary:active {
     transform: scale(0.95);
     background-color: rgba(0, 0, 0, 0.05);
@@ -295,6 +323,23 @@
     padding: 8px 12px;
   }
   
+  /* 초소형 화면에서 대형 버튼 최적화 */
+  .btn-primary-large {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+    min-height: 44px;
+    min-width: 100px;
+  }
+  
+  /* 초소형 화면에서 힌트 버튼 최적화 */
+  .hint-btn-compact {
+    font-size: 0.65rem;
+    padding: 6px 10px;
+    min-height: 32px;
+    min-width: 50px;
+    margin-left: 6px;
+  }
+  
   /* 모달 마진 강화 */
   .modal-content {
     width: 98%;
@@ -350,6 +395,23 @@
   .bottom-bar {
     /* 태블릿에서 더 넓은 공간 활용 */
     padding: 12px 24px;
+  }
+  
+  /* 태블릿에서 대형 버튼 최적화 */
+  .btn-primary-large {
+    font-size: 18px;
+    padding: 16px 32px;
+    min-height: 56px;
+    min-width: 140px;
+  }
+  
+  /* 태블릿에서 힌트 버튼 최적화 */
+  .hint-btn-compact {
+    font-size: 14px;
+    padding: 10px 16px;
+    min-height: 40px;
+    min-width: 80px;
+    margin-left: 12px;
   }
 }
 
@@ -503,6 +565,23 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  /* 가로모드에서 대형 버튼 크기 조정 */
+  .bottom-bar-controls .btn-primary-large {
+    padding: 4px 8px !important;
+    font-size: 0.6rem !important;
+    min-height: 24px !important;
+    min-width: 60px !important;
+  }
+  
+  /* 가로모드에서 힌트 버튼 크기 조정 */
+  .bottom-bar-stats .hint-btn-compact {
+    padding: 2px 6px !important;
+    font-size: 0.5rem !important;
+    min-height: 18px !important;
+    min-width: 40px !important;
+    margin-left: 4px !important;
   }
   
   /* 힌트 정보와 개발자 도구 숨김 */

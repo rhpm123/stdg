@@ -89,6 +89,8 @@
           <div class="stat-value" id="found">0/0</div>
           
           <div class="stat-value" id="lives">❤️❤️❤️❤️❤️</div>
+          
+          <button class="hint-btn-compact" id="hintBtn" disabled>💡 힌트</button>
         </div>
       </div>
       
@@ -109,9 +111,7 @@
       <!-- 핵심 컨트롤 버튼만 -->
       <div class="bottom-bar-controls">
         <div class="game-controls">
-          <button class="control-btn btn-primary" id="startBtn">게임 시작</button>
-          <button class="control-btn btn-secondary" id="pauseBtn" disabled>일시정지</button>
-          <button class="control-btn hint-btn" id="hintBtn" disabled>💡 힌트</button>
+          <button class="control-btn btn-primary-large" id="startBtn">게임 시작</button>
         </div>
       </div>
     </div>
@@ -392,7 +392,7 @@
         });
       }
       
-      document.getElementById('pauseBtn')?.addEventListener('click', pauseGame);
+
       document.getElementById('hintBtn')?.addEventListener('click', showHint);
       document.getElementById('newGameBtn')?.addEventListener('click', () => {
         window.location.href = '../index.html';

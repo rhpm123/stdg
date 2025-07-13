@@ -627,14 +627,11 @@ function updateUI() {
   
   // 버튼 상태 업데이트
   const startBtn = document.getElementById('startBtn');
-  const pauseBtn = document.getElementById('pauseBtn');
   const hintBtn = document.getElementById('hintBtn');
   
-  if (startBtn && pauseBtn) {
+  if (startBtn) {
     if (gameState.isGameActive) {
       startBtn.disabled = true;
-      pauseBtn.disabled = false;
-      pauseBtn.textContent = gameState.isPaused ? '재개' : '일시정지';
       
       // 게임 진행 중일 때 힌트 버튼 활성화
       if (hintBtn) {
@@ -642,8 +639,6 @@ function updateUI() {
       }
     } else {
       startBtn.disabled = false;
-      pauseBtn.disabled = true;
-      pauseBtn.textContent = '일시정지';
       
       // 게임 비활성 시 힌트 버튼 비활성화
       if (hintBtn) {
