@@ -208,6 +208,11 @@ class OrientationController {
               bottomBarMode: 'hidden',   // 세로모드에서는 bottom-bar 숨김
               enableFullscreen: false,   // 풀스크린 비활성화
               showOrientationOverlay: true   // 회전 안내 표시
+            },
+            desktop: { // 데스크탑 환경에 대한 프리셋 추가
+              bottomBarMode: 'auto',
+              enableFullscreen: true,
+              showOrientationOverlay: false
             }
           }
         };
@@ -691,8 +696,29 @@ class OrientationController {
       }
       
       const orientation = gameState.orientation;
-      const currentMode = this.isLandscape ? 'landscape' : 'portrait';
+      
+      // PC 환경 우선 체크
+      let currentMode;
+      if (this.isDesktopEnvironment()) {
+        currentMode = 'desktop';
+        console.log('🖥️ PC 환경 감지 - desktop 프리셋 적용');
+        
+        // PC 환경에서 .pc-bottom-bar 클래스 자동 적용
+        this.applyPCBottomBarClass();
+      } else {
+        // 모바일 환경 - 기존 landscape/portrait 로직 유지
+        currentMode = this.isLandscape ? 'landscape' : 'portrait';
+        console.log(`📱 모바일 환경 - ${currentMode} 프리셋 적용`);
+      }
+      
       const preset = orientation.presets[currentMode];
+      
+      // 프리셋이 정의되지 않은 경우 안전 장치
+      if (!preset) {
+        console.warn(`⚠️ 프리셋 ${currentMode}이 정의되지 않음, landscape 프리셋으로 폴백`);
+        currentMode = 'landscape';
+        preset = orientation.presets.landscape;
+      }
       
       // 이전 모드 저장
       orientation.lastBottomBarMode = orientation.bottomBarMode;
@@ -701,6 +727,7 @@ class OrientationController {
       orientation.bottomBarMode = preset.bottomBarMode;
       
       console.log('📱 Bottom-bar 모드 업데이트:', {
+        environment: currentMode === 'desktop' ? 'PC' : 'Mobile',
         orientation: currentMode,
         previousMode: orientation.lastBottomBarMode,
         newMode: orientation.bottomBarMode,
@@ -982,6 +1009,121 @@ class OrientationController {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
   
+  /**
+   * PC/데스크톱 환경인지 확인
+   * 기존 getBrowserSupportInfo()와 화면 크기, 터치 지원을 종합 판단
+   */
+  isDesktopEnvironment() {
+    try {
+      // 1. 기존 브라우저 정보 활용
+      const browserInfo = this.getBrowserSupportInfo();
+      const isDesktopBrowser = browserInfo.browser === 'Desktop Browser';
+      
+      // 2. 화면 크기 조건 (PC 해상도)
+      const hasDesktopScreen = window.innerWidth >= 1024;
+      
+      // 3. 터치 지원 여부 (PC는 일반적으로 터치 미지원)
+      const hasNoTouch = !('ontouchstart' in window);
+      
+      // 4. 모바일 기기가 아님을 재확인
+      const isNotMobile = !this.isMobileDevice();
+      
+      // 5. 모든 조건을 종합하여 PC 환경 판단
+      const isDesktop = isDesktopBrowser && hasDesktopScreen && hasNoTouch && isNotMobile;
+      
+      // 6. 디버깅 정보 제공
+      console.log('🖥️ PC 환경 감지 결과:', {
+        isDesktopBrowser,
+        hasDesktopScreen,
+        hasNoTouch,
+        isNotMobile,
+        finalResult: isDesktop,
+        screenSize: `${window.innerWidth}x${window.innerHeight}`,
+        userAgent: navigator.userAgent.substring(0, 50) + '...'
+      });
+      
+      return isDesktop;
+      
+    } catch (error) {
+      console.error('❌ PC 환경 감지 오류:', error);
+      // 오류 시 안전한 폴백: 화면 크기만으로 판단
+      return window.innerWidth >= 1024 && !this.isMobileDevice();
+    }
+  }
+
+  /**
+   * PC 환경에서 바텀바에 .pc-bottom-bar 클래스를 적용하고 메인 콘텐츠 높이를 조정
+   */
+  applyPCBottomBarClass() {
+    try {
+      const bottomBar = document.querySelector('.bottom-bar');
+      if (!bottomBar) {
+        console.warn('⚠️ bottom-bar 요소를 찾을 수 없습니다.');
+        return;
+      }
+
+      // PC 전용 클래스 적용
+      bottomBar.classList.add('pc-bottom-bar');
+      console.log('✅ PC 환경: .pc-bottom-bar 클래스 적용 완료');
+
+      // 메인 콘텐츠 영역 높이 조정
+      this.adjustMainContentHeight();
+      
+      // 화면 리사이즈 시에도 자동 재조정
+      if (!this.pcResizeHandler) {
+        this.pcResizeHandler = () => {
+          if (this.isDesktopEnvironment()) {
+            this.adjustMainContentHeight();
+          }
+        };
+        window.addEventListener('resize', this.pcResizeHandler);
+        console.log('📏 PC 환경: 리사이즈 이벤트 리스너 등록 완료');
+      }
+      
+    } catch (error) {
+      console.error('❌ PC 바텀바 클래스 적용 오류:', error);
+    }
+  }
+
+  /**
+   * PC 환경에서 메인 콘텐츠 높이를 viewport에 맞게 조정
+   */
+  adjustMainContentHeight() {
+    try {
+      const mainContent = document.querySelector('main, .main-content, .game-container');
+      if (!mainContent) {
+        console.warn('⚠️ 메인 콘텐츠 요소를 찾을 수 없습니다.');
+        return;
+      }
+
+      // 헤더와 바텀바 높이 계산
+      const header = document.querySelector('header, .header');
+      const headerHeight = header ? header.offsetHeight : 0;
+      const bottomBarHeight = 55; // PC 환경 고정 높이
+      
+      // viewport 높이에서 헤더와 바텀바 높이를 뺀 값으로 설정
+      const availableHeight = window.innerHeight - headerHeight - bottomBarHeight;
+      
+      // CSS 변수로 설정
+      document.documentElement.style.setProperty('--main-content-height', `${availableHeight}px`);
+      
+      // 직접 스타일 적용도 함께
+      mainContent.style.minHeight = `${availableHeight}px`;
+      mainContent.style.maxHeight = `${availableHeight}px`;
+      
+      console.log('📏 PC 메인 콘텐츠 높이 조정:', {
+        viewportHeight: window.innerHeight,
+        headerHeight,
+        bottomBarHeight,
+        availableHeight,
+        appliedTo: mainContent.className || mainContent.tagName
+      });
+      
+    } catch (error) {
+      console.error('❌ 메인 콘텐츠 높이 조정 오류:', error);
+    }
+  }
+
   /**
    * 풀스크린 모드 관리 시스템
    */
