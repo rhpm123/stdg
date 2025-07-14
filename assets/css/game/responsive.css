@@ -908,9 +908,9 @@
   visibility: visible !important;
   opacity: 1 !important;
   
-  /* 레이아웃 및 스타일 유지 */
-  grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
-  -ms-grid-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
+  /* 레이아웃 및 스타일 유지 - PC 전용 grid 비율 적용 */
+  grid-template-columns: var(--grid-stats-ratio-pc) var(--grid-progress-ratio-pc) var(--grid-controls-ratio-pc) !important;
+  -ms-grid-columns: var(--grid-stats-ratio-pc) var(--grid-progress-ratio-pc) var(--grid-controls-ratio-pc) !important;
   
   padding: 2px 32px 8px 32px !important;
   gap: var(--game-spacing-sm) !important;
@@ -969,8 +969,8 @@
 .pc-bottom-bar .bottom-bar-progress,
 .pc-bottom-bar .bottom-bar-controls {
   display: flex !important;
-  align-items: flex-start !important;
-  min-height: auto !important;
+  align-items: center !important;
+  min-height: calc(55px * 0.8) !important;
   visibility: visible !important;
   opacity: 1 !important;
 }
