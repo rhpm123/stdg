@@ -41,158 +41,82 @@ class EmergencyCSSInjection {
    * 강력한 CSS 규칙 생성 (브라우저별 호환성 포함)
    */
   generateForceCSSRules() {
-    console.log('🎨 강력한 CSS 규칙 생성 중 (브라우저 호환성 포함)...');
+    console.log('🎨 강력한 CSS 규칙 생성 중 (바텀바 완전 숨김)...');
     
-    // PC 환경 감지
-    const isPC = window.innerWidth >= 1024;
-    const pcHeight = isPC ? '55px' : this.targetHeight;
-    
-    console.log(`🖥️ 환경 감지: ${isPC ? 'PC' : '모바일'}, 타겟 높이: ${pcHeight}`);
-    
-    const rules = `
-      /* =====================================
-         응급 CSS 주입: 브라우저별 호환성 확보
-         ===================================== */
-      
-      /* 기본 바텀바 규칙 */
-      .bottom-bar {
-        height: ${pcHeight} !important;
-        min-height: ${pcHeight} !important;
-        max-height: ${pcHeight} !important;
-        
-        /* 브라우저별 호환성 속성 */
-        -webkit-box-sizing: border-box !important;
-        -moz-box-sizing: border-box !important;
-        box-sizing: border-box !important;
-        
-        /* WebKit 브라우저 (Safari, Chrome) 최적화 */
-        -webkit-transform: translateZ(0) !important;
-        -webkit-backface-visibility: hidden !important;
-        
-        /* Firefox 최적화 */
-        -moz-backface-visibility: hidden !important;
-        
-        /* Edge/IE 호환성 */
-        -ms-transform: translateZ(0) !important;
-      }
-      
-      /* PC 환경 전용 .pc-bottom-bar 응급 규칙 */
-      ${isPC ? `
-      .pc-bottom-bar,
-      .bottom-bar.pc-bottom-bar {
-        position: fixed !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        z-index: 9999 !important;
-        width: 100% !important;
-        height: 55px !important;
-        min-height: 55px !important;
-        max-height: 55px !important;
-        display: grid !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        
-        /* 브라우저별 위치 고정 강화 */
-        -webkit-position: fixed !important;
-        -moz-position: fixed !important;
-        -ms-position: fixed !important;
-        
-        /* 하드웨어 가속 강제 활성화 */
-        -webkit-transform: translate3d(0, 0, 0) !important;
-        -moz-transform: translate3d(0, 0, 0) !important;
-        -ms-transform: translate3d(0, 0, 0) !important;
-        transform: translate3d(0, 0, 0) !important;
-        
-        /* 렌더링 최적화 */
-        will-change: transform !important;
-        contain: layout style paint !important;
-      }` : ''}
-      
-      .bottom-bar-stats {
-        height: ${pcHeight} !important;
-        min-height: ${pcHeight} !important;
-        max-height: ${pcHeight} !important;
-        display: flex !important;
-        align-items: center !important;
-        overflow: hidden !important;
-        
-        /* 브라우저별 Flexbox 호환성 */
-        -webkit-display: -webkit-flex !important;
-        -moz-display: -moz-flex !important;
-        -ms-display: -ms-flexbox !important;
-        
-        -webkit-align-items: center !important;
-        -moz-align-items: center !important;
-        -ms-flex-align: center !important;
-      }
-      
-      .game-stats {
-        height: 100% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        padding: 0 15px !important;
-        
-        /* 브라우저별 Flexbox 호환성 */
-        -webkit-display: -webkit-flex !important;
-        -webkit-align-items: center !important;
-        -webkit-justify-content: space-between !important;
-        
-        -moz-display: -moz-flex !important;
-        -moz-align-items: center !important;
-        -moz-justify-content: space-between !important;
-        
-        -ms-display: -ms-flexbox !important;
-        -ms-flex-align: center !important;
-        -ms-flex-pack: justify !important;
-      }
-      
-      .stat-value {
-        height: calc(${pcHeight} * 0.7) !important;
-        line-height: calc(${pcHeight} * 0.7) !important;
-        font-size: calc(${pcHeight} * 0.35) !important;
-        display: flex !important;
-        align-items: center !important;
-        
-        /* 브라우저별 calc() 호환성 */
-        height: -webkit-calc(${pcHeight} * 0.7) !important;
-        height: -moz-calc(${pcHeight} * 0.7) !important;
-        height: calc(${pcHeight} * 0.7) !important;
-        
-        line-height: -webkit-calc(${pcHeight} * 0.7) !important;
-        line-height: -moz-calc(${pcHeight} * 0.7) !important;
-        line-height: calc(${pcHeight} * 0.7) !important;
-      }
-      
-      /* 모든 하위 요소 브라우저 호환성 */
-      .bottom-bar *,
-      .pc-bottom-bar * {
-        -webkit-box-sizing: border-box !important;
-        -moz-box-sizing: border-box !important;
-        box-sizing: border-box !important;
-      }
-      
+    return `
+      /* 🚨 응급 바텀바 완전 숨김 규칙 */
+      .bottom-bar,
+      .bottom-bar-stats,
       .bottom-bar-progress,
       .bottom-bar-controls {
-        -webkit-flex-shrink: 0 !important;
-        -moz-flex-shrink: 0 !important;
-        -ms-flex-negative: 0 !important;
-        flex-shrink: 0 !important;
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        max-height: 0 !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        z-index: -9999 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
       }
       
-      /* 브라우저별 CSS 변수 폴백 */
-      :root {
-        --emergency-bottom-bar-height: ${pcHeight} !important;
-        --emergency-pc-height: 55px !important;
+      .bottom-bar *,
+      .bottom-bar-stats *,
+      .bottom-bar-progress *,
+      .bottom-bar-controls * {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+      
+      /* 모든 미디어 쿼리에서 바텀바 숨김 */
+      @media (max-width: 480px) {
+        .bottom-bar { display: none !important; }
+      }
+      
+      @media (min-width: 481px) and (max-width: 767px) {
+        .bottom-bar { display: none !important; }
+      }
+      
+      @media (min-width: 768px) and (max-width: 1023px) {
+        .bottom-bar { display: none !important; }
+      }
+      
+      @media (min-width: 1024px) {
+        .bottom-bar { display: none !important; }
+      }
+      
+      /* 화면 방향에 상관없이 숨김 */
+      @media (orientation: landscape) {
+        .bottom-bar { display: none !important; }
+      }
+      
+      @media (orientation: portrait) {
+        .bottom-bar { display: none !important; }
+      }
+      
+      /* 메인 콘텐츠 영역 전체 확장 */
+      .main-content {
+        height: calc(100vh - var(--game-header-height)) !important;
+        height: calc(100dvh - var(--game-header-height)) !important;
+        max-height: calc(100vh - var(--game-header-height)) !important;
+        max-height: calc(100dvh - var(--game-header-height)) !important;
+        padding-bottom: 0 !important;
+      }
+      
+      /* 사이드바 강제 표시 */
+      .right-sidebar {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
       }
     `;
-    
-    console.log(`📏 적용 높이: ${pcHeight}`);
-    console.log(`🌐 PC 환경: ${isPC ? '활성화' : '비활성화'}`);
-    console.log('📝 브라우저 호환성 CSS 규칙 생성 완료');
-    
-    return rules;
   }
 
   /**

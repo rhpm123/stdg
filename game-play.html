@@ -56,6 +56,10 @@
       </div>
     </header>
     
+    <!-- 메인 레이아웃 래퍼 (그리드: 콘텐츠 + 사이드바) -->
+    <div class="main-layout-wrapper">
+      <!-- 메인 콘텐츠 영역 -->
+      <div class="main-layout-content">
     <!-- 메인 이미지 영역 -->
     <main class="main-content">
       <div class="images-container" id="imagesContainer" style="display: none;">
@@ -74,6 +78,55 @@
         </div>
       </div>
     </main>
+      </div> <!-- main-layout-content 종료 -->
+      
+      <!-- 오른쪽 사이드바 (데스크톱 전용, 바텀바와 동일한 구조) -->
+      <div class="right-sidebar">
+        <!-- 사이드바 게임 통계 섹션 -->
+        <div class="sidebar-section sidebar-stats">
+          <h4>게임 정보</h4>
+          <div class="sidebar-stats-grid">
+            <div class="sidebar-stat-item">
+              <span class="sidebar-stat-label">점수</span>
+              <span class="sidebar-stat-value" id="sidebarScore">0</span>
+            </div>
+            <div class="sidebar-stat-item">
+              <span class="sidebar-stat-label">시간</span>
+              <span class="sidebar-stat-value" id="sidebarTimer">00:00</span>
+            </div>
+            <div class="sidebar-stat-item">
+              <span class="sidebar-stat-label">진행</span>
+              <span class="sidebar-stat-value" id="sidebarFound">0/0</span>
+            </div>
+            <div class="sidebar-stat-item">
+              <span class="sidebar-stat-label">생명</span>
+              <span class="sidebar-stat-value" id="sidebarLives">❤️❤️❤️❤️❤️</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 사이드바 진행바 섹션 -->
+        <div class="sidebar-section sidebar-progress">
+          <h4>체력</h4>
+          <!-- 체력바 (시간 제한 시각화) -->
+          <div class="sidebar-health-bar-section" id="sidebarHealthBarSection">
+            <div class="health-bar">
+              <div class="health-bar-fill" id="sidebarHealthBarFill"></div>
+              <div class="health-bar-text" id="sidebarHealthBarText">100%</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 사이드바 컨트롤 섹션 -->
+        <div class="sidebar-section sidebar-controls">
+          <h4>게임 제어</h4>
+          <div class="sidebar-controls-grid">
+            <button class="sidebar-btn btn-primary" id="sidebarStartBtn">게임 시작</button>
+            <button class="sidebar-btn hint-btn" id="sidebarHintBtn" disabled>💡 힌트</button>
+          </div>
+        </div>
+      </div> <!-- right-sidebar 종료 -->
+    </div> <!-- main-layout-wrapper 종료 -->
   
     <!-- 하단 바: 게임 통계 + 진행바 + 컨트롤 버튼 -->
     <div class="bottom-bar">
@@ -121,7 +174,7 @@
   <!-- 게임 스크립트들 -->
   <script src="assets/js/game-state.js"></script>
   <script src="assets/js/orientation-controller.js"></script>
-  <script src="assets/js/bottom-bar-manager.js"></script>
+  <script src="assets/js/layout-manager.js"></script>
   <script src="assets/js/heart-system.js"></script>
   <script src="assets/js/health-bar-system.js"></script>
   <script src="assets/js/coordinate-utils.js"></script>
@@ -430,15 +483,23 @@
     }
     
     window.addEventListener('load', async function() {
-      console.log('📱 페이지 로드 완료, 초기화 시작!');
+      console.log('📱 페이지 로드 완료, 표준화된 초기화 시작!');
       
       try {
+        // === 1단계: 표준화된 초기화 (링크 소스 무관) ===
+        
         // 이벤트 리스너 설정
         setupEventListeners();
         
-        // 인증 상태 캐시 클리어 (재로그인 문제 해결)
+        // 인증 상태 캐시 강제 클리어 (일관성 보장)
         clearAuthCache();
-        console.log('인증 상태 캐시가 클리어되었습니다.');
+        console.log('🔄 인증 상태 캐시 강제 클리어 완료');
+        
+        // 게임 상태 초기화 (모든 접속에서 동일한 시작점)
+        resetGameState();
+        console.log('🎮 게임 상태 표준화 초기화 완료');
+        
+        // === 2단계: 환경 설정 로드 ===
         
         // 환경변수를 API에서 가져오는 함수
         async function loadSupabaseConfig() {
@@ -459,14 +520,21 @@
           }
         }
         
-        // URL에서 OAuth 토큰 처리 (Google 로그인 콜백)
+        // === 3단계: OAuth 토큰 처리 (모든 링크에서 동일한 방식) ===
+        
+        // URL fragment 정리 (토큰 여부와 관계없이 항상 실행)
         const urlParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = urlParams.get('access_token');
         const refreshToken = urlParams.get('refresh_token');
-        const expiresIn = urlParams.get('expires_in');
-        const tokenType = urlParams.get('token_type');
         const expiresAt = urlParams.get('expires_at');
         
+        // URL 정리 (토큰 제거) - 모든 경우에 실행
+        if (window.location.hash) {
+          window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+          console.log('🧹 URL fragment 정리 완료');
+        }
+        
+        // OAuth 토큰이 있는 경우에만 처리
         if (accessToken && refreshToken) {
           console.log('🔑 OAuth 토큰 발견, 세션 설정 중...');
           try {
@@ -487,12 +555,6 @@
               token_type: 'bearer',
               user: null // Supabase가 자동으로 설정함
             };
-            console.log('📝 세션 데이터 설정:', {
-              hasAccessToken: !!sessionData.access_token,
-              hasRefreshToken: !!sessionData.refresh_token,
-              expiresAt: new Date(sessionData.expires_at * 1000).toLocaleString()
-            
-            });
             
             const { data, error } = await supabaseClient.auth.setSession(sessionData);
             
@@ -509,28 +571,22 @@
                 localStorage.setItem('supabaseUser', JSON.stringify(data.user));
               }
             }
-            
-            // URL 정리 (토큰 제거)
-            window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
-            console.log('🧹 URL 정리 완료');
           } catch (tokenError) {
             console.warn('⚠️ 토큰 처리 중 오류:', tokenError);
           }
+          
+          // 토큰 처리 후 안정화 대기
+          await new Promise(resolve => setTimeout(resolve, 500));
         }
         
-        // 인증 상태 변경 리스너 설정 (대체 구현)
-        // console.log('인증 상태 변경 리스너 설정됨');
+        // === 4단계: 인증 상태 확인 및 UI 업데이트 (표준화) ===
         
-        // 토큰 처리가 있었다면 잠시 대기 후 인증 상태 확인
-        if (accessToken && refreshToken) {
-          await new Promise(resolve => setTimeout(resolve, 1000)); // 1초 대기
-        }
+        // 인증 상태 재확인 (캐시 무효화 후)
+        clearAuthCache();
         
-        
-        // 인증 상태 확인 후 사용자 정보 표시 (게스트 모드 허용)
         try {
           const authState = await checkAuthState();
-          console.log('🔐 현재 인증 상태:', authState);
+          console.log('🔐 최종 인증 상태:', authState);
           
           // 로그인된 사용자의 경우에만 하트 시스템 초기화
           if (authState.isAuthenticated && authState.user) {
@@ -556,6 +612,8 @@
           await updateUserInterface();
         }
         
+        // === 5단계: 게임 시스템 초기화 ===
+        
         // 시간 제한 시각화 시스템 초기화
         console.log('🔍 healthBarSystem 존재 여부:', typeof window.healthBarSystem);
         if (typeof window.healthBarSystem !== 'undefined') {
@@ -575,7 +633,7 @@
           console.error('❌ healthBarSystem이 로드되지 않았습니다!');
         }
         
-        // 게임 데이터 로딩
+        // 게임 데이터 로딩 (표준화된 순서)
         await loadGameData();
         
         // 체력바 시스템 시작 (게임 데이터 로딩 후)
@@ -585,7 +643,7 @@
           console.log('✅ 체력바 시스템 수동 시작 완료');
         }
         
-        // UI 업데이트
+        // UI 업데이트 (모든 초기화 완료 후)
         updateUI();
         
         // Orientation Controller 초기화 및 이벤트 리스너 설정
@@ -609,7 +667,9 @@
           console.warn('⚠️ OrientationController를 찾을 수 없음');
         }
         
+        // === 최종 완료 메시지 ===
         showMessage('게임 준비 완료! 시작 버튼을 눌러주세요.', 'success');
+        console.log('🎉 표준화된 초기화 완료 - 모든 링크 소스에서 동일한 상태');
         
       } catch (error) {
         console.error('❌ 게임 초기화 실패:', error);
