@@ -417,6 +417,8 @@ function updateTimerDisplay() {
     const minutes = Math.floor(remainingTime / 60000);
     const seconds = Math.floor((remainingTime % 60000) / 1000);
     
+    const timeText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
     // 시간이 30초 이하로 남았을 때 경고 색상
     if (remainingTime <= gameState.timeWarningThreshold) {
       timerEl.style.color = '#e74c3c';
@@ -426,12 +428,28 @@ function updateTimerDisplay() {
       timerEl.style.fontWeight = '';
     }
     
-    timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    timerEl.textContent = timeText;
+    
+    // ✅ 사이드바 타이머 동기화 (새로 추가된 로직)
+    if (window.layoutManager && typeof window.layoutManager.syncToSidebar === 'function') {
+      window.layoutManager.syncToSidebar('timer', timeText);
+      
+      // 사이드바 타이머에도 경고 색상 적용
+      const sidebarTimerEl = document.getElementById('sidebarTimer');
+      if (sidebarTimerEl) {
+        if (remainingTime <= gameState.timeWarningThreshold) {
+          sidebarTimerEl.style.color = '#e74c3c';
+          sidebarTimerEl.style.fontWeight = 'bold';
+        } else {
+          sidebarTimerEl.style.color = '';
+          sidebarTimerEl.style.fontWeight = '';
+        }
+      }
+    }
     
     // 시간 제한 및 체력 감소 처리
     checkTimeLimit();
   }
-}
 
 /**
  * 시간 제한 처리
@@ -606,13 +624,14 @@ function closeGameOverModal() {
  * UI 업데이트
  */
 function updateUI() {
+  // 바텀바 요소들 업데이트 (기존 로직 유지)
+  
   // 점수 업데이트
   const scoreEl = document.getElementById('score');
   if (scoreEl) scoreEl.textContent = gameState.score;
   
   // 발견한 틀린부분 업데이트
   const foundEl = document.getElementById('found');
-  
   if (foundEl) {
     foundEl.textContent = `${gameState.foundPoints.length}/${gameState.answerPoints.length}`;
   }
@@ -637,6 +656,29 @@ function updateUI() {
         hintBtn.disabled = true;
       }
     }
+  }
+  
+  // ✅ 사이드바 동기화 (새로 추가된 로직)
+  if (window.layoutManager && typeof window.layoutManager.syncToSidebar === 'function') {
+    // 각 요소별로 개별 동기화
+    window.layoutManager.syncToSidebar('score', gameState.score);
+    window.layoutManager.syncToSidebar('found', `${gameState.foundPoints.length}/${gameState.answerPoints.length}`);
+    
+    // 버튼 상태 동기화
+    const sidebarStartBtn = document.getElementById('sidebarStartBtn');
+    const sidebarHintBtn = document.getElementById('sidebarHintBtn');
+    
+    if (sidebarStartBtn && startBtn) {
+      sidebarStartBtn.disabled = startBtn.disabled;
+      sidebarStartBtn.textContent = startBtn.textContent;
+    }
+    
+    if (sidebarHintBtn && hintBtn) {
+      sidebarHintBtn.disabled = hintBtn.disabled;
+      sidebarHintBtn.textContent = hintBtn.textContent;
+    }
+    
+    console.log('🔗 사이드바 UI 동기화 완료');
   }
 }
 /**

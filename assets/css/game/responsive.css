@@ -943,4 +943,290 @@
   flex-wrap: wrap;
   gap: var(--game-spacing-sm);
   padding: 2px 0 4px var(--game-spacing-md);
+
+/* ============================================
+   사이드바/바텀바 반응형 전환 시스템 (NEW)
+   ============================================ */
+
+/* ============================================
+   전 환경 사이드바 적용 시스템 (바텀바 완전 교체)
+   ============================================ */
+
+/* 모든 환경에서 사이드바 표시, 바텀바 완전 숨김 */
+.main-layout-wrapper {
+  display: grid !important;
+  grid-template-columns: 1fr var(--game-right-sidebar-width) !important;
+  grid-template-areas: "content sidebar" !important;
+}
+
+/* 모든 환경에서 사이드바 활성화 */
+.right-sidebar {
+  display: flex !important;
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  pointer-events: auto !important;
+}
+
+/* 모든 환경에서 바텀바 완전 숨김 */
+.bottom-bar {
+  display: none !important;
+}
+
+/* 메인 콘텐츠 영역 조정 (사이드바만 고려) */
+.main-content {
+  height: calc(100vh - var(--game-header-height)) !important;
+  height: calc(100dvh - var(--game-header-height)) !important;
+  max-height: calc(100vh - var(--game-header-height)) !important;
+  max-height: calc(100dvh - var(--game-header-height)) !important;
+}
+
+/* 데스크톱 환경 (1024px 이상): 표준 사이드바 크기 */
+@media (min-width: 1024px) {
+  .main-layout-wrapper {
+    grid-template-columns: 1fr var(--game-right-sidebar-width) !important;
+  }
+  
+  .right-sidebar {
+    width: var(--game-right-sidebar-width);
+    min-width: var(--game-right-sidebar-min-width);
+    max-width: var(--game-right-sidebar-max-width);
+  }
+}
+
+/* 태블릿 환경 (768px - 1023px): 사이드바 크기 최적화 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --game-right-sidebar-width: 240px;
+    --game-right-sidebar-min-width: 220px;
+  }
+  
+  .main-layout-wrapper {
+    grid-template-columns: 1fr 240px !important;
+  }
+  
+  .right-sidebar {
+    width: 240px;
+    padding: var(--game-spacing-sm);
+  }
+  
+  .sidebar-section {
+    padding: var(--game-spacing-sm);
+    gap: var(--game-spacing-xs);
+  }
+  
+  .sidebar-section h4 {
+    font-size: 0.85rem;
+  }
+  
+  .sidebar-stat-value,
+  .sidebar-btn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
+
+/* 소형 모바일 환경 (480px - 767px): 컴팩트 사이드바 */
+@media (min-width: 480px) and (max-width: 767px) {
+  :root {
+    --game-right-sidebar-width: 200px;
+    --game-right-sidebar-min-width: 180px;
+  }
+  
+  .main-layout-wrapper {
+    grid-template-columns: 1fr 200px !important;
+  }
+  
+  .right-sidebar {
+    width: 200px;
+    padding: var(--game-spacing-xs);
+    gap: var(--game-spacing-sm);
+  }
+  
+  .sidebar-section {
+    padding: var(--game-spacing-xs);
+    gap: var(--game-spacing-xs);
+  }
+  
+  .sidebar-section h4 {
+    font-size: 0.8rem;
+    margin-bottom: var(--game-spacing-xs);
+  }
+  
+  .sidebar-stat-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .sidebar-stat-label {
+    font-size: 0.7rem;
+  }
+  
+  .sidebar-stat-value {
+    font-size: 0.85rem;
+    padding: 6px 8px;
+  }
+  
+  .sidebar-btn {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    min-height: 36px;
+  }
+}
+
+/* 초소형 모바일 환경 (480px 이하): 최소 사이드바 */
+@media (max-width: 479px) {
+  :root {
+    --game-right-sidebar-width: 160px;
+    --game-right-sidebar-min-width: 140px;
+  }
+  
+  .main-layout-wrapper {
+    grid-template-columns: 1fr 160px !important;
+  }
+  
+  .right-sidebar {
+    width: 160px;
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .sidebar-section {
+    padding: 6px;
+    gap: 4px;
+  }
+  
+  .sidebar-section h4 {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+  
+  .sidebar-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  
+  .sidebar-stat-item {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 4px;
+  }
+  
+  .sidebar-stat-label {
+    font-size: 0.65rem;
+  }
+  
+  .sidebar-stat-value {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+  }
+  
+  .sidebar-controls-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  
+  .sidebar-btn {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    min-height: 32px;
+  }
+}
+/* 중간 크기 화면 최적화 (768px - 1023px): 태블릿 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* 바텀바를 약간 더 크게 표시 */
+  .bottom-bar {
+    min-height: 65px;
+    padding: 12px 20px;
+  }
+  
+  .bottom-bar .stat-value {
+    min-height: 45px;
+    font-size: 0.95rem;
+  }
+  
+  .bottom-bar .control-btn {
+    min-height: 42px;
+    padding: 10px 16px;
+  }
+}
+
+/* 소형 모바일 환경 (480px 이하): 바텀바 컴팩트 모드 */
+@media (max-width: 480px) {
+  .bottom-bar {
+    min-height: 55px;
+    padding: 8px 12px;
+  }
+  
+  .bottom-bar .stat-value {
+    min-height: 38px;
+    font-size: 0.8rem;
+    padding: 6px 8px;
+  }
+  
+  .bottom-bar .control-btn {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* 화면 전환 시 부드러운 애니메이션 */
+@media (prefers-reduced-motion: no-preference) {
+  .main-layout-wrapper,
+  .right-sidebar,
+  .bottom-bar,
+  .main-content {
+    transition: all var(--game-transition-normal) ease;
+  }
+}
+
+/* 사이드바/바텀바 전환 시 콘텐츠 영역 자동 조정 */
+.main-layout-content {
+  transition: width var(--game-transition-normal) ease,
+              height var(--game-transition-normal) ease;
+}
+
+/* 방향 전환 시 레이아웃 재조정 */
+@media (orientation: landscape) {
+  /* 가로 모드에서 사이드바 우선 적용 (충분한 가로 공간이 있을 때) */
+  @media (min-width: 1024px) {
+    .right-sidebar {
+      width: min(var(--game-right-sidebar-width), 25vw);
+    }
+  }
+}
+
+@media (orientation: portrait) {
+  /* 세로 모드에서는 화면 공간 절약을 위해 바텀바 선호 */
+  @media (max-width: 1023px) {
+    .bottom-bar {
+      position: relative;
+      bottom: 0;
+    }
+  }
+}
+
+/* 접근성: 고대비 모드에서 사이드바/바텀바 구분 강화 */
+@media (prefers-contrast: high) {
+  .right-sidebar {
+    border-left: 3px solid rgba(255, 255, 255, 0.8);
+  }
+  
+  .bottom-bar {
+    border-top: 3px solid rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* 다크모드에서 사이드바 테마 조정 */
+@media (prefers-color-scheme: dark) {
+  .right-sidebar {
+    background: linear-gradient(135deg, rgba(45, 55, 72, 0.95), rgba(26, 32, 44, 0.95));
+    border-left-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .sidebar-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
 }

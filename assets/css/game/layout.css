@@ -18,7 +18,66 @@
    ============================================ */
 
 /* ============================================
-   메인 콘텐츠 영역 레이아웃
+   사이드바 레이아웃 시스템 (새로 추가)
+   ============================================ */
+
+/* 메인 래퍼 - 사이드바와 콘텐츠 영역 그리드 */
+.main-layout-wrapper {
+  /* 기본적으로 블록 레이아웃 (모바일 우선) */
+  display: block;
+  /* 데스크톱에서는 responsive.css의 미디어 쿼리가 grid로 오버라이드 */
+  grid-template-columns: 1fr var(--game-right-sidebar-width);
+  grid-template-areas: "content sidebar";
+  height: calc(100vh - var(--game-header-height));
+  height: calc(100dvh - var(--game-header-height));
+  max-height: calc(100vh - var(--game-header-height));
+  max-height: calc(100dvh - var(--game-header-height));
+  gap: 0;
+  overflow: hidden;
+  /* 반응형 전환 시 부드러운 애니메이션 */
+  transition: all var(--game-transition-normal) ease;
+}
+
+/* 사이드바가 숨겨진 경우의 레이아웃 */
+.main-layout-wrapper.sidebar-hidden {
+  grid-template-columns: 1fr;
+  grid-template-areas: "content";
+}
+
+/* 콘텐츠 영역 */
+.main-layout-content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 오른쪽 사이드바 기본 구조 */
+.right-sidebar {
+  grid-area: sidebar;
+  position: relative;
+  width: var(--game-right-sidebar-width);
+  min-width: var(--game-right-sidebar-min-width);
+  max-width: var(--game-right-sidebar-max-width);
+  background: var(--game-gradient-primary);
+  color: white;
+  box-shadow: var(--game-shadow-lg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  
+  /* 기본적으로 숨김 (반응형에서 제어) */
+  display: none;
+}
+
+/* 사이드바가 활성화된 경우 */
+.right-sidebar.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   메인 콘텐츠 영역 레이아웃 (사이드바 호환)
    ============================================ */
 .main-content {
   flex: 1;

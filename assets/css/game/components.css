@@ -957,4 +957,298 @@ text-overflow: ellipsis;
   font-size: 0.55rem;
   color: #999;
   line-height: 1.1;
-} 
+
+/* ============================================
+   오른쪽 사이드바 컴포넌트 (세로형 바텀바)
+   ============================================ */
+
+/* 사이드바 기본 구조 */
+.right-sidebar {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--game-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-lg);
+}
+
+/* 사이드바 섹션들 */
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+  padding: var(--game-spacing-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--game-border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-section h4 {
+  margin: 0 0 var(--game-spacing-sm) 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 사이드바 통계 섹션 (기존 바텀바 스타일 세로형 변환) */
+.sidebar-stats {
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+}
+
+.sidebar-stats .game-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-xs);
+  align-items: stretch;
+}
+
+.sidebar-stats .stat-value {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: var(--game-border-radius-small);
+  padding: var(--game-spacing-sm);
+  transition: all var(--game-transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 사이드바용 통계 아이템 중요도별 스타일 */
+.sidebar-stats .stat-value:has(#score) {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.25), rgba(255, 152, 0, 0.25));
+  border-color: rgba(255, 193, 7, 0.5);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #FFD54F;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-stats .stat-value:has(#timer) {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.25), rgba(3, 169, 244, 0.25));
+  border-color: rgba(33, 150, 243, 0.5);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+  font-weight: 600;
+  font-size: 1rem;
+  color: #64B5F6;
+  font-family: 'Courier New', monospace;
+}
+
+.sidebar-stats .stat-value:has(#found) {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(139, 195, 74, 0.2));
+  border-color: rgba(76, 175, 80, 0.4);
+  color: #81C784;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sidebar-stats .stat-value:has(#lives) {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(233, 30, 99, 0.2));
+  border-color: rgba(244, 67, 54, 0.4);
+  color: #EF5350;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sidebar-stats .stat-value:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-2px);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 사이드바 진행바 섹션 */
+.sidebar-progress {
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+}
+
+.sidebar-progress .progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--game-border-radius-small);
+  overflow: hidden;
+}
+
+.sidebar-progress .progress-fill {
+  height: 100%;
+  background: var(--game-success-gradient);
+  transition: width var(--game-transition-normal);
+  border-radius: var(--game-border-radius-small);
+}
+
+/* 사이드바 컨트롤 섹션 */
+.sidebar-controls {
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+}
+
+.sidebar-controls .game-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-xs);
+  align-items: stretch;
+}
+
+.sidebar-controls .control-btn {
+  width: 100%;
+  padding: var(--game-spacing-sm) var(--game-spacing-md);
+  border: none;
+  border-radius: var(--game-border-radius-small);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all var(--game-transition-fast);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-controls .control-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-2px);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-controls .control-btn:active {
+  transform: translateX(0);
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-controls .control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 힌트 버튼 사이드바 전용 스타일 */
+.sidebar-controls .hint-btn-compact {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+  border-color: rgba(255, 193, 7, 0.4);
+  color: #FFD54F;
+  font-weight: 600;
+}
+
+.sidebar-controls .hint-btn-compact:hover {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 152, 0, 0.3));
+  border-color: rgba(255, 193, 7, 0.6);
+  box-shadow: 2px 0 12px rgba(255, 193, 7, 0.3);
+}
+
+.sidebar-controls .hint-btn-compact:disabled {
+  background: rgba(128, 128, 128, 0.2);
+  border-color: rgba(128, 128, 128, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 사이드바 메시지 영역 */
+.sidebar-message {
+  padding: var(--game-spacing-sm);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--game-border-radius-small);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.4;
+  min-height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-message.error {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(198, 40, 40, 0.2));
+  border-color: rgba(244, 67, 54, 0.4);
+  color: #FFCDD2;
+}
+
+.sidebar-message.success {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(56, 142, 60, 0.2));
+  border-color: rgba(76, 175, 80, 0.4);
+  color: #C8E6C9;
+}
+
+.sidebar-message.loading {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(30, 136, 229, 0.2));
+  border-color: rgba(33, 150, 243, 0.4);
+  color: #BBDEFB;
+  animation: pulse var(--game-animation-pulse);
+}
+
+/* 사이드바 컴팩트 모드 (더 작은 화면용) */
+.right-sidebar.compact {
+  padding: var(--game-spacing-sm);
+  gap: var(--game-spacing-md);
+}
+
+.right-sidebar.compact .sidebar-section {
+  padding: var(--game-spacing-sm);
+  gap: var(--game-spacing-xs);
+}
+
+.right-sidebar.compact .sidebar-section h4 {
+  font-size: 0.8rem;
+  margin-bottom: var(--game-spacing-xs);
+}
+
+.right-sidebar.compact .sidebar-stats .stat-value {
+  min-height: 38px;
+  padding: var(--game-spacing-xs);
+  font-size: 0.85rem;
+}
+
+.right-sidebar.compact .sidebar-controls .control-btn {
+  padding: var(--game-spacing-xs) var(--game-spacing-sm);
+  min-height: 35px;
+  font-size: 0.8rem;
+}
+
+/* 사이드바 애니메이션 */
+.right-sidebar {
+  transition: transform var(--game-transition-normal), opacity var(--game-transition-normal);
+}
+
+.right-sidebar.slide-in {
+  animation: slideInFromRight var(--game-transition-slow) ease-out;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 사이드바 숨김/표시 토글 애니메이션 */
+.right-sidebar.hidden {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.right-sidebar.visible {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}

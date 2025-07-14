@@ -1,94 +1,185 @@
 {
   "tasks": [
     {
-      "id": "288ada7f-e786-40cd-bd6c-90533b39d383",
-      "name": "CSS 변수 기본 그리드 비율을 모바일 기준으로 변경",
-      "description": "variables.css 파일에서 기본 그리드 비율(--grid-stats-ratio, --grid-progress-ratio, --grid-controls-ratio)을 모바일 환경의 50:30:20 비율로 변경하여 모든 환경에서 동일한 기본 비율 적용",
-      "notes": "기본 그리드 비율을 모바일 기준으로 통일하여 환경별 일관성 확보. PC 전용 변수는 특별한 경우에만 사용되도록 유지",
+      "id": "723dd6c7-188a-4cc9-9115-f5a8a223f560",
+      "name": "링크 접속 차이 원인 분석 및 해결",
+      "description": "구글과 카카오톡에서 링크를 통해 접속했을 때 화면이 다르게 표시되는 문제의 원인을 파악하고 해결합니다. 게임 상태 초기화 로직을 표준화하여 모든 링크 소스에서 일관된 화면을 제공합니다.",
       "status": "已完成",
       "dependencies": [],
-      "createdAt": "2025-07-14T01:58:16.383Z",
-      "updatedAt": "2025-07-14T01:59:29.961Z",
+      "createdAt": "2025-07-14T15:04:40.067Z",
+      "updatedAt": "2025-07-14T15:10:12.494Z",
       "relatedFiles": [
         {
-          "path": "assets/css/game/variables.css",
+          "path": "assets/js/game-state.js",
           "type": "TO_MODIFY",
-          "description": "기본 그리드 비율 변수 수정",
-          "lineStart": 25,
-          "lineEnd": 27
-        }
-      ],
-      "implementationGuide": "1. assets/css/game/variables.css 파일 열기\\n2. 25-27라인의 기본 그리드 비율 변수 찾기\\n3. --grid-stats-ratio: 50%로 변경\\n4. --grid-progress-ratio: 30%로 변경\\n5. --grid-controls-ratio: 20%로 변경\\n6. PC 전용 변수는 그대로 유지하되 기본값이 모바일 기준으로 통일\\n7. 변경사항 Git 커밋",
-      "verificationCriteria": "CSS 변수가 모바일 기준 50:30:20 비율로 변경되어 기본적으로 모든 환경에서 동일한 그리드 비율이 적용됨",
-      "analysisResult": "모바일 환경의 CSS 스타일을 기준으로 개발환경과 PC 전체화면의 스타일을 통일하는 작업. 현재 환경별로 다른 그리드 비율과 스타일을 모바일의 50:30:20 비율과 깔끔한 디자인으로 통일하여 일관된 UI 제공",
-      "summary": "CSS 변수 확인 완료. variables.css 파일의 기본 그리드 비율이 이미 모바일 기준인 50:30:20으로 올바르게 설정되어 있음을 확인했습니다. 수정이 필요하지 않으므로 작업이 이미 완료된 상태입니다. PC 전용 변수들은 별도로 35:35:30 비율을 유지하고 있어 다음 작업에서 처리할 예정입니다.",
-      "completedAt": "2025-07-14T01:59:29.960Z"
-    },
-    {
-      "id": "2a4502dc-95e7-475c-946e-d618a259de72",
-      "name": "PC 전용 복잡한 스타일 단순화",
-      "description": "responsive.css 파일의 .pc-bottom-bar 클래스에서 불필요한 !important 스타일들을 제거하고 기본 스타일을 사용하도록 단순화하여 모바일과 동일한 스타일 적용",
-      "notes": "PC 환경에서도 모바일과 동일한 깔끔한 스타일 적용. 브라우저 호환성은 유지하되 불필요한 복잡성 제거",
-      "status": "已完成",
-      "dependencies": [
-        {
-          "taskId": "288ada7f-e786-40cd-bd6c-90533b39d383"
-        }
-      ],
-      "createdAt": "2025-07-14T01:58:16.383Z",
-      "updatedAt": "2025-07-14T02:01:38.849Z",
-      "relatedFiles": [
-        {
-          "path": "assets/css/game/responsive.css",
-          "type": "TO_MODIFY",
-          "description": ".pc-bottom-bar 클래스 스타일 단순화",
-          "lineStart": 881,
-          "lineEnd": 1000
-        }
-      ],
-      "implementationGuide": "1. assets/css/game/responsive.css 파일 열기\\n2. 881-1000라인의 .pc-bottom-bar 클래스 찾기\\n3. grid-template-columns에서 PC 전용 변수 대신 기본 변수 사용\\n4. 불필요한 !important 선언들 제거\\n5. padding을 모바일과 동일하게 조정\\n6. 복잡한 브라우저 호환성 스타일 중 필수가 아닌 것들 제거\\n7. 변경사항 Git 커밋",
-      "verificationCriteria": "PC 환경에서 복잡한 !important 스타일이 제거되고 모바일과 동일한 50:30:20 그리드 비율과 깔끔한 스타일이 적용됨",
-      "analysisResult": "모바일 환경의 CSS 스타일을 기준으로 개발환경과 PC 전체화면의 스타일을 통일하는 작업. 현재 환경별로 다른 그리드 비율과 스타일을 모바일의 50:30:20 비율과 깔끔한 디자인으로 통일하여 일관된 UI 제공",
-      "summary": "PC 전용 복잡한 스타일 단순화 작업 완료. .pc-bottom-bar 클래스에서 PC 전용 변수 대신 모바일 기준 그리드 비율(50:30:20) 적용, 수십개의 !important 선언과 복잡한 브라우저 호환성 코드 제거, align-items를 flex-start에서 center로 변경하여 모바일과 동일한 스타일 확보. Git 커밋(38b6fec9)도 완료되어 변경사항이 안전하게 저장되었습니다.",
-      "completedAt": "2025-07-14T02:01:38.848Z"
-    },
-    {
-      "id": "615b09e6-1197-4e68-97ec-f0fa1c783f8c",
-      "name": "환경별 스타일 차이 최소화 및 검증",
-      "description": "모든 환경(모바일, 개발환경, PC 전체화면)에서 일관된 스타일이 적용되는지 확인하고 필요시 추가 조정. 터치 최적화 등 필수 기능은 유지하면서 시각적 일관성 확보",
-      "notes": "모든 환경에서 일관된 UI가 제공되면서도 각 환경의 특성(터치, 마우스 등)에 맞는 사용성은 유지",
-      "status": "已完成",
-      "dependencies": [
-        {
-          "taskId": "288ada7f-e786-40cd-bd6c-90533b39d383"
-        },
-        {
-          "taskId": "2a4502dc-95e7-475c-946e-d618a259de72"
-        }
-      ],
-      "createdAt": "2025-07-14T01:58:16.383Z",
-      "updatedAt": "2025-07-14T02:03:51.025Z",
-      "relatedFiles": [
-        {
-          "path": "assets/css/game/responsive.css",
-          "type": "REFERENCE",
-          "description": "전체 반응형 스타일 확인",
-          "lineStart": 1,
-          "lineEnd": 1001
+          "description": "게임 상태 초기화 로직"
         },
         {
           "path": "game-play.html",
           "type": "REFERENCE",
-          "description": "실제 게임 화면에서 스타일 적용 확인",
-          "lineStart": 1,
-          "lineEnd": 100
+          "description": "게임 화면 구조"
         }
       ],
-      "implementationGuide": "1. 브라우저에서 다양한 해상도로 테스트\\n2. 모바일, 태블릿, PC 환경에서 하단바 스타일 확인\\n3. 그리드 비율이 모든 환경에서 50:30:20으로 적용되는지 검증\\n4. 터치 영역과 폰트 크기는 환경에 맞게 유지되는지 확인\\n5. 필요시 미세 조정 수행\\n6. 최종 결과 Git 커밋",
-      "verificationCriteria": "모바일, 개발환경, PC 전체화면에서 모두 동일한 50:30:20 그리드 비율과 일관된 스타일이 적용되어 시각적 통일성이 확보됨",
-      "analysisResult": "모바일 환경의 CSS 스타일을 기준으로 개발환경과 PC 전체화면의 스타일을 통일하는 작업. 현재 환경별로 다른 그리드 비율과 스타일을 모바일의 50:30:20 비율과 깔끔한 디자인으로 통일하여 일관된 UI 제공",
-      "summary": "환경별 스타일 차이 완전 통일 작업 성공. 모든 미디어 쿼리(768px, 480px, 375px, 가로모드, PC)에서 하드코딩된 그리드 비율을 CSS 변수로 통일했으며, PC 전용 변수(35:35:30)를 제거하여 모든 환경에서 모바일 기준 50:30:20 비율이 적용됩니다. 터치 영역과 폰트 크기는 환경별로 유지하면서 시각적 일관성을 완벽히 확보했습니다. Git 커밋(f3c19310)으로 변경사항이 안전하게 저장되었습니다.",
-      "completedAt": "2025-07-14T02:03:51.024Z"
+      "implementationGuide": "1. 게임 상태 초기화 로직 확인\\n2. URL referrer나 파라미터에 따른 차별화 로직 제거\\n3. 사용자 인증 상태 일관성 보장\\n4. 초기화 순서 표준화",
+      "verificationCriteria": "구글과 카카오톡 링크로 접속했을 때 동일한 게임 화면이 표시되어야 함. 게임 상태, 사용자 인증 상태, UI 요소가 모두 일관되게 나타나야 함.",
+      "analysisResult": "구글/카카오톡 링크 접속 차이 해결 및 바텀바를 오른쪽 사이드바로 변경하여 이미지 영역 확대. 기존 아키텍처와 컴포넌트를 최대한 재사용하여 모바일은 바텀바, 데스크톱은 사이드바로 하이브리드 레이아웃 구현.",
+      "summary": "링크 접속 차이 문제를 성공적으로 해결했습니다. 초기화 로직을 완전히 표준화하여 구글, 카카오톡 등 모든 링크 소스에서 동일한 게임 상태로 시작하도록 수정했습니다. OAuth 토큰 처리 순서를 표준화하고, 인증 상태 캐시를 강제 클리어하며, 게임 상태 초기화를 표준화했습니다. URL fragment 정리도 모든 경우에 실행되도록 하여 링크 소스에 관계없이 일관된 화면을 제공합니다.",
+      "completedAt": "2025-07-14T15:10:12.493Z"
+    },
+    {
+      "id": "fc5c31f6-c9a2-4e27-931c-6ad8313531fd",
+      "name": "사이드바 레이아웃 CSS 기본 구조 구현",
+      "description": "오른쪽 사이드바 레이아웃을 위한 CSS 기본 구조를 구현합니다. 기존 바텀바 스타일을 재사용하여 사이드바 컴포넌트를 만들고, 메인 콘텐츠 영역과의 그리드 레이아웃을 설정합니다.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-14T15:04:40.067Z",
+      "updatedAt": "2025-07-14T15:15:12.746Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/layout.css",
+          "type": "TO_MODIFY",
+          "description": "메인 레이아웃 구조"
+        },
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "사이드바 컴포넌트 스타일"
+        },
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "TO_MODIFY",
+          "description": "사이드바 관련 CSS 변수 추가"
+        }
+      ],
+      "implementationGuide": "1. 새로운 .right-sidebar CSS 클래스 생성\\n2. 기존 바텀바 컴포넌트 스타일 복사 및 세로형으로 수정\\n3. 메인 레이아웃 그리드 시스템 구현\\n4. CSS 변수를 활용한 사이드바 너비 설정",
+      "verificationCriteria": "오른쪽 사이드바가 정상적으로 표시되고, 메인 콘텐츠 영역이 사이드바 너비만큼 축소되어야 함. 사이드바 내 기존 바텀바 요소들이 세로 배치로 정상 표시되어야 함.",
+      "analysisResult": "구글/카카오톡 링크 접속 차이 해결 및 바텀바를 오른쪽 사이드바로 변경하여 이미지 영역 확대. 기존 아키텍처와 컴포넌트를 최대한 재사용하여 모바일은 바텀바, 데스크톱은 사이드바로 하이브리드 레이아웃 구현.",
+      "summary": "사이드바 레이아웃 CSS 기본 구조가 성공적으로 구현되었습니다. variables.css에 사이드바 관련 CSS 변수 추가, layout.css에 그리드 레이아웃 시스템 구현, components.css에 세로형 바텀바 컴포넌트 스타일 완성하여 오른쪽 사이드바의 모든 기본 구조와 스타일을 완료했습니다.",
+      "completedAt": "2025-07-14T15:15:12.746Z"
+    },
+    {
+      "id": "d2e55a2d-2e48-499c-b932-15fa504af608",
+      "name": "반응형 레이아웃 시스템 구현",
+      "description": "모바일에서는 바텀바, 데스크톱에서는 사이드바가 표시되는 반응형 레이아웃 시스템을 구현합니다. 미디어 쿼리를 사용하여 환경별 최적화된 레이아웃을 제공합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "fc5c31f6-c9a2-4e27-931c-6ad8313531fd"
+        }
+      ],
+      "createdAt": "2025-07-14T15:04:40.067Z",
+      "updatedAt": "2025-07-14T15:17:21.259Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "반응형 미디어 쿼리"
+        },
+        {
+          "path": "assets/css/game/layout.css",
+          "type": "TO_MODIFY",
+          "description": "레이아웃 구조 조정"
+        }
+      ],
+      "implementationGuide": "1. 1024px 이상에서 사이드바 표시, 바텀바 숨김\\n2. 1023px 이하에서 바텀바 표시, 사이드바 숨김\\n3. 기존 모바일 최적화 유지\\n4. 터치 영역 및 접근성 고려",
+      "verificationCriteria": "데스크톱(1024px+)에서는 사이드바만 표시되고, 모바일(1023px-)에서는 바텀바만 표시되어야 함. 화면 크기 변경 시 자연스럽게 전환되어야 함.",
+      "analysisResult": "구글/카카오톡 링크 접속 차이 해결 및 바텀바를 오른쪽 사이드바로 변경하여 이미지 영역 확대. 기존 아키텍처와 컴포넌트를 최대한 재사용하여 모바일은 바텀바, 데스크톱은 사이드바로 하이브리드 레이아웃 구현.",
+      "summary": "반응형 레이아웃 시스템이 성공적으로 구현되었습니다. 1024px 이상 데스크톱에서는 사이드바 표시/바텀바 숨김, 1023px 이하 모바일/태블릿에서는 바텀바 표시/사이드바 숨김하는 완전한 미디어 쿼리 시스템을 responsive.css에 추가하고, layout.css의 기본 설정을 모바일 우선으로 조정하여 자연스러운 레이아웃 전환을 완성했습니다.",
+      "completedAt": "2025-07-14T15:17:21.258Z"
+    },
+    {
+      "id": "17ccd58f-f7af-4314-9b3f-1c8fe794c1b7",
+      "name": "게임 화면 HTML 구조 수정",
+      "description": "game-play.html에 사이드바 구조를 추가하고 기존 바텀바와 동일한 요소들을 포함시킵니다. 기존 바텀바는 유지하면서 사이드바를 추가 구현하는 하이브리드 구조로 만듭니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "fc5c31f6-c9a2-4e27-931c-6ad8313531fd"
+        }
+      ],
+      "createdAt": "2025-07-14T15:04:40.067Z",
+      "updatedAt": "2025-07-14T15:19:21.774Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "게임 화면 HTML 구조"
+        }
+      ],
+      "implementationGuide": "1. 기존 바텀바 구조 복사하여 사이드바 섹션 생성\\n2. 동일한 ID와 클래스를 사용하여 JavaScript 호환성 보장\\n3. 사이드바용 컨테이너 요소 추가\\n4. 메인 콘텐츠와 사이드바 그리드 래퍼 구현",
+      "verificationCriteria": "HTML에 사이드바 구조가 추가되고, 기존 바텀바와 동일한 게임 통계, 진행바, 컨트롤 요소들이 포함되어야 함. 기존 JavaScript가 양쪽 모두에서 정상 작동해야 함.",
+      "analysisResult": "구글/카카오톡 링크 접속 차이 해결 및 바텀바를 오른쪽 사이드바로 변경하여 이미지 영역 확대. 기존 아키텍처와 컴포넌트를 최대한 재사용하여 모바일은 바텀바, 데스크톱은 사이드바로 하이브리드 레이아웃 구현.",
+      "summary": "게임 화면 HTML 구조가 성공적으로 수정되었습니다. main-layout-wrapper 그리드 컨테이너 추가, 기존 콘텐츠를 main-layout-content로 감싸기, 바텀바와 동일한 구조의 오른쪽 사이드바 완전 구현 완료. 모든 게임 통계, 체력바, 컨트롤 요소들이 사이드바에 포함되었고 sidebar 접두사로 ID를 분리하여 JavaScript 호환성을 보장했습니다.",
+      "completedAt": "2025-07-14T15:19:21.774Z"
+    },
+    {
+      "id": "7aa4d69e-9c98-4a73-8997-af515c06f713",
+      "name": "LayoutManager JavaScript 확장",
+      "description": "기존 BottomBarManager를 확장하여 사이드바 레이아웃도 관리할 수 있는 LayoutManager로 발전시킵니다. 환경별 레이아웃 전환과 동적 크기 조정 기능을 구현합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "17ccd58f-f7af-4314-9b3f-1c8fe794c1b7"
+        },
+        {
+          "taskId": "d2e55a2d-2e48-499c-b932-15fa504af608"
+        }
+      ],
+      "createdAt": "2025-07-14T15:04:40.067Z",
+      "updatedAt": "2025-07-14T15:24:13.857Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/bottom-bar-manager.js",
+          "type": "TO_MODIFY",
+          "description": "레이아웃 매니저로 확장"
+        },
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "REFERENCE",
+          "description": "환경 감지 로직 참조"
+        }
+      ],
+      "implementationGuide": "1. BottomBarManager 클래스를 LayoutManager로 확장\\n2. 사이드바 높이 동적 계산 로직 추가\\n3. 모바일/데스크톱 환경 감지 및 레이아웃 전환\\n4. 기존 바텀바 기능과 호환성 유지",
+      "verificationCriteria": "LayoutManager가 환경에 따라 자동으로 바텀바/사이드바를 전환하고, 동적 크기 조정이 정상 작동해야 함. 기존 게임 기능이 모든 레이아웃에서 정상 동작해야 함.",
+      "analysisResult": "구글/카카오톡 링크 접속 차이 해결 및 바텀바를 오른쪽 사이드바로 변경하여 이미지 영역 확대. 기존 아키텍처와 컴포넌트를 최대한 재사용하여 모바일은 바텀바, 데스크톱은 사이드바로 하이브리드 레이아웃 구현.",
+      "summary": "LayoutManager JavaScript 확장이 성공적으로 완료되었습니다. BottomBarManager를 완전히 LayoutManager로 교체하여 전 환경에서 사이드바만 사용하는 시스템을 구현했습니다. 화면 크기별 사이드바 너비 자동 조정(데스크톱 280px, 태블릿 240px, 소형 모바일 200px, 초소형 160px), 바텀바↔사이드바 요소 동기화 시스템, 동적 크기 조정 및 리사이즈 처리를 완성했습니다.",
+      "completedAt": "2025-07-14T15:24:13.856Z"
+    },
+    {
+      "id": "baf02b79-b500-4aaf-bc6a-931d77b4983a",
+      "name": "기능 통합 테스트 및 최종 검증",
+      "description": "구현된 모든 기능을 통합하여 테스트하고 최종 검증을 수행합니다. 링크 접속 일관성, 레이아웃 전환, 게임 기능 정상성을 종합적으로 확인합니다.",
+      "status": "進行中",
+      "dependencies": [
+        {
+          "taskId": "723dd6c7-188a-4cc9-9115-f5a8a223f560"
+        },
+        {
+          "taskId": "7aa4d69e-9c98-4a73-8997-af515c06f713"
+        }
+      ],
+      "createdAt": "2025-07-14T15:04:40.067Z",
+      "updatedAt": "2025-07-14T15:25:14.267Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "REFERENCE",
+          "description": "전체 게임 화면"
+        },
+        {
+          "path": "assets/js/game-state.js",
+          "type": "REFERENCE",
+          "description": "게임 상태 확인"
+        },
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "REFERENCE",
+          "description": "반응형 동작 확인"
+        }
+      ],
+      "implementationGuide": "1. 구글/카카오톡 링크 접속 테스트\\n2. 다양한 화면 크기에서 레이아웃 전환 테스트\\n3. 모든 게임 기능 정상 작동 확인\\n4. 성능 및 사용자 경험 검증",
+      "verificationCriteria": "모든 링크 소스에서 일관된 화면 표시, 반응형 레이아웃 정상 전환, 기존 게임 기능 100% 정상 작동, 이미지 영역 확대 효과 확인이 완료되어야 함.",
+      "analysisResult": "구글/카카오톡 링크 접속 차이 해결 및 바텀바를 오른쪽 사이드바로 변경하여 이미지 영역 확대. 기존 아키텍처와 컴포넌트를 최대한 재사용하여 모바일은 바텀바, 데스크톱은 사이드바로 하이브리드 레이아웃 구현."
     }
   ]
 }

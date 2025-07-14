@@ -236,30 +236,59 @@ const healthBarSystem = {
     // 체력바 텍스트 업데이트
     this.healthBarText.textContent = `${percentage}%`;
     
-    // 체력 상태에 따른 색상 변경
-    this.updateHealthBarColor(percentage);
-  },
-  /**
-   * 체력 상태에 따른 색상 변경
-   */
-  updateHealthBarColor(percentage) {
-    if (!this.healthBarFill) return;
+    // 체력바 색상 업데이트 (단계별 색상 변경)
+    this.healthBarFill.className = 'health-bar-fill'; // 기본 클래스 리셋
     
-    // 기존 클래스 제거
-    this.healthBarFill.classList.remove('good', 'low', 'warning', 'critical');
+    if (percentage <= 10) {
+      this.healthBarFill.classList.add('critical'); // 위험 (10% 이하)
+    } else if (percentage <= 30) {
+      this.healthBarFill.classList.add('warning');  // 경고 (30% 이하)
+    } else if (percentage <= 50) {
+      this.healthBarFill.classList.add('caution');  // 주의 (50% 이하)
+    } else {
+      this.healthBarFill.classList.add('safe');     // 안전 (50% 초과)
+    }
     
-    // 체력 상태에 따른 클래스 추가
-    if (percentage > 60) {
-      this.healthBarFill.classList.add('good');
-    } else if (percentage > 40) {
-      this.healthBarFill.classList.add('low');
-    } else if (percentage > 20) {
-      this.healthBarFill.classList.add('warning');
+    // ✅ 사이드바 체력바 동기화 (새로 추가된 로직)
+    if (window.layoutManager && typeof window.layoutManager.syncToSidebar === 'function') {
+      // 사이드바 체력바 너비 업데이트
+      const sidebarHealthBarFill = document.getElementById('sidebarHealthBarFill');
+      if (sidebarHealthBarFill) {
+        sidebarHealthBarFill.style.width = `${percentage}%`;
+        
+        // 사이드바 체력바 색상도 동일하게 적용
+        sidebarHealthBarFill.className = 'health-bar-fill';
+        if (percentage <= 10) {
+          sidebarHealthBarFill.classList.add('critical');
+        } else if (percentage <= 30) {
+          sidebarHealthBarFill.classList.add('warning');
+        } else if (percentage <= 50) {
+          sidebarHealthBarFill.classList.add('caution');
+        } else {
+          sidebarHealthBarFill.classList.add('safe');
+        }
+      }
+      
+      // 사이드바 체력바 텍스트 업데이트
+      const sidebarHealthBarText = document.getElementById('sidebarHealthBarText');
+      if (sidebarHealthBarText) {
+        sidebarHealthBarText.textContent = `${percentage}%`;
+      }
+      
+      console.log('💪 사이드바 체력바 동기화 완료:', percentage + '%');
+    }
+    
+    // 사용자 피드백: 체력 단계별 체력바 깜박임 효과
+    if (percentage <= 10 && percentage > 0) {
+      // 10% 이하일 때 빠른 깜박임 효과
+      this.healthBarFill.style.animation = 'healthBarBlink 0.5s infinite';
+    } else if (percentage <= 30) {
+      // 30% 이하일 때 느린 깜박임 효과
+      this.healthBarFill.style.animation = 'healthBarBlink 1s infinite';
     } else {
       this.healthBarFill.classList.add('critical');
     }
-  },
-  
+  }
   /**
    * 체력 강제 설정 (디버그용)
    */

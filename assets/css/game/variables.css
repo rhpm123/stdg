@@ -14,6 +14,13 @@
   --game-header-height: 45px;
   --game-bottom-bar-height: 55px;
   --game-bottom-bar-compact-height: 35px;
+  
+  /* 사이드바 레이아웃 변수 (새로 추가) */
+  --game-right-sidebar-width: 280px;
+  --game-right-sidebar-min-width: 240px;
+  --game-right-sidebar-max-width: 320px;
+  --game-main-content-with-sidebar: calc(100% - var(--game-right-sidebar-width));
+  
   --game-spacing-xs: 4px;
   --game-spacing-sm: 8px;
   --game-spacing-md: 16px;

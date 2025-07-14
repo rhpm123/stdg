@@ -42,8 +42,16 @@ class HeartSystem {
   // UI 업데이트
   updateUI() {
     const heartDisplay = document.getElementById('heartDisplay') || document.getElementById('lives');
+    const heartText = '❤️'.repeat(this.currentHearts) + '🤍'.repeat(this.maxHearts - this.currentHearts);
+    
     if (heartDisplay) {
-      heartDisplay.innerHTML = '❤️'.repeat(this.currentHearts) + '🤍'.repeat(this.maxHearts - this.currentHearts);
+      heartDisplay.innerHTML = heartText;
+    }
+    
+    // ✅ 사이드바 생명 동기화 (새로 추가된 로직)
+    if (window.layoutManager && typeof window.layoutManager.syncToSidebar === 'function') {
+      window.layoutManager.syncToSidebar('lives', heartText);
+      console.log('💖 사이드바 하트 동기화 완료');
     }
   }
 
@@ -56,35 +64,32 @@ class HeartSystem {
   hasHearts() {
     return this.currentHearts > 0;
   }
+
+  // 하트 시스템 리셋
+  reset() {
+    this.currentHearts = this.maxHearts;
+    this.updateUI();
+    console.log('🔄 하트 시스템 리셋됨');
+  }
+
+  // 하트 수 설정
+  setHearts(count) {
+    this.currentHearts = Math.max(0, Math.min(count, this.maxHearts));
+    this.updateUI();
+    console.log(`💝 하트 수 설정됨: ${this.currentHearts}`);
+  }
+
+  // 시스템 상태 확인
+  getStatus() {
+    return {
+      current: this.currentHearts,
+      max: this.maxHearts,
+      percentage: (this.currentHearts / this.maxHearts) * 100,
+      isEmpty: this.currentHearts === 0,
+      isFull: this.currentHearts === this.maxHearts
+    };
+  }
 }
 
-// 전역 하트 시스템 인스턴스
-const heartSystem = new HeartSystem();
-
-// 로그인된 사용자용 하트 시스템을 전역으로 노출
-window.heartSystem = {
-  init: (userId = null) => {
-    if (userId) {
-      console.log('💖 인증된 사용자: 하트 시스템 활성화');
-      return heartSystem.init();
-    } else {
-    console.log('🎮 게스트 모드: 하트 시스템 비활성화');
-    return window.heartSystem;
-    }
-  },
-  useHeart: () => {
-    return heartSystem.useHeart();
-  },
-  restoreHeart: () => {
-    return heartSystem.restoreHeart();
-  },
-  getCurrentHearts: () => {
-    return heartSystem.getCurrentHearts();
-  },
-  hasHearts: () => {
-    return heartSystem.hasHearts();
-  },
-  updateUI: () => {
-    return heartSystem.updateUI();
-  }
-}; 
+// 전역 하트 시스템 인스턴스 생성
+window.heartSystem = new HeartSystem(); 
