@@ -290,21 +290,21 @@ const healthBarSystem = {
       this.healthBarFill.style.animation = 'none';
       this.healthBarFill.classList.remove('critical');
     }
-  }
+  },
   /**
    * 체력 강제 설정 (디버그용)
    */
   setHealth(percentage) {
     this.currentHealth = Math.max(0, Math.min(100, percentage));
     this.updateDisplay();
-  }
+  },
   
   /**
    * 현재 체력 반환
    */
   getHealth() {
     return this.currentHealth;
-  }
+  },
   
   /**
    * 체력바 표시 여부 확인
@@ -318,6 +318,12 @@ const healthBarSystem = {
 if (typeof window !== 'undefined') {
   window.healthBarSystem = healthBarSystem;
   console.log('✅ healthBarSystem이 window 객체에 등록되었습니다!');
+  
+  // 새로운 모듈 로더 시스템에 등록
+  if (typeof registerModule === 'function') {
+    registerModule('healthBarSystem', healthBarSystem, ['gameState', 'layoutManager']);
+    console.log('🔧 healthBarSystem이 모듈 로더에 등록되었습니다.');
+  }
 }
 
 // 모듈 시스템 지원
