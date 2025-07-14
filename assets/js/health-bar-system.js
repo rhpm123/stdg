@@ -295,7 +295,7 @@ const healthBarSystem = {
   setHealth(percentage) {
     this.currentHealth = Math.max(0, Math.min(100, percentage));
     this.updateDisplay();
-  },
+  }
   
   /**
    * 현재 체력 반환
