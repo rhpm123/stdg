@@ -270,3 +270,31 @@ if (typeof module !== 'undefined' && module.exports) {
     getTodayDateString
   };
 } 
+
+// 브라우저 환경에서만 전역 스코프에 등록
+if (typeof window !== 'undefined') {
+  // 개별 함수들을 전역에 노출
+  window.getImageSetId = getImageSetId;
+  window.resetGameState = resetGameState;
+  window.startGameState = startGameState;
+  window.togglePauseState = togglePauseState;
+  window.addScore = addScore;
+  window.addFoundPoint = addFoundPoint;
+  window.isGameComplete = isGameComplete;
+  window.updateElapsedTime = updateElapsedTime;
+  window.setGameData = setGameData;
+  window.getTodayDateString = getTodayDateString;
+  window.loadDailyHintData = loadDailyHintData;
+  window.saveDailyHintData = saveDailyHintData;
+  window.incrementHintUsage = incrementHintUsage;
+  
+  // 모듈 객체도 전역에 노출
+  window.gameState = gameState;
+  console.log('✅ gameState 모듈이 전역에 등록되었습니다!', Object.keys(gameState));
+  
+  // 새로운 모듈 로더 시스템에 등록 (의존성 없음)
+  if (typeof registerModule === 'function') {
+    registerModule('gameState', gameState, []);
+    console.log('🔧 gameState가 모듈 로더에 등록되었습니다.');
+  }
+} 
