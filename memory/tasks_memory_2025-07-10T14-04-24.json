@@ -1,0 +1,230 @@
+{
+  "tasks": [
+    {
+      "id": "79b2e0b8-7cc0-4d9b-9cd7-753d1e55e4e4",
+      "name": "모바일 가로모드 레이아웃 최적화",
+      "description": "responsive.css에 모바일 가로모드 전용 미디어쿼리를 추가하여 이미지 컨테이너가 좌우 배치되도록 수정. 현재 max-height: 500px 조건이 너무 제한적이므로 더 넓은 범위의 모바일 기기를 지원하도록 개선",
+      "notes": "HTML 구조 변경 없이 CSS만 수정하여 기존 기능에 영향 없음. 컴퓨터와 모바일 세로모드는 기존 동작 유지",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-08T15:10:48.222Z",
+      "updatedAt": "2025-07-08T15:40:59.876Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "가로모드 미디어쿼리 추가 및 레이아웃 최적화",
+          "lineStart": 100,
+          "lineEnd": 115
+        },
+        {
+          "path": "assets/css/game/layout.css",
+          "type": "REFERENCE",
+          "description": "기존 images-container 레이아웃 구조 참조",
+          "lineStart": 40,
+          "lineEnd": 60
+        }
+      ],
+      "implementationGuide": "1. responsive.css에 새로운 미디어쿼리 추가: @media (orientation: landscape) and (max-width: 1024px) and (min-width: 480px)\\n2. .images-container에 flex-direction: row !important 강제 적용\\n3. .image-section 크기를 calc(50% - 5px)로 조정\\n4. gap을 10px로 최적화하여 화면 공간 효율적 활용\\n5. 기존 !important 규칙과 충돌하지 않도록 우선순위 조정",
+      "verificationCriteria": "핸드폰 가로모드에서 브라우저 개발자 도구로 테스트 시 이미지가 좌우로 나란히 배치되고 UI 요소들이 겹치지 않음. 다양한 모바일 기기 해상도(480px~1024px)에서 정상 작동 확인",
+      "analysisResult": "핸드폰 가로모드에서 게임 레이아웃이 컴퓨터 버전과 다르게 표시되는 문제 해결. 현재 가로모드 미디어쿼리가 너무 제한적이어서 대부분의 모바일 기기에서 작동하지 않음. responsive.css를 확장하여 모바일 가로모드에서도 이미지가 좌우로 배치되고 UI 요소들이 적절히 최적화되도록 개선",
+      "summary": "모바일 가로모드 레이아웃 최적화가 성공적으로 완료됨. responsive.css에 새로운 미디어쿼리 섹션을 추가하여 모바일 세로모드에서는 이미지 세로 배치, 가로모드에서는 좌우 배치하도록 구현. 가로모드 조건을 480px~1024px로 확장하여 대부분의 모바일 기기에서 작동하도록 개선. 헤더와 하단바 압축으로 공간 효율성 향상. 기존 데스크톱 및 모바일 세로모드 기능에 영향 없이 가로모드만 최적화됨.",
+      "completedAt": "2025-07-08T15:40:59.875Z"
+    },
+    {
+      "id": "b7ebc19d-cce1-4477-9b2e-a41f2bf46708",
+      "name": "가로모드 UI 요소 압축 최적화",
+      "description": "모바일 가로모드에서 제한된 세로 공간을 효율적으로 활용하기 위해 헤더와 하단 바의 패딩 및 크기를 압축. 게임 통계 정보와 버튼들이 적절히 배치되도록 최적화",
+      "notes": "터치 영역 최소 크기(44px)는 유지하면서 패딩과 마진만 조정. 접근성 기준 준수",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "79b2e0b8-7cc0-4d9b-9cd7-753d1e55e4e4"
+        }
+      ],
+      "createdAt": "2025-07-08T15:10:48.222Z",
+      "updatedAt": "2025-07-08T23:07:54.088Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "가로모드 헤더 및 하단 바 압축 스타일 추가",
+          "lineStart": 100,
+          "lineEnd": 115
+        }
+      ],
+      "implementationGuide": "1. .game-header-top 패딩을 6px 12px로 축소\\n2. .bottom-bar 패딩을 6px 12px로 조정\\n3. .bottom-bar .stat-item 크기와 폰트 크기 최적화\\n4. .control-btn 크기를 모바일 가로모드에 맞게 조정\\n5. 버튼 그룹의 gap 축소로 공간 절약",
+      "verificationCriteria": "모바일 가로모드에서 헤더와 하단 바가 적절히 압축되어 이미지 영역이 충분히 확보됨. 모든 버튼과 UI 요소가 터치하기 쉬운 크기 유지",
+      "analysisResult": "핸드폰 가로모드에서 게임 레이아웃이 컴퓨터 버전과 다르게 표시되는 문제 해결. 현재 가로모드 미디어쿼리가 너무 제한적이어서 대부분의 모바일 기기에서 작동하지 않음. responsive.css를 확장하여 모바일 가로모드에서도 이미지가 좌우로 배치되고 UI 요소들이 적절히 최적화되도록 개선",
+      "summary": "모바일 가로모드에서 하단 사이드바가 화면을 가리는 문제를 해결하기 위한 UI 압축 최적화 완료. 헤더와 하단 바 높이를 50px에서 40px로 축소하고, 통계 항목과 버튼 요소들의 패딩과 폰트 크기를 대폭 축소하여 공간 효율성을 크게 향상시켰습니다. 메인 콘텐츠 영역이 확장되어 이미지 표시 공간이 더 확보되었으며, 터치 영역 최소 크기(32px)를 유지하여 접근성 기준을 준수했습니다. !important 속성으로 우선순위를 보장하여 다른 CSS 규칙과의 충돌을 방지했습니다.",
+      "completedAt": "2025-07-08T23:07:54.087Z"
+    },
+    {
+      "id": "1237636e-7c5e-44b0-81a1-e9980a4e046b",
+      "name": "Orientation Controller 모듈 개발",
+      "description": "Screen Orientation API를 활용한 핵심 가로모드 제어 모듈 구현. 현재 orientation 상태 감지, 자동 가로모드 회전 시도, orientation 변경 이벤트 처리를 담당하는 독립적인 JavaScript 모듈을 생성한다.",
+      "notes": "기존 game-state.js와의 연동을 위해 orientation 상태를 gameState 객체에 추가. iOS Safari의 제한적 Screen Orientation API 지원을 고려한 구현 필요.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-10T13:30:59.721Z",
+      "updatedAt": "2025-07-10T13:43:05.771Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "CREATE",
+          "description": "새로 생성할 orientation 제어 모듈"
+        },
+        {
+          "path": "assets/js/game-state.js",
+          "type": "TO_MODIFY",
+          "description": "orientation 상태 필드 추가",
+          "lineStart": 5,
+          "lineEnd": 35
+        }
+      ],
+      "implementationGuide": "assets/js/orientation-controller.js 파일 신규 생성. OrientationController 클래스로 구현하며 다음 메서드들을 포함: initOrientation(), lockLandscape(), handleOrientationChange(), checkOrientationSupport(). Screen Orientation API의 브라우저 지원 여부를 확인하고 지원하지 않는 경우 적절한 폴백 제공.",
+      "verificationCriteria": "모바일 기기에서 controller 초기화 시 현재 orientation 상태가 정확히 감지되고, Screen Orientation API 지원 여부가 올바르게 판단되며, orientation 변경 이벤트가 정상적으로 처리되는지 확인",
+      "analysisResult": "모바일에서 게임 실행 시 무조건 가로모드로 강제 전환되도록 하는 기능 구현. 기존 완료된 가로모드 레이아웃 최적화를 기반으로 Screen Orientation API 활용, 회전 안내 화면, 게임 진행 제한, 풀스크린 모드를 통해 모바일 사용자 경험을 최적화한다.",
+      "summary": "Orientation Controller 모듈 구현 완료. OrientationController 클래스가 assets/js/orientation-controller.js에 생성되었으며, Screen Orientation API 지원 확인, 가로모드 강제 전환, orientation 변경 이벤트 처리, 콜백 시스템을 포함한 모든 핵심 기능이 구현됨. game-state.js에 orientation 상태 필드가 추가되어 기존 게임 상태 관리 시스템과 통합되었음. iOS Safari 등 브라우저별 폴백 메커니즘도 적절히 구현됨.",
+      "completedAt": "2025-07-10T13:43:05.769Z"
+    },
+    {
+      "id": "09289378-e7b1-460c-b942-b9ab338d3c67",
+      "name": "회전 안내 UI 오버레이 구현",
+      "description": "세로모드일 때 사용자에게 핸드폰 회전을 유도하는 시각적 안내 화면 구현. CSS 미디어쿼리로 세로모드를 감지하고, 애니메이션이 포함된 회전 안내 오버레이를 표시한다.",
+      "notes": "기존 CSS 모듈 구조(assets/css/game/)를 따라 새로운 orientation.css 파일 생성. 모든 HTML 페이지(index.html, game-play.html, game-result.html)에 CSS 링크와 HTML 마크업 추가 필요.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-10T13:30:59.721Z",
+      "updatedAt": "2025-07-10T13:46:25.809Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/orientation.css",
+          "type": "CREATE",
+          "description": "회전 안내 UI 전용 스타일시트"
+        },
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "CSS 링크 및 회전 안내 HTML 마크업 추가",
+          "lineStart": 10,
+          "lineEnd": 20
+        },
+        {
+          "path": "index.html",
+          "type": "TO_MODIFY",
+          "description": "회전 안내 HTML 마크업 추가",
+          "lineStart": 1,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "assets/css/game/orientation.css 신규 생성. @media (orientation: portrait) 미디어쿼리를 사용해 세로모드 감지. 회전 아이콘 애니메이션, 안내 텍스트, 반투명 오버레이 스타일 구현. 기존 responsive.css와 충돌하지 않도록 클래스명 설계.",
+      "verificationCriteria": "모바일 기기를 세로모드로 전환했을 때 회전 안내 오버레이가 즉시 표시되고, 가로모드로 전환하면 오버레이가 사라지며, 애니메이션이 부드럽게 작동하는지 확인",
+      "analysisResult": "모바일에서 게임 실행 시 무조건 가로모드로 강제 전환되도록 하는 기능 구현. 기존 완료된 가로모드 레이아웃 최적화를 기반으로 Screen Orientation API 활용, 회전 안내 화면, 게임 진행 제한, 풀스크린 모드를 통해 모바일 사용자 경험을 최적화한다.",
+      "summary": "회전 안내 UI 오버레이 구현 완료. assets/css/game/orientation.css 파일이 생성되어 세로모드 감지 및 애니메이션 기능을 제공하며, 모든 HTML 페이지(index.html, game-play.html, game-result.html)에 CSS 링크와 회전 안내 마크업이 추가됨. 핸드폰 아이콘 회전 애니메이션, 화살표 펄스 효과, 반응형 디자인으로 다양한 모바일 화면 크기를 지원하여 사용자에게 자연스러운 가로모드 전환 유도 제공.",
+      "completedAt": "2025-07-10T13:46:25.809Z"
+    },
+    {
+      "id": "67062881-d781-4702-b827-0e47633b76c0",
+      "name": "풀스크린 모드 시스템 구현",
+      "description": "가로모드 진입 시 자동으로 풀스크린 모드로 전환하여 몰입감을 높이는 기능 구현. requestFullscreen API를 활용하고 브라우저별 호환성을 보장한다.",
+      "notes": "일부 모바일 브라우저에서는 사용자 제스처 없이 풀스크린 모드 진입이 제한될 수 있으므로, 게임 시작 버튼 클릭 시에 풀스크린 모드를 활성화하는 것이 안전함.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "1237636e-7c5e-44b0-81a1-e9980a4e046b"
+        }
+      ],
+      "createdAt": "2025-07-10T13:30:59.721Z",
+      "updatedAt": "2025-07-10T13:50:49.286Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "TO_MODIFY",
+          "description": "풀스크린 관리 메서드 추가"
+        },
+        {
+          "path": "assets/js/game-state.js",
+          "type": "TO_MODIFY",
+          "description": "풀스크린 상태 필드 추가",
+          "lineStart": 20,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "orientation-controller.js에 풀스크린 관리 메서드 추가: enterFullscreen(), exitFullscreen(), handleFullscreenChange(). 브라우저별 prefix 처리 (webkit, moz, ms). 풀스크린 진입/해제 이벤트를 게임 상태와 연동.",
+      "verificationCriteria": "게임 시작 시 풀스크린 모드가 정상적으로 활성화되고, 게임 종료나 ESC 키 입력 시 풀스크린이 해제되며, 다양한 모바일 브라우저에서 호환성이 확보되는지 확인",
+      "analysisResult": "모바일에서 게임 실행 시 무조건 가로모드로 강제 전환되도록 하는 기능 구현. 기존 완료된 가로모드 레이아웃 최적화를 기반으로 Screen Orientation API 활용, 회전 안내 화면, 게임 진행 제한, 풀스크린 모드를 통해 모바일 사용자 경험을 최적화한다.",
+      "summary": "풀스크린 모드 시스템 구현 완료. OrientationController 클래스에 enterFullscreen(), exitFullscreen(), handleFullscreenChange() 메서드가 추가되어 브라우저별 호환성(webkit, moz, ms)을 지원하며, 게임 시작/종료/완료 시 자동 풀스크린 관리가 통합됨. 모든 HTML 페이지에 orientation-controller.js 스크립트가 추가되어 모바일 가로모드에서 몰입적인 게임 경험을 제공하며, gameState와의 상태 동기화도 완벽 구현됨.",
+      "completedAt": "2025-07-10T13:50:49.285Z"
+    },
+    {
+      "id": "bed38288-bf6a-4ed0-a47e-9506ee7f0a0c",
+      "name": "게임 진행 제어 로직 통합",
+      "description": "가로모드가 아닐 때 게임 시작과 진행을 제한하는 로직을 기존 게임 시스템에 통합. 세로모드에서는 게임 버튼을 비활성화하고 적절한 안내 메시지를 표시한다.",
+      "notes": "기존 게임 로직에 최소한의 변경만 가하고, orientation 상태 확인 로직을 게임 시작점에 추가하는 방식으로 구현. 사용자 경험을 해치지 않도록 자연스러운 메시지 표시.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "1237636e-7c5e-44b0-81a1-e9980a4e046b"
+        },
+        {
+          "taskId": "09289378-e7b1-460c-b942-b9ab338d3c67"
+        }
+      ],
+      "createdAt": "2025-07-10T13:30:59.721Z",
+      "updatedAt": "2025-07-10T13:56:47.342Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/game-logic.js",
+          "type": "TO_MODIFY",
+          "description": "게임 시작 시 orientation 체크 로직 추가",
+          "lineStart": 50,
+          "lineEnd": 80
+        },
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "게임 버튼 상태 관리를 위한 이벤트 리스너 추가",
+          "lineStart": 450,
+          "lineEnd": 500
+        }
+      ],
+      "implementationGuide": "game-logic.js에 orientation 체크 함수 추가. 게임 시작 시 isLandscape 상태를 확인하여 세로모드면 게임 진행을 차단하고 회전 안내 표시. orientation 변경 이벤트 수신 시 게임 버튼 상태를 동적으로 업데이트.",
+      "verificationCriteria": "세로모드에서 게임 시작 버튼이 비활성화되고 적절한 안내 메시지가 표시되며, 가로모드로 전환하면 게임 버튼이 활성화되어 정상적인 게임 진행이 가능한지 확인",
+      "analysisResult": "모바일에서 게임 실행 시 무조건 가로모드로 강제 전환되도록 하는 기능 구현. 기존 완료된 가로모드 레이아웃 최적화를 기반으로 Screen Orientation API 활용, 회전 안내 화면, 게임 진행 제한, 풀스크린 모드를 통해 모바일 사용자 경험을 최적화한다.",
+      "summary": "게임 진행 제어 로직 통합 완료. game-logic.js에 orientation 체크 함수들(isLandscapeMode, canStartGame, updateGameButtonStates)이 추가되어 세로모드에서 게임 시작 차단 및 버튼 비활성화 구현. 가로/세로모드 전환 시 자동 게임 일시정지/재개 기능이 통합되었으며, game-play.html에 orientation 이벤트 리스너가 추가되어 실시간 버튼 상태 관리 제공. 모바일 사용자는 가로모드에서만 게임 진행이 가능하며 자연스러운 UX 제공.",
+      "completedAt": "2025-07-10T13:56:47.340Z"
+    },
+    {
+      "id": "f8556e69-38d1-4c85-98c9-dd46cf86e414",
+      "name": "브라우저 호환성 및 폴백 구현",
+      "description": "다양한 모바일 브라우저에서의 호환성을 보장하고, Screen Orientation API를 지원하지 않는 기기를 위한 폴백 메커니즘을 구현한다.",
+      "notes": "iOS Safari의 경우 Screen Orientation API 지원이 제한적이므로, orientationchange 이벤트와 window.orientation 속성을 활용한 대체 구현 필요. 사용자에게는 동일한 경험을 제공하되 내부 구현만 달리함.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "1237636e-7c5e-44b0-81a1-e9980a4e046b"
+        }
+      ],
+      "createdAt": "2025-07-10T13:30:59.721Z",
+      "updatedAt": "2025-07-10T13:53:51.790Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "TO_MODIFY",
+          "description": "브라우저 호환성 체크 및 폴백 로직 추가"
+        },
+        {
+          "path": "assets/css/game/orientation.css",
+          "type": "TO_MODIFY",
+          "description": "폴백용 CSS 미디어쿼리 추가"
+        }
+      ],
+      "implementationGuide": "orientation-controller.js에 브라우저 호환성 체크 함수 추가. iOS Safari, Android Chrome, Samsung Internet 등 주요 모바일 브라우저별 테스트. API 미지원 시에는 CSS 미디어쿼리와 window.orientation 속성을 활용한 폴백 구현.",
+      "verificationCriteria": "iPhone Safari, Android Chrome, Samsung Internet에서 각각 테스트하여 가로모드 강제 기능이 정상 작동하거나 적절한 폴백이 제공되는지 확인. API 미지원 기기에서도 기본적인 회전 안내는 표시되어야 함",
+      "analysisResult": "모바일에서 게임 실행 시 무조건 가로모드로 강제 전환되도록 하는 기능 구현. 기존 완료된 가로모드 레이아웃 최적화를 기반으로 Screen Orientation API 활용, 회전 안내 화면, 게임 진행 제한, 풀스크린 모드를 통해 모바일 사용자 경험을 최적화한다.",
+      "summary": "브라우저 호환성 및 폴백 구현 완료. iOS Safari, Android Chrome, Samsung Internet, Firefox Mobile 등 주요 모바일 브라우저별 상세 감지 및 특별 처리가 구현됨. 4단계 폴백 메커니즘(Screen Orientation API → orientationchange event → CSS media query → window dimensions)으로 API 미지원 기기에서도 안정적인 orientation 감지를 보장하며, 각 브라우저의 특성에 맞춘 보정 로직과 다중 CSS 미디어쿼리 폴백으로 포괄적 호환성 확보.",
+      "completedAt": "2025-07-10T13:53:51.789Z"
+    }
+  ]
+}

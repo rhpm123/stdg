@@ -1,0 +1,35 @@
+{
+  "tasks": [
+    {
+      "id": "d27d165a-b01b-47be-bd5f-ff419b781ab2",
+      "name": "힌트 버튼 크기 stat-value와 일관성 맞추기",
+      "description": "assets/css/game/components.css 파일의 .hint-btn-compact 클래스에서 font-size를 12px에서 0.85rem으로, padding을 4px 8px에서 var(--game-spacing-xs) var(--game-spacing-sm)으로 변경하여 다른 stat-value 요소들과 시각적 일관성 확보",
+      "notes": "다른 stat-value 요소들 중 가장 작은 폰트 크기인 0.85rem과 동일하게 맞춰서 시각적 일관성 확보. CSS 변수 기반 패딩 사용으로 디자인 시스템 일관성 유지",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-14T01:46:11.391Z",
+      "updatedAt": "2025-07-14T01:48:33.595Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": ".hint-btn-compact 클래스 스타일 수정",
+          "lineStart": 399,
+          "lineEnd": 427
+        },
+        {
+          "path": "game-play.html",
+          "type": "REFERENCE",
+          "description": "힌트 버튼이 실제 사용되는 HTML 구조 확인용",
+          "lineStart": 90,
+          "lineEnd": 90
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/components.css 파일 열기\\n2. 399~427라인의 .hint-btn-compact 클래스 찾기\\n3. font-size: 12px를 font-size: 0.85rem으로 변경\\n4. padding: 4px 8px를 padding: var(--game-spacing-xs) var(--game-spacing-sm)으로 변경\\n5. 다른 속성들(min-height, background, border 등)은 그대로 유지\\n6. 변경사항 Git 커밋",
+      "verificationCriteria": "힌트 버튼의 폰트 크기가 0.85rem으로 변경되어 다른 작은 stat-value들과 동일한 크기가 되고, 패딩이 CSS 변수 기반으로 변경되어 디자인 시스템 일관성이 확보됨. 브라우저에서 확인했을 때 힌트 버튼이 다른 stat-value 요소들과 시각적으로 조화롭게 보임",
+      "analysisResult": "힌트 버튼(.hint-btn-compact) 크기를 다른 stat-value 요소들과 시각적으로 일관되게 맞추는 작업. CSS 변수를 활용하여 폰트 크기와 패딩을 표준화하고 기존 디자인 시스템과의 일관성을 확보함",
+      "summary": "힌트 버튼 크기 조정 작업 성공적으로 완료. .hint-btn-compact 클래스의 font-size를 0.85rem으로 변경하여 다른 작은 stat-value들과 동일한 크기로 맞췄고, padding을 CSS 변수 기반(var(--game-spacing-xs) var(--game-spacing-sm))으로 변경하여 디자인 시스템 일관성을 확보했습니다. Git 커밋(db5a701e)도 완료하여 변경사항이 안전하게 저장되었습니다.",
+      "completedAt": "2025-07-14T01:48:33.594Z"
+    }
+  ]
+}

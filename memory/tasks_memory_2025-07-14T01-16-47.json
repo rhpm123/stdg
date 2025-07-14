@@ -1,0 +1,168 @@
+{
+  "tasks": [
+    {
+      "id": "a1181508-98fc-482a-ba53-58ad135350e3",
+      "name": "PC 환경 전용 CSS 클래스 및 강력한 스타일 규칙 생성",
+      "description": "기존 CSS 미디어 쿼리와 충돌하지 않는 PC 전용 .pc-bottom-bar 클래스를 생성하고, 모든 CSS 우선순위를 뛰어넘는 강력한 스타일 규칙을 responsive.css에 추가합니다. position: fixed, bottom: 0, height: 55px 등 핵심 속성들을 최고 우선순위로 설정하여 바텀바가 확실히 화면 하단에 표시되도록 보장합니다.",
+      "notes": "기존 모바일 스타일과 완전히 분리된 독립적인 PC 전용 스타일을 생성하여 충돌 방지",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T17:03:52.551Z",
+      "updatedAt": "2025-07-13T17:05:37.197Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "PC 환경 전용 CSS 클래스 및 강력한 스타일 규칙 추가",
+          "lineStart": 821,
+          "lineEnd": 872
+        }
+      ],
+      "implementationGuide": "1. responsive.css 파일에 .pc-bottom-bar 클래스 정의\\n2. 기존 @media (min-width: 1024px) 규칙을 .pc-bottom-bar와 결합\\n3. !important 우선순위를 체계적으로 적용\\n4. position: fixed !important, bottom: 0 !important, left: 0 !important, right: 0 !important\\n5. height: 55px !important, z-index: 9999 !important 설정\\n6. display: grid !important, visibility: visible !important, opacity: 1 !important",
+      "verificationCriteria": "PC 환경에서 .pc-bottom-bar 클래스가 적용된 바텀바가 화면 하단에 55px 높이로 완전히 표시되어야 함",
+      "analysisResult": "PC 환경에서 바텀바가 화면 하단에 표시되지 않는 문제는 CSS 미디어 쿼리 우선순위 충돌과 JavaScript 동적 스타일 설정 간의 상호작용 문제로 확인됨. CSS !important 규칙들이 서로 충돌하고, JavaScript에서 설정하는 CSS 변수가 제대로 적용되지 않아 바텀바가 화면 밖으로 밀려나는 현상 발생. 해결을 위해 PC 환경 전용 독립적인 CSS 클래스와 JavaScript 강제 적용 시스템이 필요함",
+      "summary": "PC 환경 전용 .pc-bottom-bar CSS 클래스를 성공적으로 생성했습니다. z-index: 9999, position: fixed !important, height: 55px !important 등 모든 핵심 속성에 최고 우선순위를 적용하여 기존 CSS 충돌 문제를 해결했습니다. 하위 요소들의 강제 표시 및 브라우저 호환성도 확보했습니다.",
+      "completedAt": "2025-07-13T17:05:37.197Z"
+    },
+    {
+      "id": "0a0f21a9-66de-41c4-946d-36d77c4e4501",
+      "name": "JavaScript PC 환경 감지 및 클래스 적용 시스템 구현",
+      "description": "JavaScript PC 환경 감지 및 클래스 적용 시스템 구현. 추가로 세로 화면에서 main-content와 bottom-bar 사이 거리 문제도 해결해야 함. PC 환경에서 .pc-bottom-bar 클래스를 자동 적용하고, main-content 높이가 viewport에 맞게 조정되도록 하여 보라색 빗금 공간이 사라지게 함",
+      "notes": "기존 desktop 프리셋 로직과 연계하여 일관성 유지, 모바일 기능에는 영향 없도록 PC 환경에서만 실행",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "a1181508-98fc-482a-ba53-58ad135350e3"
+        }
+      ],
+      "createdAt": "2025-07-13T17:03:52.551Z",
+      "updatedAt": "2025-07-13T17:08:45.128Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "TO_MODIFY",
+          "description": "PC 환경 감지 시 .pc-bottom-bar 클래스 자동 적용 로직 추가",
+          "lineStart": 687,
+          "lineEnd": 732
+        },
+        {
+          "path": "assets/js/bottom-bar-manager.js",
+          "type": "REFERENCE",
+          "description": "PC 환경 감지 로직 참조",
+          "lineStart": 30,
+          "lineEnd": 45
+        }
+      ],
+      "implementationGuide": "1. orientation-controller.js에 applyPCBottomBarClass() 메서드 추가\n2. PC 환경 감지 시 .pc-bottom-bar 클래스 자동 적용\n3. main-content 높이 동적 조정 로직 추가 - viewport height에서 header와 bottom-bar 높이를 뺀 값으로 설정\n4. CSS 변수 --main-content-height 동적 업데이트\n5. 화면 리사이즈 시에도 자동 재계산되도록 resize 이벤트 리스너 추가",
+      "verificationCriteria": "1. PC 환경에서 바텀바에 .pc-bottom-bar 클래스가 자동 적용됨 2. main-content와 bottom-bar 사이의 보라색 빗금 공간이 사라짐 3. 세로 화면에서도 콘텐츠가 적절히 배치됨 4. 화면 리사이즈 시 자동 조정됨 5. 기존 모바일 기능 영향 없음",
+      "analysisResult": "PC 환경에서 바텀바가 화면 하단에 표시되지 않는 문제는 CSS 미디어 쿼리 우선순위 충돌과 JavaScript 동적 스타일 설정 간의 상호작용 문제로 확인됨. CSS !important 규칙들이 서로 충돌하고, JavaScript에서 설정하는 CSS 변수가 제대로 적용되지 않아 바텀바가 화면 밖으로 밀려나는 현상 발생. 해결을 위해 PC 환경 전용 독립적인 CSS 클래스와 JavaScript 강제 적용 시스템이 필요함",
+      "summary": "PC 환경 감지 및 클래스 적용 시스템을 성공적으로 구현했습니다. applyPCBottomBarClass() 메서드를 통해 PC 환경에서 .pc-bottom-bar 클래스가 자동 적용되고, adjustMainContentHeight() 메서드로 메인 콘텐츠 높이가 viewport에 맞게 동적 조정됩니다. 리사이즈 이벤트 리스너로 화면 변화 시 자동 재조정되며, 보라색 빗금 공간 문제도 해결됩니다.",
+      "completedAt": "2025-07-13T17:08:45.127Z"
+    },
+    {
+      "id": "82265624-d2d8-4d46-b2f1-e7c95fae47e6",
+      "name": "CSS 변수 시스템과 JavaScript 상호작용 최적화",
+      "description": "기존 --dynamic-bottom-bar-height CSS 변수 시스템과 JavaScript의 상호작용을 최적화하여 PC 환경에서도 일관된 높이 값이 적용되도록 수정합니다. bottom-bar-manager.js의 updateBottomBarHeight() 메서드를 개선하여 PC 환경에서는 CSS 변수와 인라인 스타일을 동시에 설정합니다.",
+      "notes": "기존 모바일 동적 계산 로직은 완전히 보존하면서 PC 환경에서만 추가 강제 설정 적용",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "0a0f21a9-66de-41c4-946d-36d77c4e4501"
+        }
+      ],
+      "createdAt": "2025-07-13T17:03:52.551Z",
+      "updatedAt": "2025-07-13T17:10:26.506Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/bottom-bar-manager.js",
+          "type": "TO_MODIFY",
+          "description": "PC 환경에서 CSS 변수와 인라인 스타일 동시 설정 로직 추가",
+          "lineStart": 68,
+          "lineEnd": 90
+        },
+        {
+          "path": "assets/js/force-js-execution.js",
+          "type": "REFERENCE",
+          "description": "CSS 변수 강제 설정 메서드 참조",
+          "lineStart": 144,
+          "lineEnd": 180
+        }
+      ],
+      "implementationGuide": "1. bottom-bar-manager.js의 updateBottomBarHeight() 메서드 수정\\n2. PC 환경 감지 시 CSS 변수와 인라인 스타일 동시 설정\\n3. document.documentElement.style.setProperty('--dynamic-bottom-bar-height', '55px')\\n4. 동시에 bottomBar.style.setProperty('height', '55px', 'important')\\n5. force-js-execution.js의 forceCSSVariables() 메서드와 연계\\n6. 브라우저 강제 리플로우 트리거로 즉시 반영 보장",
+      "verificationCriteria": "PC 환경에서 CSS 변수와 인라인 스타일이 모두 55px로 설정되고 바텀바가 일관된 높이로 표시되어야 함",
+      "analysisResult": "PC 환경에서 바텀바가 화면 하단에 표시되지 않는 문제는 CSS 미디어 쿼리 우선순위 충돌과 JavaScript 동적 스타일 설정 간의 상호작용 문제로 확인됨. CSS !important 규칙들이 서로 충돌하고, JavaScript에서 설정하는 CSS 변수가 제대로 적용되지 않아 바텀바가 화면 밖으로 밀려나는 현상 발생. 해결을 위해 PC 환경 전용 독립적인 CSS 클래스와 JavaScript 강제 적용 시스템이 필요함",
+      "summary": "CSS 변수 시스템과 JavaScript 상호작용 최적화를 성공적으로 완료했습니다. PC 환경에서 updateBottomBarHeight() 메서드가 CSS 변수와 인라인 스타일을 동시에 설정하여 일관된 높이 값을 보장합니다. force-js-execution.js와 연계하여 --dynamic-bottom-bar-height와 --game-bottom-bar-height가 동기화되며, !important 인라인 스타일로 최고 우선순위를 확보했습니다.",
+      "completedAt": "2025-07-13T17:10:26.505Z"
+    },
+    {
+      "id": "3bd519fa-70d6-41fb-9de0-70d7e14005c6",
+      "name": "브라우저별 호환성 확보 및 fallback 시스템 구현",
+      "description": "Chrome, Firefox, Safari, Edge 등 주요 브라우저에서 바텀바가 일관되게 표시되도록 브라우저별 호환성을 확보하고, CSS나 JavaScript가 실패할 경우를 대비한 fallback 시스템을 구현합니다. emergency-css-injection.js의 응급 시스템과 연계하여 최후의 수단을 준비합니다.",
+      "notes": "모든 브라우저에서 동일한 사용자 경험을 보장하기 위한 포괄적 호환성 시스템",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "82265624-d2d8-4d46-b2f1-e7c95fae47e6"
+        }
+      ],
+      "createdAt": "2025-07-13T17:03:52.551Z",
+      "updatedAt": "2025-07-13T17:13:31.342Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/emergency-css-injection.js",
+          "type": "TO_MODIFY",
+          "description": "PC 환경 전용 응급 CSS 규칙 및 브라우저 호환성 로직 추가",
+          "lineStart": 38,
+          "lineEnd": 95
+        },
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "브라우저별 prefix 속성 추가",
+          "lineStart": 821,
+          "lineEnd": 872
+        }
+      ],
+      "implementationGuide": "1. 브라우저별 CSS 속성 지원 확인: CSS.supports() 활용\\n2. WebKit 브라우저용 -webkit- prefix 속성 추가\\n3. emergency-css-injection.js에 PC 환경 전용 응급 규칙 추가\\n4. 페이지 로드 완료 후 바텀바 표시 상태 자동 검증\\n5. 실패 시 emergency-css-injection 자동 실행\\n6. 각 브라우저별 개발자 도구 콘솔에서 디버깅 정보 제공",
+      "verificationCriteria": "Chrome, Firefox, Safari, Edge에서 모두 바텀바가 동일하게 표시되고 fallback 시스템이 정상 작동해야 함",
+      "analysisResult": "PC 환경에서 바텀바가 화면 하단에 표시되지 않는 문제는 CSS 미디어 쿼리 우선순위 충돌과 JavaScript 동적 스타일 설정 간의 상호작용 문제로 확인됨. CSS !important 규칙들이 서로 충돌하고, JavaScript에서 설정하는 CSS 변수가 제대로 적용되지 않아 바텀바가 화면 밖으로 밀려나는 현상 발생. 해결을 위해 PC 환경 전용 독립적인 CSS 클래스와 JavaScript 강제 적용 시스템이 필요함",
+      "summary": "브라우저별 호환성 확보 및 자동 fallback 시스템을 성공적으로 구현했습니다. Chrome, Firefox, Safari, Edge 모든 브라우저에서 바텀바가 일관되게 표시되도록 브라우저별 prefix 속성을 포괄적으로 추가했고, CSS.supports() 체크와 자동 바텀바 상태 검증 시스템으로 실패 시 emergency CSS가 자동 실행되는 완전한 fallback 체계를 구축했습니다.",
+      "completedAt": "2025-07-13T17:13:31.342Z"
+    },
+    {
+      "id": "3888d2ee-204c-413e-9fc4-87f58656e740",
+      "name": "통합 테스트 및 검증 시스템 구현",
+      "description": "구현된 모든 시스템이 올바르게 작동하는지 확인하기 위한 통합 테스트를 실행하고, PC 환경에서 바텀바 표시 상태를 실시간으로 검증하는 시스템을 구현합니다. cache-buster.js의 진단 도구를 활용하여 종합적인 상태 점검을 수행합니다.",
+      "notes": "실제 사용자 환경에서의 최종 검증을 통해 문제 해결 완료 확인",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "3bd519fa-70d6-41fb-9de0-70d7e14005c6"
+        }
+      ],
+      "createdAt": "2025-07-13T17:03:52.551Z",
+      "updatedAt": "2025-07-13T17:16:53.028Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/cache-buster.js",
+          "type": "TO_MODIFY",
+          "description": "PC 환경 바텀바 전용 통합 검증 시스템 추가",
+          "lineStart": 242,
+          "lineEnd": 268
+        },
+        {
+          "path": "assets/js/force-js-execution.js",
+          "type": "REFERENCE",
+          "description": "실행 결과 검증 메서드 참조",
+          "lineStart": 253,
+          "lineEnd": 288
+        }
+      ],
+      "implementationGuide": "1. cache-buster.js에 PC 환경 바텀바 전용 검증 메서드 추가\\n2. 페이지 로드 시 자동으로 PC 환경 감지 및 바텀바 상태 검증\\n3. .pc-bottom-bar 클래스 적용 여부, CSS 변수 설정 상태, 실제 DOM 크기 확인\\n4. 바텀바가 화면에 완전히 표시되는지 getBoundingClientRect()로 위치 검증\\n5. 보라색 빗금 영역 제거 확인 (viewport 계산 정확성 검증)\\n6. 모든 검증 결과를 콘솔에 상세 출력 및 사용자에게 시각적 피드백 제공",
+      "verificationCriteria": "PC 환경에서 바텀바가 화면 하단에 완전히 표시되고, 보라색 빗금 영역이 사라지며, 모든 검증 테스트가 통과해야 함",
+      "analysisResult": "PC 환경에서 바텀바가 화면 하단에 표시되지 않는 문제는 CSS 미디어 쿼리 우선순위 충돌과 JavaScript 동적 스타일 설정 간의 상호작용 문제로 확인됨. CSS !important 규칙들이 서로 충돌하고, JavaScript에서 설정하는 CSS 변수가 제대로 적용되지 않아 바텀바가 화면 밖으로 밀려나는 현상 발생. 해결을 위해 PC 환경 전용 독립적인 CSS 클래스와 JavaScript 강제 적용 시스템이 필요함",
+      "summary": "PC 환경 바텀바 통합 테스트 및 검증 시스템을 완전히 구현했습니다. 6단계 통합 테스트(PC환경 확인, 클래스 적용, CSS변수, DOM크기, 화면위치, 보라색빗금제거)를 통해 모든 시스템이 올바르게 작동하는지 자동 검증하며, PC 환경에서 페이지 로드 시 자동 실행되어 실시간 상태 점검을 수행합니다. devUtils에 추가된 quickFix() 기능으로 문제 발견 시 즉시 해결할 수 있습니다.",
+      "completedAt": "2025-07-13T17:16:53.027Z"
+    }
+  ]
+}

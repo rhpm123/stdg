@@ -1,0 +1,163 @@
+{
+  "tasks": [
+    {
+      "id": "3c46d632-84f3-44ff-b580-e538cea3690e",
+      "name": "PC 환경 감지 로직 구현",
+      "description": "OrientationController.js에 isDesktopEnvironment() 메서드를 추가하여 PC 환경을 정확히 감지하는 로직을 구현합니다. 기존 getBrowserSupportInfo() 메서드의 데스크톱 브라우저 감지 로직을 확장하고, 화면 크기와 터치 지원 여부를 종합적으로 판단하여 PC 환경을 식별합니다.",
+      "notes": "기존 코드 패턴을 최대한 재사용하여 일관성 유지. 모바일 감지 로직에 영향을 주지 않도록 별도 메서드로 구현",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T16:34:51.799Z",
+      "updatedAt": "2025-07-13T16:36:31.538Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "TO_MODIFY",
+          "description": "isDesktopEnvironment 메서드 추가",
+          "lineStart": 980,
+          "lineEnd": 990
+        },
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "REFERENCE",
+          "description": "기존 getBrowserSupportInfo 메서드 참조",
+          "lineStart": 58,
+          "lineEnd": 131
+        }
+      ],
+      "implementationGuide": "1. OrientationController 클래스에 isDesktopEnvironment() 메서드 추가\\n2. 기존 getBrowserSupportInfo() 결과와 window.innerWidth >= 1024, !('ontouchstart' in window) 조건 결합\\n3. 브라우저별 상세 감지 로직 활용하여 정확도 향상\\n4. 콘솔 로그로 감지 결과 디버깅 정보 제공\\n5. 기존 isMobileDevice() 메서드와 상호 보완적으로 동작하도록 구현",
+      "verificationCriteria": "1. PC 환경에서 isDesktopEnvironment()가 true 반환 2. 모바일 환경에서 false 반환 3. 기존 isMobileDevice() 메서드와 상호 배타적 결과 4. 브라우저 개발자 도구에서 모바일 모드 전환시 올바른 감지 5. 콘솔 로그로 감지 과정 확인 가능",
+      "analysisResult": "PC 모드에서 bottom-bar가 잘리고 블러 처리되는 문제를 해결하기 위해 기존 모바일 최적화 시스템에 PC 호환성을 추가. OrientationController의 디바이스 감지 로직 확장, BottomBarManager의 PC 모드 분기 구현, CSS 미디어 쿼리 개선을 통해 PC와 모바일 환경에서 모두 적절하게 작동하도록 수정하되 기존 모바일 기능은 완전히 보존",
+      "summary": "PC 환경 감지 로직을 성공적으로 구현했습니다. OrientationController 클래스에 isDesktopEnvironment() 메서드를 추가하여 브라우저 정보, 화면 크기(1024px 이상), 터치 지원 여부, 모바일 기기 여부를 종합적으로 판단하는 로직을 구현했습니다. 기존 getBrowserSupportInfo() 메서드의 패턴을 재사용하고 상세한 디버깅 로그를 포함하여 PC와 모바일 환경을 정확히 구분할 수 있습니다.",
+      "completedAt": "2025-07-13T16:36:31.538Z"
+    },
+    {
+      "id": "6f2b11b6-4fec-4d87-b55f-d2fc71055893",
+      "name": "BottomBarManager PC 모드 구현",
+      "description": "BottomBarManager.js의 calculateOptimalHeight() 메서드에 PC 환경 분기를 추가하여 PC에서는 고정 높이(55px)를 사용하도록 수정합니다. 기존 모바일 동적 계산 로직은 완전히 보존하면서 PC 환경에서만 간단한 고정값을 반환하도록 구현합니다.",
+      "notes": "기존 모바일 최적화 로직을 완전히 보존하면서 PC 환경에서만 단순화. OrientationController 의존성 추가",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "3c46d632-84f3-44ff-b580-e538cea3690e"
+        }
+      ],
+      "createdAt": "2025-07-13T16:34:51.799Z",
+      "updatedAt": "2025-07-13T16:37:31.220Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/bottom-bar-manager.js",
+          "type": "TO_MODIFY",
+          "description": "calculateOptimalHeight 메서드에 PC 분기 추가",
+          "lineStart": 30,
+          "lineEnd": 55
+        },
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "DEPENDENCY",
+          "description": "isDesktopEnvironment 메서드 의존성",
+          "lineStart": 980,
+          "lineEnd": 990
+        }
+      ],
+      "implementationGuide": "1. calculateOptimalHeight() 메서드 시작 부분에 PC 환경 체크 추가\\n2. OrientationController의 isDesktopEnvironment() 메서드 활용\\n3. PC 환경일 때 this.defaultHeight(55px) 즉시 반환\\n4. 모바일 환경일 때 기존 복잡한 계산 로직 그대로 유지\\n5. PC 모드 적용 시 콘솔 로그로 디버깅 정보 제공\\n6. updateBottomBarHeight() 호출하여 CSS 변수 업데이트",
+      "verificationCriteria": "1. PC 환경에서 bottom-bar 높이가 55px로 고정 2. 모바일 환경에서 기존 동적 계산 유지 3. CSS 변수 --dynamic-bottom-bar-height가 올바르게 설정 4. PC/모바일 환경 전환시 높이가 적절히 변경 5. 기존 모바일 기능에 영향 없음",
+      "analysisResult": "PC 모드에서 bottom-bar가 잘리고 블러 처리되는 문제를 해결하기 위해 기존 모바일 최적화 시스템에 PC 호환성을 추가. OrientationController의 디바이스 감지 로직 확장, BottomBarManager의 PC 모드 분기 구현, CSS 미디어 쿼리 개선을 통해 PC와 모바일 환경에서 모두 적절하게 작동하도록 수정하되 기존 모바일 기능은 완전히 보존",
+      "summary": "BottomBarManager의 calculateOptimalHeight() 메서드에 PC 환경 분기를 성공적으로 추가했습니다. PC 환경에서는 OrientationController의 isDesktopEnvironment() 메서드를 활용하여 복잡한 계산 없이 고정 높이(55px)를 즉시 반환하고, 모바일 환경에서는 기존의 동적 계산 로직을 완전히 보존합니다. 각 환경별로 적절한 디버깅 로그를 제공하여 동작 과정을 투명하게 확인할 수 있습니다.",
+      "completedAt": "2025-07-13T16:37:31.219Z"
+    },
+    {
+      "id": "9f4f85d2-94ec-44e0-9965-53b5f6839bb6",
+      "name": "gameState 프리셋 확장",
+      "description": "game-state.js의 orientation.presets 객체에 desktop 프리셋을 추가하여 PC 환경에서의 bottom-bar 동작을 정의합니다. PC에서는 full 모드로 고정하고 orientation 오버레이를 비활성화하여 불필요한 모바일 전용 UI가 표시되지 않도록 설정합니다.",
+      "notes": "기존 landscape, portrait 프리셋은 모바일 전용으로 유지. desktop 프리셋은 PC 환경 전용으로 새로 추가",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T16:34:51.799Z",
+      "updatedAt": "2025-07-13T16:38:26.949Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/game-state.js",
+          "type": "TO_MODIFY",
+          "description": "orientation.presets에 desktop 프리셋 추가",
+          "lineStart": 45,
+          "lineEnd": 65
+        }
+      ],
+      "implementationGuide": "1. gameState.orientation.presets 객체에 desktop 프리셋 추가\\n2. desktop: { bottomBarMode: 'full', enableFullscreen: false, showOrientationOverlay: false } 설정\\n3. 기존 landscape, portrait 프리셋은 완전히 보존\\n4. 주석으로 각 프리셋의 용도 명확히 설명\\n5. PC 환경에서 사용될 프리셋임을 문서화",
+      "verificationCriteria": "1. gameState.orientation.presets.desktop 객체가 올바르게 정의됨 2. bottomBarMode: 'full' 설정 확인 3. enableFullscreen: false 설정 확인 4. showOrientationOverlay: false 설정 확인 5. 기존 landscape, portrait 프리셋이 변경되지 않음",
+      "analysisResult": "PC 모드에서 bottom-bar가 잘리고 블러 처리되는 문제를 해결하기 위해 기존 모바일 최적화 시스템에 PC 호환성을 추가. OrientationController의 디바이스 감지 로직 확장, BottomBarManager의 PC 모드 분기 구현, CSS 미디어 쿼리 개선을 통해 PC와 모바일 환경에서 모두 적절하게 작동하도록 수정하되 기존 모바일 기능은 완전히 보존",
+      "summary": "gameState.orientation.presets 객체에 desktop 프리셋을 성공적으로 추가했습니다. PC 환경에서 bottomBarMode는 'full'로 고정하여 완전한 bottom-bar 표시를 보장하고, enableFullscreen과 showOrientationOverlay는 false로 설정하여 PC에서 불필요한 모바일 전용 기능들을 비활성화했습니다. 기존 landscape와 portrait 프리셋은 완전히 보존하여 모바일 환경에서의 기능을 그대로 유지합니다.",
+      "completedAt": "2025-07-13T16:38:26.949Z"
+    },
+    {
+      "id": "90943957-091d-4d90-a8f6-144c66b1e4b7",
+      "name": "OrientationController PC 모드 연동",
+      "description": "OrientationController.js의 updateBottomBarMode() 메서드를 확장하여 PC 환경에서는 desktop 프리셋을 사용하도록 수정합니다. 환경 감지 결과에 따라 적절한 프리셋을 선택하고 PC에서는 orientation 오버레이가 표시되지 않도록 처리합니다.",
+      "notes": "PC와 모바일 환경을 명확히 구분하여 각각 적절한 프리셋 적용. 기존 모바일 로직은 완전히 보존",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "3c46d632-84f3-44ff-b580-e538cea3690e"
+        },
+        {
+          "taskId": "9f4f85d2-94ec-44e0-9965-53b5f6839bb6"
+        }
+      ],
+      "createdAt": "2025-07-13T16:34:51.799Z",
+      "updatedAt": "2025-07-13T16:40:07.071Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "TO_MODIFY",
+          "description": "updateBottomBarMode 메서드에 PC 환경 처리 추가",
+          "lineStart": 687,
+          "lineEnd": 730
+        },
+        {
+          "path": "assets/js/game-state.js",
+          "type": "DEPENDENCY",
+          "description": "desktop 프리셋 의존성",
+          "lineStart": 45,
+          "lineEnd": 65
+        }
+      ],
+      "implementationGuide": "1. updateBottomBarMode() 메서드에서 PC 환경 감지 로직 추가\\n2. isDesktopEnvironment()가 true일 때 desktop 프리셋 사용\\n3. 모바일일 때는 기존 landscape/portrait 프리셋 유지\\n4. currentMode 변수를 'desktop', 'landscape', 'portrait' 중 하나로 설정\\n5. updateOrientationOverlay() 호출로 PC에서 오버레이 숨김 처리\\n6. 상세한 로깅으로 어떤 프리셋이 적용되었는지 확인 가능",
+      "verificationCriteria": "1. PC 환경에서 desktop 프리셋이 적용됨 2. 모바일 환경에서 기존 landscape/portrait 프리셋 유지 3. PC에서 orientation 오버레이가 표시되지 않음 4. bottom-bar 모드가 환경에 따라 적절히 설정됨 5. 콘솔 로그로 적용된 프리셋 확인 가능",
+      "analysisResult": "PC 모드에서 bottom-bar가 잘리고 블러 처리되는 문제를 해결하기 위해 기존 모바일 최적화 시스템에 PC 호환성을 추가. OrientationController의 디바이스 감지 로직 확장, BottomBarManager의 PC 모드 분기 구현, CSS 미디어 쿼리 개선을 통해 PC와 모바일 환경에서 모두 적절하게 작동하도록 수정하되 기존 모바일 기능은 완전히 보존",
+      "summary": "OrientationController의 updateBottomBarMode() 메서드를 성공적으로 확장하여 PC 환경에서는 desktop 프리셋을 사용하도록 구현했습니다. PC 환경 우선 체크 로직을 추가하고, 환경에 따라 적절한 프리셋(desktop/landscape/portrait)을 선택하며, 프리셋이 없을 때의 안전 장치도 포함했습니다. 각 환경별로 상세한 로그 메시지를 제공하여 디버깅을 용이하게 하고, 기존 모바일 로직은 완전히 보존하여 호환성을 유지했습니다.",
+      "completedAt": "2025-07-13T16:40:07.070Z"
+    },
+    {
+      "id": "499edb02-4141-468c-a8e9-4a37cc8c657d",
+      "name": "CSS 미디어 쿼리 PC 최적화",
+      "description": "responsive.css의 @media (min-width: 1024px) 섹션을 강화하여 PC 환경에서 bottom-bar가 확실히 표시되도록 CSS 규칙을 추가합니다. orientation 오버레이 숨김 처리와 bottom-bar 고정 높이 적용으로 PC에서의 안정적인 UI를 보장합니다.",
+      "notes": "기존 데스크톱 미디어 쿼리 섹션을 확장하는 방식으로 구현. 모바일 규칙에는 영향 없음",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T16:34:51.799Z",
+      "updatedAt": "2025-07-13T16:41:16.374Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "PC 데스크톱 미디어 쿼리 섹션 강화",
+          "lineStart": 821,
+          "lineEnd": 856
+        },
+        {
+          "path": "assets/css/game/orientation.css",
+          "type": "REFERENCE",
+          "description": "orientation-overlay 클래스 참조",
+          "lineStart": 10,
+          "lineEnd": 40
+        }
+      ],
+      "implementationGuide": "1. @media (min-width: 1024px) 섹션에 bottom-bar 강제 표시 규칙 추가\\n2. .bottom-bar { height: var(--game-bottom-bar-height) !important; display: grid !important; } 설정\\n3. .orientation-overlay { display: none !important; } 추가로 PC에서 회전 안내 완전 숨김\\n4. min-height, max-height도 고정값으로 설정하여 동적 계산 무시\\n5. 기존 데스크톱 최적화 규칙들과 조화롭게 통합\\n6. 주석으로 PC 모드 전용 규칙임을 명시",
+      "verificationCriteria": "1. PC 환경(1024px 이상)에서 bottom-bar가 완전히 표시됨 2. orientation 오버레이가 PC에서 숨겨짐 3. bottom-bar 높이가 55px로 고정됨 4. 모바일 환경에서 기존 반응형 동작 유지 5. 브라우저 크기 조정시 적절한 미디어 쿼리 적용",
+      "analysisResult": "PC 모드에서 bottom-bar가 잘리고 블러 처리되는 문제를 해결하기 위해 기존 모바일 최적화 시스템에 PC 호환성을 추가. OrientationController의 디바이스 감지 로직 확장, BottomBarManager의 PC 모드 분기 구현, CSS 미디어 쿼리 개선을 통해 PC와 모바일 환경에서 모두 적절하게 작동하도록 수정하되 기존 모바일 기능은 완전히 보존",
+      "summary": "responsive.css의 @media (min-width: 1024px) 섹션에 PC 환경 전용 강화 규칙을 성공적으로 추가했습니다. bottom-bar의 height, min-height, max-height를 고정값으로 설정하고 display, visibility, opacity 속성을 강제 적용하여 PC에서 확실한 표시를 보장했습니다. 또한 orientation-overlay를 완전히 숨김 처리하여 PC에서 불필요한 모바일 UI가 표시되지 않도록 했습니다. 기존 데스크톱 최적화 규칙들과 조화롭게 통합되어 모바일 환경에는 영향을 주지 않습니다.",
+      "completedAt": "2025-07-13T16:41:16.374Z"
+    }
+  ]
+}

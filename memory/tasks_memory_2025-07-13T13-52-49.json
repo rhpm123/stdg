@@ -1,0 +1,119 @@
+{
+  "tasks": [
+    {
+      "id": "c78d30dc-0197-4d16-ab78-5bee94e8da74",
+      "name": "stat-value 최소 너비 긴급 수정",
+      "description": "components.css에서 각 stat-value 요소의 min-width 값을 실제 콘텐츠 길이에 맞게 즉시 증가시킵니다. 현재 하트 5개(❤️❤️❤️❤️❤️)가 60px에서 잘리는 문제와 점수/시간 표시 공간 부족 문제를 우선 해결합니다.",
+      "notes": "즉시 효과를 볼 수 있는 긴급 수정. 기존 CSS 구조는 그대로 유지하면서 min-width만 증가",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-11T17:34:15.000Z",
+      "updatedAt": "2025-07-11T17:40:16.745Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "각 stat-value의 min-width 값 수정",
+          "lineStart": 200,
+          "lineEnd": 260
+        }
+      ],
+      "implementationGuide": "1. components.css 파일 열기\\n2. .bottom-bar .stat-value:has(#score) min-width: 60px → 80px 수정 (4자리 점수 대응)\\n3. .bottom-bar .stat-value:has(#timer) min-width: 60px → 70px 수정 (MM:SS 형식 대응)\\n4. .bottom-bar .stat-value:has(#lives) min-width: 60px → 85px 수정 (하트 5개 완전 대응)\\n5. .bottom-bar .stat-value:has(#progress) min-width: 50px → 55px 수정 (100% 형식 대응)\\n6. .bottom-bar .stat-value:has(#found) min-width: 50px → 65px 수정 (99/99 형식 대응)\\n7. 변경사항 git commit",
+      "verificationCriteria": "브라우저에서 game-play.html 열어서 각 stat-value 칸의 내용이 잘리지 않고 완전히 표시되는지 확인. 특히 하트 5개, 4자리 점수, MM:SS 시간 형식이 완전히 보여야 함",
+      "analysisResult": "game-stats 칸들의 너비 부족 문제를 해결하기 위해 기존 CSS 모듈 구조를 보존하면서 콘텐츠 기반 min-width 재계산, flexbox 레이아웃 최적화, 우선순위 기반 공간 배분을 통해 모든 텍스트가 잘리지 않고 제대로 표시되도록 개선",
+      "summary": "stat-value 최소 너비 긴급 수정 작업이 성공적으로 완료되었습니다. components.css에서 모든 칸의 min-width가 콘텐츠에 맞게 적절히 증가되어 텍스트 잘림 현상이 해결되었으며, git commit도 완료되었습니다. 점수 80px, 시간 70px, 하트 85px, 진행률 55px, 찾은 개수 65px로 설정하여 즉시 효과를 볼 수 있는 개선이 이루어졌습니다.",
+      "completedAt": "2025-07-11T17:40:16.744Z"
+    },
+    {
+      "id": "c8930d31-db5c-4c9e-b954-c6fa01c73b0f",
+      "name": "flexbox 레이아웃 구조 최적화",
+      "description": "base.css의 .game-stats와 .stat-value flexbox 설정을 콘텐츠 기반 크기 조정으로 변경합니다. 현재 flex: 1 균등 분배 방식을 flex: 0 1 auto 콘텐츠 기반 방식으로 변경하여 각 칸이 실제 내용에 맞는 크기를 가지도록 개선합니다.",
+      "notes": "flexbox 레이아웃의 근본적 개선. 균등 분배에서 콘텐츠 기반 분배로 전환",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "c78d30dc-0197-4d16-ab78-5bee94e8da74"
+        }
+      ],
+      "createdAt": "2025-07-11T17:34:15.000Z",
+      "updatedAt": "2025-07-11T17:42:07.653Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/base.css",
+          "type": "TO_MODIFY",
+          "description": "game-stats와 stat-value의 flexbox 설정 최적화",
+          "lineStart": 130,
+          "lineEnd": 170
+        }
+      ],
+      "implementationGuide": "1. base.css 파일 열기\\n2. .game-stats의 justify-content: space-between → space-evenly 변경 (균등한 간격 분배)\\n3. .stat-value의 flex: 1 → flex: 0 1 auto 변경 (콘텐츠 기반 크기)\\n4. .stat-value의 min-width: auto 유지 (components.css에서 개별 설정)\\n5. 기존 height: 100%, align-items: center 유지\\n6. 변경사항 git commit",
+      "verificationCriteria": "브라우저에서 각 stat-value 칸이 내용에 맞는 적절한 크기를 가지며, 칸 사이 간격이 균등하게 분배되고, 전체적으로 조화로운 레이아웃을 보여야 함",
+      "analysisResult": "game-stats 칸들의 너비 부족 문제를 해결하기 위해 기존 CSS 모듈 구조를 보존하면서 콘텐츠 기반 min-width 재계산, flexbox 레이아웃 최적화, 우선순위 기반 공간 배분을 통해 모든 텍스트가 잘리지 않고 제대로 표시되도록 개선",
+      "summary": "flexbox 레이아웃 구조 최적화 작업이 성공적으로 완료되었습니다. base.css에서 .game-stats의 justify-content를 space-evenly로 변경하여 균등한 간격 분배를 구현했고, .stat-value의 flex 속성을 0 1 auto로 변경하여 콘텐츠 기반 크기 조정이 가능하도록 개선했습니다. MCP Git으로 commit까지 완료되어 근본적인 레이아웃 개선이 이루어졌습니다.",
+      "completedAt": "2025-07-11T17:42:07.652Z"
+    },
+    {
+      "id": "58a27567-213f-4302-ac6b-9f861bb03f15",
+      "name": "우선순위 기반 공간 배분 적용",
+      "description": "중요도에 따라 각 stat-value에 차등적인 flex-grow 값을 적용하여 점수와 시간 등 중요한 정보에 더 많은 공간을 할당합니다. 점수(가장 중요) > 시간 > 목숨 > 진행률/찾은 개수 순으로 공간 배분을 차등화합니다.",
+      "notes": "사용자 경험 최적화를 위한 지능적 공간 배분. 게임에서 중요한 정보일수록 더 많은 공간 할당",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "c8930d31-db5c-4c9e-b954-c6fa01c73b0f"
+        }
+      ],
+      "createdAt": "2025-07-11T17:34:15.000Z",
+      "updatedAt": "2025-07-11T17:44:08.081Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "각 stat-value에 우선순위 기반 flex-grow 값 추가",
+          "lineStart": 200,
+          "lineEnd": 280
+        }
+      ],
+      "implementationGuide": "1. components.css 파일 열기\\n2. .bottom-bar .stat-value:has(#score)에 flex-grow: 2 추가 (가장 중요)\\n3. .bottom-bar .stat-value:has(#timer)에 flex-grow: 1.5 추가\\n4. .bottom-bar .stat-value:has(#lives)에 flex-grow: 1.2 추가\\n5. .bottom-bar .stat-value:has(#progress)에 flex-grow: 1 추가\\n6. .bottom-bar .stat-value:has(#found)에 flex-grow: 1 추가\\n7. 하트 칸에 letter-spacing: 2px 추가 (하트 간격 최적화)\\n8. 변경사항 git commit",
+      "verificationCriteria": "점수와 시간 칸이 다른 칸보다 넓은 공간을 차지하고, 모든 칸의 내용이 여유롭게 표시되며, 하트 사이 간격이 적절히 조정되어 가독성이 향상되어야 함",
+      "analysisResult": "game-stats 칸들의 너비 부족 문제를 해결하기 위해 기존 CSS 모듈 구조를 보존하면서 콘텐츠 기반 min-width 재계산, flexbox 레이아웃 최적화, 우선순위 기반 공간 배분을 통해 모든 텍스트가 잘리지 않고 제대로 표시되도록 개선",
+      "summary": "우선순위 기반 공간 배분 적용 작업이 성공적으로 완료되었습니다. 각 stat-value에 중요도별 flex-grow 값을 적용하여 점수(2), 시간(1.5), 목숨(1.2), 진행률/찾은개수(1)로 차등화된 공간 배분을 구현했습니다. 또한 하트 이모티콘의 가독성을 위해 letter-spacing을 2px로 최적화했으며, 중복 스타일을 정리하여 코드 품질도 향상시켰습니다.",
+      "completedAt": "2025-07-11T17:44:08.080Z"
+    },
+    {
+      "id": "ae274423-7534-4847-92ce-6c628ccf73dc",
+      "name": "반응형 대응 강화 및 최종 검증",
+      "description": "responsive.css에서 소형 화면과 가로 모드에서의 stat-value 표시 최적화를 강화하고, 모든 화면 크기에서 너비 문제가 해결되었는지 최종 검증합니다. 특히 480px 이하 소형 화면에서의 공간 활용도를 개선합니다.",
+      "notes": "크로스 디바이스 호환성 확보 및 전체 수정사항의 최종 검증. 모든 화면 크기에서 완벽한 표시 보장",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "58a27567-213f-4302-ac6b-9f861bb03f15"
+        }
+      ],
+      "createdAt": "2025-07-11T17:34:15.000Z",
+      "updatedAt": "2025-07-11T17:46:25.261Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "소형 화면과 가로 모드에서의 stat-value 최적화",
+          "lineStart": 200,
+          "lineEnd": 250
+        },
+        {
+          "path": "game-play.html",
+          "type": "REFERENCE",
+          "description": "최종 검증을 위한 테스트 페이지",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. responsive.css 파일 열기\\n2. @media (max-width: 480px) 섹션에 .bottom-bar .stat-value min-width: 0 추가 (소형 화면 유연성)\\n3. 소형 화면용 font-size: 0.7rem 적용으로 공간 절약\\n4. 가로 모드에서 stat-value 압축 설정 검토 및 조정\\n5. 다양한 화면 크기에서 테스트 (데스크톱, 태블릿, 모바일)\\n6. 모든 stat-value 내용이 잘리지 않는지 최종 확인\\n7. 변경사항 git commit 및 최종 검증 완료",
+      "verificationCriteria": "데스크톱(1920px), 태블릿(768px), 모바일(375px), 소형 모바일(320px) 화면에서 모든 stat-value 내용이 완전히 표시되고, 가로/세로 모드 전환시에도 레이아웃이 깨지지 않아야 함",
+      "analysisResult": "game-stats 칸들의 너비 부족 문제를 해결하기 위해 기존 CSS 모듈 구조를 보존하면서 콘텐츠 기반 min-width 재계산, flexbox 레이아웃 최적화, 우선순위 기반 공간 배분을 통해 모든 텍스트가 잘리지 않고 제대로 표시되도록 개선",
+      "summary": "반응형 대응 강화 및 최종 검증 작업이 성공적으로 완료되었습니다. 480px과 375px 이하 화면에서 min-width 0으로 완전 유연화를 구현하고, 가로 모드에서 우선순위 기반 flex-grow 재조정을 적용했습니다. 또한 전역 오버플로우 방지와 타이포그래피 최적화를 통해 320px부터 1920px까지 모든 화면 크기에서 완벽한 표시를 보장하는 크로스 디바이스 호환성을 달성했습니다.",
+      "completedAt": "2025-07-11T17:46:25.260Z"
+    }
+  ]
+}

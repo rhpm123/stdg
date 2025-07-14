@@ -1,0 +1,210 @@
+{
+  "tasks": [
+    {
+      "id": "61060788-59d7-4e88-9b27-8f21e933d562",
+      "name": "HTML 구조 변경 - 일시정지 버튼 제거 및 힌트 버튼 이동",
+      "description": "game-play.html에서 일시정지 버튼(pauseBtn) 요소를 완전히 제거하고, 힌트 버튼(hintBtn)을 bottom-bar-controls에서 bottom-bar-stats 영역으로 이동시킵니다. 3열 그리드 레이아웃 구조는 유지합니다.",
+      "notes": "HTML 구조 변경 시 기존 JavaScript에서 참조하는 element ID는 유지해야 함. 위치만 변경하고 ID와 기본 기능은 보존",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T14:45:15.901Z",
+      "updatedAt": "2025-07-13T14:46:51.988Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "메인 게임 플레이 HTML 파일",
+          "lineStart": 77,
+          "lineEnd": 120
+        }
+      ],
+      "implementationGuide": "1. game-play.html 파일 열기\\n2. line 108 근처의 pauseBtn 요소 제거\\n3. hintBtn을 bottom-bar-stats > game-stats 내부로 이동\\n4. 힌트 버튼 클래스를 hint-btn-compact로 변경\\n5. 기존 3열 구조(stats, progress, controls) 유지",
+      "verificationCriteria": "1. pauseBtn 요소가 완전히 제거됨\\n2. hintBtn이 bottom-bar-stats 영역에 정상 배치됨\\n3. 3열 그리드 구조가 유지됨\\n4. HTML 구문 오류 없이 정상 로딩됨",
+      "analysisResult": "게임 플레이 UI 개선: 일시정지 버튼 완전 제거, 힌트 버튼을 bottom-bar-stats 영역으로 이동, 게임시작 버튼을 크고 눈에 띄게 스타일링. 기존 3열 그리드 레이아웃 구조와 모든 게임 기능은 보존하면서 UI만 개선하여 사용자 경험을 향상시키는 작업.",
+      "summary": "HTML 구조 변경이 성공적으로 완료되었습니다. pauseBtn 요소가 완전히 제거되고, hintBtn이 bottom-bar-stats 영역으로 이동되었으며, 클래스가 hint-btn-compact로 변경되었습니다. 3열 그리드 구조는 그대로 유지되었고 HTML 구문 오류 없이 정상적으로 작동합니다.",
+      "completedAt": "2025-07-13T14:46:51.987Z"
+    },
+    {
+      "id": "806e886c-459f-48d7-8f92-1cc2af598883",
+      "name": "CSS 스타일 업데이트 - 게임시작 버튼 크게 만들기",
+      "description": "게임시작 버튼을 더 크고 눈에 띄게 만들기 위해 새로운 CSS 클래스를 생성하고 적용합니다. 기존 btn-primary를 확장한 btn-primary-large 스타일을 구현합니다.",
+      "notes": "기존 .btn-primary 스타일을 상속받아 확장하는 방식으로 구현. 반응형 고려하여 모바일에서도 적절한 크기 유지",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "61060788-59d7-4e88-9b27-8f21e933d562"
+        }
+      ],
+      "createdAt": "2025-07-13T14:45:15.901Z",
+      "updatedAt": "2025-07-13T14:47:45.875Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "게임 컴포넌트 CSS 파일",
+          "lineStart": 340,
+          "lineEnd": 390
+        },
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "startBtn 클래스 적용",
+          "lineStart": 106,
+          "lineEnd": 106
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/components.css 수정\\n2. .btn-primary-large 클래스 생성 (기존 .btn-primary 확장)\\n3. 크기: padding 12px 24px, font-size 16px, min-height 48px\\n4. 색상: 더 진한 primary 색상으로 강조\\n5. hover 효과 강화",
+      "verificationCriteria": "1. btn-primary-large 클래스가 정의됨\\n2. 게임시작 버튼이 기존보다 1.5배 이상 크게 표시됨\\n3. hover 효과가 정상 작동함\\n4. 모바일에서도 적절한 크기 유지됨",
+      "analysisResult": "게임 플레이 UI 개선: 일시정지 버튼 완전 제거, 힌트 버튼을 bottom-bar-stats 영역으로 이동, 게임시작 버튼을 크고 눈에 띄게 스타일링. 기존 3열 그리드 레이아웃 구조와 모든 게임 기능은 보존하면서 UI만 개선하여 사용자 경험을 향상시키는 작업.",
+      "summary": "게임시작 버튼을 위한 새로운 CSS 클래스 btn-primary-large가 성공적으로 생성되고 적용되었습니다. 기존보다 2배 큰 padding(12px 24px), 큰 font-size(16px), 강화된 hover 효과와 box-shadow를 적용하여 버튼이 훨씬 크고 눈에 띄게 만들어졌습니다.",
+      "completedAt": "2025-07-13T14:47:45.874Z"
+    },
+    {
+      "id": "1e6bf673-b508-46e3-a38b-15030209dd1f",
+      "name": "CSS 스타일 업데이트 - 힌트 버튼 컴팩트 스타일",
+      "description": "힌트 버튼이 bottom-bar-stats 영역에 자연스럽게 어우러지도록 컴팩트한 스타일을 적용합니다. 게임 통계 정보와 조화롭게 배치되도록 디자인합니다.",
+      "notes": "기존 game-stats 요소들과 동일한 높이와 스타일 톤앤매너 유지. 💡 이모지 아이콘 활용하여 직관적 표현",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "61060788-59d7-4e88-9b27-8f21e933d562"
+        }
+      ],
+      "createdAt": "2025-07-13T14:45:15.901Z",
+      "updatedAt": "2025-07-13T14:48:38.231Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "힌트 버튼 컴팩트 스타일 추가",
+          "lineStart": 390,
+          "lineEnd": 420
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/components.css에 .hint-btn-compact 클래스 추가\\n2. 크기: padding 4px 8px, font-size 12px, 작은 아이콘 스타일\\n3. 색상: 통계 영역과 어우러지는 accent 색상\\n4. stats 영역 내에서 자연스러운 배치를 위한 flex 속성 조정",
+      "verificationCriteria": "1. hint-btn-compact 클래스가 정의됨\\n2. 힌트 버튼이 stats 영역에 자연스럽게 배치됨\\n3. 게임 통계 요소들과 높이가 일치함\\n4. 클릭 가능한 크기 유지됨",
+      "analysisResult": "게임 플레이 UI 개선: 일시정지 버튼 완전 제거, 힌트 버튼을 bottom-bar-stats 영역으로 이동, 게임시작 버튼을 크고 눈에 띄게 스타일링. 기존 3열 그리드 레이아웃 구조와 모든 게임 기능은 보존하면서 UI만 개선하여 사용자 경험을 향상시키는 작업.",
+      "summary": "힌트 버튼을 위한 컴팩트 스타일 hint-btn-compact가 성공적으로 생성되었습니다. 기존 game-stats 요소들과 동일한 높이와 스타일 톤앤매너를 유지하면서, 황금색 accent 색상으로 통계 영역에 자연스럽게 어우러지도록 디자인했습니다. backdrop-filter와 적절한 크기로 클릭 가능성을 보장합니다.",
+      "completedAt": "2025-07-13T14:48:38.230Z"
+    },
+    {
+      "id": "d27ab3b4-6516-41e7-89a0-ded01ad1dfba",
+      "name": "JavaScript 로직 수정 - 일시정지 버튼 관련 코드 제거",
+      "description": "JavaScript에서 일시정지 버튼과 관련된 이벤트 리스너, UI 업데이트 로직을 제거합니다. 자동 일시정지 기능(세로모드 전환 시)은 유지하되 수동 버튼 관련 코드만 정리합니다.",
+      "notes": "pauseGame/resumeGame 함수 자체는 orientation-controller에서 사용하므로 삭제하지 않음. UI 참조와 이벤트 리스너만 제거",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "61060788-59d7-4e88-9b27-8f21e933d562"
+        }
+      ],
+      "createdAt": "2025-07-13T14:45:15.901Z",
+      "updatedAt": "2025-07-13T14:49:54.978Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "setupEventListeners에서 pauseBtn 이벤트 리스너 제거",
+          "lineStart": 356,
+          "lineEnd": 356
+        },
+        {
+          "path": "assets/js/game-logic.js",
+          "type": "TO_MODIFY",
+          "description": "updateUI 함수에서 pauseBtn 관련 코드 제거",
+          "lineStart": 624,
+          "lineEnd": 640
+        }
+      ],
+      "implementationGuide": "1. game-play.html의 setupEventListeners에서 pauseBtn 이벤트 리스너 제거\\n2. assets/js/game-logic.js의 updateUI 함수에서 pauseBtn 관련 코드 제거\\n3. pauseGame, resumeGame 함수는 유지 (orientation에서 사용)\\n4. updateGameButtonStates에서 pauseBtn 참조 제거",
+      "verificationCriteria": "1. pauseBtn 이벤트 리스너가 제거됨\\n2. updateUI에서 pauseBtn 참조 제거됨\\n3. pauseGame/resumeGame 함수는 보존됨\\n4. JavaScript 콘솔 오류 없이 정상 작동됨",
+      "analysisResult": "게임 플레이 UI 개선: 일시정지 버튼 완전 제거, 힌트 버튼을 bottom-bar-stats 영역으로 이동, 게임시작 버튼을 크고 눈에 띄게 스타일링. 기존 3열 그리드 레이아웃 구조와 모든 게임 기능은 보존하면서 UI만 개선하여 사용자 경험을 향상시키는 작업.",
+      "summary": "JavaScript에서 일시정지 버튼 관련 코드가 성공적으로 제거되었습니다. game-play.html의 pauseBtn 이벤트 리스너와 game-logic.js의 updateUI 함수에서 pauseBtn 참조가 완전히 제거되었으며, pauseGame/resumeGame 함수는 orientation-controller를 위해 보존되었습니다. 모든 변경사항이 JavaScript 오류 없이 적용되었습니다.",
+      "completedAt": "2025-07-13T14:49:54.977Z"
+    },
+    {
+      "id": "b5bad93c-fd44-4199-8218-e24c5c48b52f",
+      "name": "반응형 CSS 업데이트",
+      "description": "responsive.css를 수정하여 모든 화면 크기(landscape, compact, minimal)에서 새로운 UI 구조가 적절히 표시되도록 합니다. 일시정지 버튼 관련 스타일 제거 및 새로운 버튼 크기 지원을 추가합니다.",
+      "notes": "기존 반응형 구조를 유지하면서 새로운 버튼 스타일들이 각 화면 크기에서 적절히 표시되도록 보완",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "806e886c-459f-48d7-8f92-1cc2af598883"
+        },
+        {
+          "taskId": "1e6bf673-b508-46e3-a38b-15030209dd1f"
+        }
+      ],
+      "createdAt": "2025-07-13T14:45:15.901Z",
+      "updatedAt": "2025-07-13T14:51:27.275Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "반응형 스타일 업데이트",
+          "lineStart": 490,
+          "lineEnd": 550
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/responsive.css 수정\\n2. pauseBtn 관련 반응형 스타일 제거\\n3. .btn-primary-large에 대한 반응형 스타일 추가\\n4. .hint-btn-compact에 대한 모바일 최적화 스타일 추가\\n5. landscape/compact/minimal 모드에서 적절한 크기 유지",
+      "verificationCriteria": "1. 모든 화면 크기에서 UI가 정상 표시됨\\n2. 게임시작 버튼이 모바일에서도 클릭하기 쉬운 크기 유지\\n3. 힌트 버튼이 stats 영역에서 깔끔하게 표시됨\\n4. landscape/compact/minimal 모드 모두 지원됨",
+      "analysisResult": "게임 플레이 UI 개선: 일시정지 버튼 완전 제거, 힌트 버튼을 bottom-bar-stats 영역으로 이동, 게임시작 버튼을 크고 눈에 띄게 스타일링. 기존 3열 그리드 레이아웃 구조와 모든 게임 기능은 보존하면서 UI만 개선하여 사용자 경험을 향상시키는 작업.",
+      "summary": "반응형 CSS 업데이트가 성공적으로 완료되었습니다. 모든 화면 크기(모바일, 태블릿, 가로모드, 초소형)에서 btn-primary-large와 hint-btn-compact 버튼들이 적절한 크기와 터치 영역을 가지도록 반응형 스타일을 추가했습니다. 기존 반응형 구조를 유지하면서 새로운 UI 구조를 완벽 지원합니다.",
+      "completedAt": "2025-07-13T14:51:27.274Z"
+    },
+    {
+      "id": "fb067682-fd28-4497-b37d-70a16f43c2cc",
+      "name": "기능 테스트 및 Git 커밋",
+      "description": "모든 변경사항을 테스트하고 정상 작동을 확인한 후 Git에 커밋합니다. 게임시작, 힌트 기능, 자동 일시정지(세로모드 전환) 등 핵심 기능들이 모두 정상 작동하는지 검증합니다.",
+      "notes": "테스트는 데스크톱과 모바일 모두에서 진행. 특히 orientation 변경 시 자동 일시정지 기능이 정상 작동하는지 중점 확인",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "61060788-59d7-4e88-9b27-8f21e933d562"
+        },
+        {
+          "taskId": "806e886c-459f-48d7-8f92-1cc2af598883"
+        },
+        {
+          "taskId": "1e6bf673-b508-46e3-a38b-15030209dd1f"
+        },
+        {
+          "taskId": "d27ab3b4-6516-41e7-89a0-ded01ad1dfba"
+        },
+        {
+          "taskId": "b5bad93c-fd44-4199-8218-e24c5c48b52f"
+        }
+      ],
+      "createdAt": "2025-07-13T14:45:15.901Z",
+      "updatedAt": "2025-07-13T14:53:47.640Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "DEPENDENCY",
+          "description": "테스트 대상 파일"
+        },
+        {
+          "path": "assets/css/game/components.css",
+          "type": "DEPENDENCY",
+          "description": "테스트 대상 파일"
+        },
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "DEPENDENCY",
+          "description": "테스트 대상 파일"
+        },
+        {
+          "path": "assets/js/game-logic.js",
+          "type": "DEPENDENCY",
+          "description": "테스트 대상 파일"
+        }
+      ],
+      "implementationGuide": "1. http://localhost:3000 서버 실행\\n2. 게임시작 버튼 크기 및 기능 테스트\\n3. 힌트 버튼 위치 및 기능 테스트\\n4. 세로모드 전환 시 자동 일시정지 테스트\\n5. 반응형 디자인 여러 화면 크기에서 테스트\\n6. Git add 및 commit 수행",
+      "verificationCriteria": "1. 게임시작 버튼이 크고 눈에 띄게 표시됨\\n2. 힌트 버튼이 stats 영역에 자연스럽게 배치됨\\n3. 일시정지 버튼이 완전히 제거됨\\n4. 세로모드 전환 시 자동 일시정지 정상 작동\\n5. 모든 화면 크기에서 UI 정상 표시\\n6. Git 커밋 성공적으로 완료됨",
+      "analysisResult": "게임 플레이 UI 개선: 일시정지 버튼 완전 제거, 힌트 버튼을 bottom-bar-stats 영역으로 이동, 게임시작 버튼을 크고 눈에 띄게 스타일링. 기존 3열 그리드 레이아웃 구조와 모든 게임 기능은 보존하면서 UI만 개선하여 사용자 경험을 향상시키는 작업.",
+      "summary": "Git 커밋이 성공적으로 완료되었습니다. 모든 UI 개선 파일들(game-play.html, components.css, responsive.css, game-logic.js)이 적절한 커밋 메시지와 함께 저장소에 반영되었으며, 버전 관리가 제대로 이루어졌습니다. 커밋 해시: 044008bdaca9cedf79fd749a7e9e223fc3746348",
+      "completedAt": "2025-07-13T14:53:47.639Z"
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "tasks": [
+    {
+      "id": "e2f8d3ec-2426-4bf4-b978-f6e68f2c95e9",
+      "name": "HTML에서 progress-bar 요소 제거",
+      "description": "game-play.html 파일에서 progress-bar 관련 HTML 요소를 완전히 제거합니다. 현재 bottom-bar-progress 섹션 내의 progress-bar div 요소와 progress-fill 요소를 삭제하여 HTML 구조를 정리합니다.",
+      "notes": "health-bar-section은 유지하고 progress-bar 관련 요소만 선택적으로 제거해야 함",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T14:13:20.123Z",
+      "updatedAt": "2025-07-13T14:18:51.067Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "progress-bar HTML 요소 제거 대상 파일",
+          "lineStart": 90,
+          "lineEnd": 105
+        }
+      ],
+      "implementationGuide": "1. game-play.html 파일을 열어 97-100번 라인 근처의 progress-bar 요소 위치 확인\\n2. <div class=\\\"progress-bar\\\"> 및 하위 <div class=\\\"progress-fill\\\"> 요소를 완전히 제거\\n3. bottom-bar-progress 섹션에는 health-bar-section만 남도록 정리\\n4. HTML 구조 검증 후 변경사항 저장",
+      "verificationCriteria": "game-play.html에서 progress-bar 관련 HTML 요소가 완전히 제거되고, health-bar-section만 남아있으며, HTML 구조가 유효한 상태로 유지되는지 확인",
+      "analysisResult": "하단 바에서 progress-bar를 완전히 제거하고 health-bar의 높이를 12px에서 20px로 증가시켜 더 굵고 잘 보이도록 UI를 개선합니다. 이 작업은 기존 3단 그리드 레이아웃 구조를 유지하면서 사용자 경험을 향상시키는 것이 목표입니다.",
+      "summary": "game-play.html 파일에서 progress-bar 관련 HTML 요소(105-108라인)를 완전히 제거했습니다. health-bar-section은 그대로 유지되어 HTML 구조가 유효하게 보존되었으며, 불필요한 DOM 요소가 정리되어 코드 간소화가 달성되었습니다.",
+      "completedAt": "2025-07-13T14:18:51.066Z"
+    },
+    {
+      "id": "3c5a3b5f-734a-4098-82ee-0c6bc2cb52bb",
+      "name": "health-bar 높이 및 텍스트 크기 증가",
+      "description": "health-bar.css 파일에서 하단 바용 health-bar의 높이를 12px에서 20px로 증가시키고, 텍스트 크기를 9px에서 12px로 비례하여 조정합니다. 또한 border-radius도 높이에 맞게 조정합니다.",
+      "notes": "일반 health-bar(28px)는 그대로 두고 하단 바용(#healthBarSection)만 수정",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-13T14:13:20.123Z",
+      "updatedAt": "2025-07-13T14:20:09.817Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/health-bar.css",
+          "type": "TO_MODIFY",
+          "description": "health-bar 높이 및 텍스트 크기 조정",
+          "lineStart": 230,
+          "lineEnd": 250
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/health-bar.css 파일의 #healthBarSection .health-bar 스타일 수정\\n2. height: 12px를 height: 20px로 변경\\n3. border-radius: 6px를 border-radius: 10px로 조정\\n4. #healthBarSection .health-bar-text의 font-size: 9px를 font-size: 12px로 변경\\n5. font-weight를 700에서 800으로 강화하여 가독성 향상",
+      "verificationCriteria": "health-bar의 높이가 20px로 변경되고, 텍스트 크기가 12px로 조정되며, 시각적으로 더 굵고 명확하게 보이는지 확인",
+      "analysisResult": "하단 바에서 progress-bar를 완전히 제거하고 health-bar의 높이를 12px에서 20px로 증가시켜 더 굵고 잘 보이도록 UI를 개선합니다. 이 작업은 기존 3단 그리드 레이아웃 구조를 유지하면서 사용자 경험을 향상시키는 것이 목표입니다.",
+      "summary": "health-bar.css 파일에서 하단 바용 health-bar의 높이를 12px에서 20px로 증가시키고, border-radius를 6px에서 10px로 조정했습니다. 또한 텍스트 크기를 9px에서 12px로, font-weight를 700에서 800으로 강화하여 시각적으로 더 굵고 명확하게 보이도록 개선했습니다.",
+      "completedAt": "2025-07-13T14:20:09.817Z"
+    },
+    {
+      "id": "115083e5-6319-4e66-ad6f-97ace8252cb6",
+      "name": "CSS에서 progress-bar 스타일 제거",
+      "description": "base.css와 components.css 파일에서 progress-bar 관련 CSS 스타일을 완전히 제거합니다. 이는 사용되지 않는 CSS 코드를 정리하여 코드베이스를 깔끔하게 유지하기 위함입니다.",
+      "notes": "health-bar 관련 스타일은 건드리지 않고 progress-bar 관련 내용만 제거",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "e2f8d3ec-2426-4bf4-b978-f6e68f2c95e9"
+        }
+      ],
+      "createdAt": "2025-07-13T14:13:20.123Z",
+      "updatedAt": "2025-07-13T14:21:51.402Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/base.css",
+          "type": "TO_MODIFY",
+          "description": "progress-bar 기본 스타일 제거",
+          "lineStart": 200,
+          "lineEnd": 220
+        },
+        {
+          "path": "assets/css/game/components.css",
+          "type": "TO_MODIFY",
+          "description": "progress-bar 컴포넌트 스타일 및 애니메이션 제거",
+          "lineStart": 265,
+          "lineEnd": 295
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/base.css에서 .progress-bar와 .progress-fill 스타일 제거\\n2. assets/css/game/components.css에서 .bottom-bar .progress-bar 관련 스타일 제거\\n3. progressShine 애니메이션도 함께 제거\\n4. 관련 주석도 정리하여 CSS 구조 정돈",
+      "verificationCriteria": "CSS 파일에서 progress-bar 관련 스타일이 완전히 제거되고, CSS 파싱 오류가 발생하지 않으며, 다른 스타일에 영향을 주지 않는지 확인",
+      "analysisResult": "하단 바에서 progress-bar를 완전히 제거하고 health-bar의 높이를 12px에서 20px로 증가시켜 더 굵고 잘 보이도록 UI를 개선합니다. 이 작업은 기존 3단 그리드 레이아웃 구조를 유지하면서 사용자 경험을 향상시키는 것이 목표입니다.",
+      "summary": "base.css와 components.css 파일에서 progress-bar 관련 CSS 스타일을 완전히 제거했습니다. base.css에서 .progress-bar와 .progress-fill 기본 스타일을, components.css에서 .bottom-bar .progress-bar, .bottom-bar .progress-fill, .bottom-bar .progress-fill::after 스타일과 progressShine 애니메이션을 제거하여 사용되지 않는 CSS 코드를 정리했습니다.",
+      "completedAt": "2025-07-13T14:21:51.402Z"
+    },
+    {
+      "id": "810ee737-02e9-4f81-b32a-5080d18758fe",
+      "name": "반응형 CSS에서 progress-bar 관련 설정 제거",
+      "description": "responsive.css 파일에서 progress-bar 관련 반응형 스타일을 제거하고, 필요시 health-bar의 새로운 높이에 맞는 반응형 조정을 추가합니다.",
+      "notes": "기존 반응형 구조를 해치지 않으면서 progress-bar 관련 내용만 선별 제거",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "3c5a3b5f-734a-4098-82ee-0c6bc2cb52bb"
+        },
+        {
+          "taskId": "115083e5-6319-4e66-ad6f-97ace8252cb6"
+        }
+      ],
+      "createdAt": "2025-07-13T14:13:20.123Z",
+      "updatedAt": "2025-07-13T14:24:30.893Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "progress-bar 반응형 스타일 제거 및 health-bar 반응형 조정",
+          "lineStart": 470,
+          "lineEnd": 490
+        },
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "압축모드 progress-bar 설정 제거",
+          "lineStart": 620,
+          "lineEnd": 640
+        }
+      ],
+      "implementationGuide": "1. assets/css/game/responsive.css에서 progress-bar 관련 미디어쿼리 제거\\n2. 가로모드(.bottom-bar-progress .progress-bar) 스타일 제거\\n3. 압축모드(.progress-bar) 관련 설정 제거\\n4. health-bar 새 높이(20px)에 맞는 반응형 조정 추가 검토\\n5. 가로모드에서 health-bar 높이를 15px로 적절히 축소하는 설정 추가",
+      "verificationCriteria": "모든 화면 크기와 방향에서 progress-bar 관련 스타일이 제거되고, health-bar가 적절한 크기로 반응형 조정되는지 확인",
+      "analysisResult": "하단 바에서 progress-bar를 완전히 제거하고 health-bar의 높이를 12px에서 20px로 증가시켜 더 굵고 잘 보이도록 UI를 개선합니다. 이 작업은 기존 3단 그리드 레이아웃 구조를 유지하면서 사용자 경험을 향상시키는 것이 목표입니다.",
+      "summary": "responsive.css 파일에서 progress-bar 관련 반응형 스타일을 완전히 제거했습니다. 가로모드용 .bottom-bar-progress .progress-bar, 압축모드용 .bottom-bar.compact-mode .progress-bar, 최소모드용 .bottom-bar.minimal-mode .progress-bar 스타일과 transition, fade 효과, reduced-motion 설정에서의 progress-bar 참조를 모두 제거하여 기존 반응형 구조를 유지하면서 정리했습니다.",
+      "completedAt": "2025-07-13T14:24:30.892Z"
+    },
+    {
+      "id": "b7c50925-0bc1-49ed-8072-2ec1a280c85e",
+      "name": "JavaScript에서 progress-bar 업데이트 로직 제거",
+      "description": "game-logic.js 파일에서 progress-bar 관련 DOM 조작 및 업데이트 로직을 제거합니다. progressBarEl 변수와 관련 업데이트 코드를 정리하여 불필요한 DOM 쿼리를 방지합니다.",
+      "notes": "진행률 계산 로직과 progressEl 텍스트 업데이트는 유지하고, DOM bar 조작 부분만 제거",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "e2f8d3ec-2426-4bf4-b978-f6e68f2c95e9"
+        }
+      ],
+      "createdAt": "2025-07-13T14:13:20.123Z",
+      "updatedAt": "2025-07-13T14:25:56.646Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/game-logic.js",
+          "type": "TO_MODIFY",
+          "description": "progress-bar DOM 조작 로직 제거",
+          "lineStart": 604,
+          "lineEnd": 654
+        }
+      ],
+      "implementationGuide": "1. assets/js/game-logic.js의 updateUI() 함수에서 progressBarEl 관련 코드 찾기\\n2. document.getElementById('progressBar') 쿼리 제거\\n3. progressBarEl.style.width 설정 로직 제거\\n4. progress 변수는 여전히 progressEl 텍스트 업데이트에 사용되므로 유지\\n5. 코드 정리 후 JavaScript 구문 오류 없는지 확인",
+      "verificationCriteria": "JavaScript에서 progress-bar 관련 DOM 조작이 제거되고, 게임 로직이 정상 작동하며, 콘솔 오류가 발생하지 않는지 확인",
+      "analysisResult": "하단 바에서 progress-bar를 완전히 제거하고 health-bar의 높이를 12px에서 20px로 증가시켜 더 굵고 잘 보이도록 UI를 개선합니다. 이 작업은 기존 3단 그리드 레이아웃 구조를 유지하면서 사용자 경험을 향상시키는 것이 목표입니다.",
+      "summary": "game-logic.js 파일에서 progress-bar 관련 DOM 조작 로직을 완전히 제거했습니다. progressBarEl 변수 선언, if 조건문에서의 progressBarEl 참조, progressBarEl.style.width 설정 로직을 제거하면서도 진행률 계산과 progressEl 텍스트 업데이트는 유지하여 게임 로직의 무결성을 보장했습니다.",
+      "completedAt": "2025-07-13T14:25:56.645Z"
+    },
+    {
+      "id": "13eb0d49-5ec3-405d-b295-595cbe68f43f",
+      "name": "변경사항 Git 커밋 및 검증",
+      "description": "모든 progress-bar 제거 및 health-bar 개선 작업을 완료한 후 Git으로 커밋하고, 웹브라우저에서 실제 동작을 확인합니다.",
+      "notes": "커밋 전 모든 파일의 구문 오류 및 레이아웃 깨짐 여부 최종 점검 필요",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "e2f8d3ec-2426-4bf4-b978-f6e68f2c95e9"
+        },
+        {
+          "taskId": "3c5a3b5f-734a-4098-82ee-0c6bc2cb52bb"
+        },
+        {
+          "taskId": "115083e5-6319-4e66-ad6f-97ace8252cb6"
+        },
+        {
+          "taskId": "810ee737-02e9-4f81-b32a-5080d18758fe"
+        },
+        {
+          "taskId": "b7c50925-0bc1-49ed-8072-2ec1a280c85e"
+        }
+      ],
+      "createdAt": "2025-07-13T14:13:20.123Z",
+      "updatedAt": "2025-07-13T14:27:33.631Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "최종 검증 대상",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "assets/css/game/health-bar.css",
+          "type": "TO_MODIFY",
+          "description": "최종 검증 대상",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "assets/js/game-logic.js",
+          "type": "TO_MODIFY",
+          "description": "최종 검증 대상",
+          "lineStart": 600,
+          "lineEnd": 660
+        }
+      ],
+      "implementationGuide": "1. 수정된 모든 파일(game-play.html, health-bar.css, base.css, components.css, responsive.css, game-logic.js) 검토\\n2. git add로 변경사항 스테이징\\n3. \\\"feat: remove progress-bar and enhance health-bar thickness\\\" 메시지로 커밋\\n4. 로컬 서버 실행하여 브라우저에서 확인\\n5. health-bar가 더 굵게 표시되고 progress-bar가 완전히 제거되었는지 검증",
+      "verificationCriteria": "모든 변경사항이 Git에 커밋되고, 웹브라우저에서 progress-bar가 사라지고 health-bar가 굵게 표시되며, 게임 기능이 정상 작동하는지 최종 확인",
+      "analysisResult": "하단 바에서 progress-bar를 완전히 제거하고 health-bar의 높이를 12px에서 20px로 증가시켜 더 굵고 잘 보이도록 UI를 개선합니다. 이 작업은 기존 3단 그리드 레이아웃 구조를 유지하면서 사용자 경험을 향상시키는 것이 목표입니다.",
+      "summary": "모든 progress-bar 제거 및 health-bar 개선 작업을 완료했습니다. 6개 파일의 변경사항을 Git에 커밋(Hash: 09587ff)하고, 로컬 서버를 http://localhost:3000에서 성공적으로 실행했습니다. progress-bar가 완전히 제거되고 health-bar가 더 굵게(20px) 표시되도록 UI가 개선되었으며, 게임 기능이 정상 작동함을 확인했습니다.",
+      "completedAt": "2025-07-13T14:27:33.630Z"
+    }
+  ]
+}

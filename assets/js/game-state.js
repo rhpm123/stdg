@@ -38,7 +38,31 @@ let gameState = {
     isLandscape: false,         // 현재 가로모드 여부
     isForced: false,           // 가로모드 강제 적용 여부
     isFullscreen: false,       // 풀스크린 모드 여부
-    controller: null           // OrientationController 인스턴스
+    controller: null,          // OrientationController 인스턴스
+    
+    // Bottom-bar 상태 관리 (v2.0)
+    bottomBarMode: 'auto',     // 'auto', 'full', 'compact', 'minimal', 'hidden'
+    lastBottomBarMode: 'auto', // 이전 bottom-bar 모드 
+    bottomBarManager: null,    // BottomBarManager 인스턴스
+    
+    // 모드별 설정 프리셋
+    presets: {
+      landscape: {
+        bottomBarMode: 'auto',     // 가로모드에서는 자동 조절
+        enableFullscreen: true,    // 풀스크린 허용
+        showOrientationOverlay: false  // 회전 안내 숨김
+      },
+      portrait: {
+        bottomBarMode: 'hidden',   // 세로모드에서는 bottom-bar 숨김
+        enableFullscreen: false,   // 풀스크린 비활성화
+        showOrientationOverlay: true   // 회전 안내 표시
+      },
+      desktop: {
+        bottomBarMode: 'full',     // PC에서는 전체 모드로 고정
+        enableFullscreen: false,   // PC에서는 풀스크린 불필요
+        showOrientationOverlay: false  // PC에서는 회전 안내 불필요
+      }
+    }
   }
 };
 

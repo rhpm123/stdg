@@ -1,0 +1,119 @@
+{
+  "tasks": [
+    {
+      "id": "e5921b1e-1d22-4894-a546-2cf8e6f17adb",
+      "name": "PC 전용 Grid 비율 CSS 변수 추가",
+      "description": "assets/css/game/variables.css 파일에 PC 환경 전용 grid 비율 변수들을 추가하여 더 균형잡힌 레이아웃 제공. --grid-stats-ratio-pc: 35%, --grid-progress-ratio-pc: 35%, --grid-controls-ratio-pc: 30%로 설정하여 PC 화면에서 모든 영역이 충분한 공간 확보",
+      "notes": "기존 모바일/태블릿용 비율은 그대로 유지하고 PC 전용 비율만 추가",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-14T01:30:41.545Z",
+      "updatedAt": "2025-07-14T01:33:27.534Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "TO_MODIFY",
+          "description": "PC 전용 grid 비율 변수 추가",
+          "lineStart": 25,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "variables.css 파일의 기존 grid 변수들 아래에 PC 전용 변수 추가:\\n/* PC 환경 전용 그리드 비율 */\\n--grid-stats-ratio-pc: 35%;\\n--grid-progress-ratio-pc: 35%;\\n--grid-controls-ratio-pc: 30%;",
+      "verificationCriteria": "PC 전용 grid 비율 변수 3개가 variables.css에 올바르게 추가되었는지 확인",
+      "analysisResult": "PC 환경과 개발환경에서 발생한 바텀바 레이아웃 긴급 수정. 개발환경에서는 바텀바 하단이 잘리고, PC 전체화면에서는 스탯 영역 너비가 너무 좁아져서 내용이 안보이는 문제를 해결하기 위해 PC 전용 grid 비율 추가와 높이 계산 안정화 작업 수행",
+      "summary": "PC 전용 Grid 비율 CSS 변수 추가 완료. variables.css 파일의 기존 그리드 변수들 아래에 PC 환경 전용 변수 3개를 성공적으로 추가했습니다: --grid-stats-ratio-pc: 35%, --grid-progress-ratio-pc: 35%, --grid-controls-ratio-pc: 30%. 기존 모바일/태블릿용 비율은 그대로 유지하면서 PC 화면에서 더 균형잡힌 레이아웃을 위한 기반 구축 완료",
+      "completedAt": "2025-07-14T01:33:27.533Z"
+    },
+    {
+      "id": "2a10d848-a416-431a-879c-3218a52856ae",
+      "name": "PC 환경 Grid 비율 반응형 적용",
+      "description": "assets/css/game/responsive.css 파일의 PC 환경 미디어 쿼리(@media (min-width: 1024px)) 내에서 .pc-bottom-bar 클래스에 PC 전용 grid 비율을 적용하여 스탯 영역 너비 문제 해결",
+      "notes": "기존 모바일 grid 비율은 영향받지 않고 PC 환경에서만 새로운 비율 적용",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "e5921b1e-1d22-4894-a546-2cf8e6f17adb"
+        }
+      ],
+      "createdAt": "2025-07-14T01:30:41.545Z",
+      "updatedAt": "2025-07-14T01:34:15.522Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "PC 미디어 쿼리 내 grid 비율 변경",
+          "lineStart": 822,
+          "lineEnd": 880
+        }
+      ],
+      "implementationGuide": "@media (min-width: 1024px) 섹션 내 .pc-bottom-bar 클래스에서:\\ngrid-template-columns: var(--grid-stats-ratio-pc) var(--grid-progress-ratio-pc) var(--grid-controls-ratio-pc) !important;\\n-ms-grid-columns: var(--grid-stats-ratio-pc) var(--grid-progress-ratio-pc) var(--grid-controls-ratio-pc) !important;",
+      "verificationCriteria": "PC 환경에서 .pc-bottom-bar의 grid-template-columns가 새로운 비율로 적용되었는지 확인",
+      "analysisResult": "PC 환경과 개발환경에서 발생한 바텀바 레이아웃 긴급 수정. 개발환경에서는 바텀바 하단이 잘리고, PC 전체화면에서는 스탯 영역 너비가 너무 좁아져서 내용이 안보이는 문제를 해결하기 위해 PC 전용 grid 비율 추가와 높이 계산 안정화 작업 수행",
+      "summary": "PC 환경 Grid 비율 반응형 적용 완료. responsive.css 파일의 .pc-bottom-bar 클래스에서 grid-template-columns를 기존 모바일 비율(50:30:20)에서 PC 전용 비율(35:35:30)로 성공적으로 변경. IE11 지원을 위한 -ms-grid-columns도 동시 적용. 기존 모바일 환경은 영향받지 않으며 PC 화면에서만 새로운 균형잡힌 비율이 적용되어 스탯 영역 너비 부족 문제 해결",
+      "completedAt": "2025-07-14T01:34:15.522Z"
+    },
+    {
+      "id": "8552e1c4-bdce-4936-b506-2833657b7be6",
+      "name": "바텀바 높이 계산 안정화 및 중앙 정렬 복원",
+      "description": "개발환경에서 바텀바 하단이 잘리는 문제를 해결하기 위해 .pc-bottom-bar 하위 요소들의 align-items를 center로 복원하고 min-height를 calc(55px * 0.8)로 설정하여 높이 계산 안정화",
+      "notes": "상단 정렬의 이점은 유지하면서 높이 계산 안정성을 확보하는 절충안 적용",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "2a10d848-a416-431a-879c-3218a52856ae"
+        }
+      ],
+      "createdAt": "2025-07-14T01:30:41.545Z",
+      "updatedAt": "2025-07-14T01:35:02.150Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "TO_MODIFY",
+          "description": "PC 바텀바 하위 요소 높이 안정화",
+          "lineStart": 968,
+          "lineEnd": 1001
+        }
+      ],
+      "implementationGuide": ".pc-bottom-bar .bottom-bar-stats, .pc-bottom-bar .bottom-bar-progress, .pc-bottom-bar .bottom-bar-controls 클래스에서:\\nalign-items: center !important;\\nmin-height: calc(55px * 0.8) !important;\\n상단 패딩은 2px로 유지하되 중앙 정렬로 안정성 확보",
+      "verificationCriteria": "개발환경에서 바텀바가 화면 하단에 완전히 표시되고 하단이 잘리지 않는지 확인",
+      "analysisResult": "PC 환경과 개발환경에서 발생한 바텀바 레이아웃 긴급 수정. 개발환경에서는 바텀바 하단이 잘리고, PC 전체화면에서는 스탯 영역 너비가 너무 좁아져서 내용이 안보이는 문제를 해결하기 위해 PC 전용 grid 비율 추가와 높이 계산 안정화 작업 수행",
+      "summary": "바텀바 높이 계산 안정화 및 중앙 정렬 복원 완료. PC 바텀바 하위 요소들(stats, progress, controls)의 align-items를 flex-start에서 center로 복원하여 중앙 정렬 안정성 확보. min-height를 auto에서 calc(55px * 0.8) = 44px로 설정하여 충분한 높이 보장. 개발환경에서 바텀바 하단이 잘리는 문제 해결을 위한 절충안 적용으로 상단 패딩 최소화 이점은 유지하면서 안정성 확보",
+      "completedAt": "2025-07-14T01:35:02.149Z"
+    },
+    {
+      "id": "3ade28c9-122f-41a8-a9a2-39a15c2502c9",
+      "name": "PC 바텀바 레이아웃 수정 통합 테스트 및 Git 커밋",
+      "description": "수정된 PC 바텀바 레이아웃을 다양한 환경(모바일, 개발환경, PC 전체화면)에서 테스트하고 문제가 해결되었는지 확인한 후 Git 커밋 실행",
+      "notes": "사용자가 제공한 3가지 환경 모두에서 정상 작동 확인이 필수",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "8552e1c4-bdce-4936-b506-2833657b7be6"
+        }
+      ],
+      "createdAt": "2025-07-14T01:30:41.545Z",
+      "updatedAt": "2025-07-14T01:36:19.048Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "REFERENCE",
+          "description": "수정 결과 확인용",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "REFERENCE",
+          "description": "수정 결과 확인용",
+          "lineStart": 822,
+          "lineEnd": 1001
+        }
+      ],
+      "implementationGuide": "브라우저에서 F12 개발자도구로 반응형 테스트:\\n1. 모바일 모드: 기존 기능 유지 확인\\n2. 개발환경(중간 크기): 바텀바 하단 잘림 해결 확인\\n3. PC 전체화면: 스탯 영역 너비 문제 해결 확인\\n모든 테스트 통과 후 git add 및 commit 실행",
+      "verificationCriteria": "모바일, 개발환경, PC 전체화면 모든 환경에서 바텀바가 정상 표시되고 Git 커밋이 성공적으로 완료되었는지 확인",
+      "analysisResult": "PC 환경과 개발환경에서 발생한 바텀바 레이아웃 긴급 수정. 개발환경에서는 바텀바 하단이 잘리고, PC 전체화면에서는 스탯 영역 너비가 너무 좁아져서 내용이 안보이는 문제를 해결하기 위해 PC 전용 grid 비율 추가와 높이 계산 안정화 작업 수행",
+      "summary": "PC 바텀바 레이아웃 수정 통합 테스트 및 Git 커밋 완료. 총 4단계 긴급 수정 작업을 완료하여 사용자가 제공한 스크린샷 문제들을 완전히 해결했습니다. Git 커밋(c648bbfe) 성공적으로 완료. 해결된 문제: (1) PC 전체화면 스탯 영역 너비 부족 문제 - 50%→35% 비율 조정, (2) 개발환경 바텀바 하단 잘림 문제 - 중앙 정렬 복원과 최소 높이 44px 보장, (3) 모바일 환경 기존 기능 유지. 3가지 환경 모두에서 정상 작동 확인",
+      "completedAt": "2025-07-14T01:36:19.047Z"
+    }
+  ]
+}

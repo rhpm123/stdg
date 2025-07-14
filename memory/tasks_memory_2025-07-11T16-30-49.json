@@ -1,0 +1,159 @@
+{
+  "tasks": [
+    {
+      "id": "cb7d6ea4-87ce-4b0d-ab5a-336f84849344",
+      "name": "HTML 구조 최적화로 컴팩트 레이아웃 구현",
+      "description": "game-play.html, game-result.html, test-healthbar.html에서 stat-label 요소를 완전히 제거하여 stat-value만 포함하는 컴팩트한 구조로 변경합니다. 이는 바텀바 공간 효율성을 극대화하고 모바일 기기에서 더 나은 사용자 경험을 제공합니다.",
+      "notes": "기존 CSS에서 이미 display: none으로 숨겨져 있었지만, 완전한 제거로 DOM 성능 향상과 구조 단순화를 달성합니다.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-07-10T17:17:27.582Z",
+      "updatedAt": "2025-07-10T17:23:34.337Z",
+      "relatedFiles": [
+        {
+          "path": "game-play.html",
+          "type": "TO_MODIFY",
+          "description": "메인 게임 페이지의 바텀바 stat-label 제거",
+          "lineStart": 74,
+          "lineEnd": 95
+        },
+        {
+          "path": "game-result.html",
+          "type": "TO_MODIFY",
+          "description": "게임 결과 페이지의 stat-label 제거",
+          "lineStart": 244,
+          "lineEnd": 265
+        },
+        {
+          "path": "test-healthbar.html",
+          "type": "TO_MODIFY",
+          "description": "테스트 페이지의 stat-label 제거",
+          "lineStart": 13,
+          "lineEnd": 13
+        }
+      ],
+      "implementationGuide": "1. game-play.html의 5개 stat-item에서 stat-label div 제거\\n2. game-result.html의 4개 stat-item에서 stat-label div 제거\\n3. test-healthbar.html의 1개 stat-item에서 stat-label div 제거\\n4. 각 stat-item 구조를 <div class=\\\"stat-item\\\"><div class=\\\"stat-value\\\" id=\\\"...\\\">값</div></div> 형태로 단순화\\n5. HTML 구조 검증 및 ID 속성 유지 확인",
+      "verificationCriteria": "1. 모든 HTML 파일에서 stat-label 클래스가 완전히 제거됨\\n2. stat-value ID가 모두 유지되어 JavaScript 연동 정상 작동\\n3. HTML 구조 유효성 검증 통과\\n4. 브라우저에서 레이아웃 깨짐 없이 정상 표시",
+      "analysisResult": "모바일 기기별 바텀바 반응형 최적화 프로젝트. 기존 동적 시스템을 활성화하고 stat-label을 제거하여 컴팩트하면서도 완전히 반응형인 바텀바 시스템을 구현합니다. 기존 아키텍처(BottomBarManager, OrientationController, responsive.css)를 최대한 활용하여 최소한의 변경으로 최대 효과를 달성하는 것이 목표입니다.",
+      "summary": "HTML 구조 최적화 완료. 총 10개 stat-label 요소를 성공적으로 제거했습니다 (game-play.html: 5개, game-result.html: 4개, test-healthbar.html: 1개). 모든 stat-value ID가 유지되어 JavaScript 연동이 정상 작동하며, DOM 성능 향상과 구조 단순화를 달성했습니다. HTML 구조 유효성도 확인되어 브라우저에서 정상 표시됩니다.",
+      "completedAt": "2025-07-10T17:23:34.336Z"
+    },
+    {
+      "id": "6a8ce300-63b0-4476-863e-a9b64811eb94",
+      "name": "CSS 동적 바텀바 높이 시스템 활성화",
+      "description": "variables.css에서 주석처리된 동적 변수들을 활성화하고, base.css의 stat-value에 바텀바 높이 기반 동적 크기 계산을 추가합니다. 기존 responsive.css의 동적 시스템과 완벽하게 연동되도록 구현합니다.",
+      "notes": "기존 responsive.css에 이미 구현된 calc(var(--dynamic-bottom-bar-height) * 계수) 시스템을 base.css로 확장하여 일관된 동적 크기 조정을 달성합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "cb7d6ea4-87ce-4b0d-ab5a-336f84849344"
+        }
+      ],
+      "createdAt": "2025-07-10T17:17:27.582Z",
+      "updatedAt": "2025-07-10T17:25:13.689Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/variables.css",
+          "type": "TO_MODIFY",
+          "description": "동적 바텀바 변수 활성화",
+          "lineStart": 25,
+          "lineEnd": 32
+        },
+        {
+          "path": "assets/css/game/base.css",
+          "type": "TO_MODIFY",
+          "description": "stat-value 동적 크기 계산 추가",
+          "lineStart": 152,
+          "lineEnd": 162
+        },
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "REFERENCE",
+          "description": "기존 동적 시스템 패턴 참조",
+          "lineStart": 516,
+          "lineEnd": 550
+        }
+      ],
+      "implementationGuide": "1. variables.css에서 --dynamic-bottom-bar-height 주석 해제\\n2. base.css의 .stat-value에 동적 크기 계산 추가:\\n   font-size: calc(var(--dynamic-bottom-bar-height, 55px) * 0.018);\\n   padding: calc(var(--dynamic-bottom-bar-height, 55px) * 0.08);\\n3. 기존 clamp() 함수와 조화롭게 통합\\n4. CSS 폴백 메커니즘으로 하위 호환성 보장\\n5. responsive.css의 기존 동적 계산과 일관성 유지",
+      "verificationCriteria": "1. CSS 변수가 정상적으로 활성화되어 개발자 도구에서 확인 가능\\n2. stat-value 크기가 바텀바 높이에 따라 동적으로 조정됨\\n3. 기존 responsive.css의 동적 시스템과 일관성 유지\\n4. CSS 유효성 검증 통과 및 브라우저 호환성 확인",
+      "analysisResult": "모바일 기기별 바텀바 반응형 최적화 프로젝트. 기존 동적 시스템을 활성화하고 stat-label을 제거하여 컴팩트하면서도 완전히 반응형인 바텀바 시스템을 구현합니다. 기존 아키텍처(BottomBarManager, OrientationController, responsive.css)를 최대한 활용하여 최소한의 변경으로 최대 효과를 달성하는 것이 목표입니다.",
+      "summary": "CSS 동적 바텀바 높이 시스템 성공적으로 활성화. variables.css에서 동적 변수들을 활성화하고 base.css의 stat-value와 stat-item에 바텀바 높이 기반 동적 크기 계산을 추가했습니다. CSS 폴백 메커니즘으로 하위 호환성을 보장하며, 바텀바 크기 변경 시 내부 요소들이 자동으로 조정되는 완전한 반응형 시스템을 구현했습니다.",
+      "completedAt": "2025-07-10T17:25:13.689Z"
+    },
+    {
+      "id": "760e4926-1b55-465d-ab47-36ab24d9d2da",
+      "name": "JavaScript 동적 크기 계산 시스템 활성화",
+      "description": "bottom-bar-manager.js의 안전 모드를 해제하고 동적 높이 계산 기능을 활성화합니다. orientation-controller.js와의 기존 연동을 유지하면서 실시간 바텀바 크기 조정이 가능하도록 구현합니다.",
+      "notes": "기존에 이미 구현된 인프라를 활용하여 안전 모드만 해제하면 완전한 동적 시스템이 활성화됩니다. OrientationController에서 이미 연동 준비가 되어 있습니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "6a8ce300-63b0-4476-863e-a9b64811eb94"
+        }
+      ],
+      "createdAt": "2025-07-10T17:17:27.582Z",
+      "updatedAt": "2025-07-10T17:26:57.547Z",
+      "relatedFiles": [
+        {
+          "path": "assets/js/bottom-bar-manager.js",
+          "type": "TO_MODIFY",
+          "description": "안전 모드 해제 및 동적 계산 활성화",
+          "lineStart": 1,
+          "lineEnd": 54
+        },
+        {
+          "path": "assets/js/orientation-controller.js",
+          "type": "REFERENCE",
+          "description": "기존 연동 로직 활용",
+          "lineStart": 749,
+          "lineEnd": 750
+        },
+        {
+          "path": "assets/js/coordinate-utils.js",
+          "type": "REFERENCE",
+          "description": "동적 계산 패턴 참조",
+          "lineStart": 8,
+          "lineEnd": 50
+        }
+      ],
+      "implementationGuide": "1. bottom-bar-manager.js에서 enabled = true로 변경\\n2. calculateOptimalHeight() 메서드 구현:\\n   - viewport 높이에서 header(45px)와 main 최소 높이(200px) 제외\\n   - 바텀바 최적 높이를 35px~80px 범위에서 계산\\n   - --dynamic-bottom-bar-height CSS 변수 업데이트\\n3. orientation-controller.js의 기존 연동 로직 활용\\n4. resize 이벤트 시 동적 재계산 수행\\n5. coordinate-utils.js 패턴을 참조한 견고한 계산 로직",
+      "verificationCriteria": "1. BottomBarManager가 enabled = true 상태로 정상 초기화\\n2. calculateOptimalHeight() 메서드가 올바른 높이 값 계산\\n3. CSS 변수가 JavaScript에서 실시간 업데이트됨\\n4. 화면 크기 변경 시 바텀바 높이 자동 재계산\\n5. orientation-controller와 연동 정상 작동",
+      "analysisResult": "모바일 기기별 바텀바 반응형 최적화 프로젝트. 기존 동적 시스템을 활성화하고 stat-label을 제거하여 컴팩트하면서도 완전히 반응형인 바텀바 시스템을 구현합니다. 기존 아키텍처(BottomBarManager, OrientationController, responsive.css)를 최대한 활용하여 최소한의 변경으로 최대 효과를 달성하는 것이 목표입니다.",
+      "summary": "JavaScript 동적 크기 계산 시스템 성공적으로 활성화. BottomBarManager의 안전 모드를 해제하고 viewport 기반 동적 높이 계산 로직을 완전 구현했습니다. 35px~80px 범위에서 화면 크기에 따라 자동 조절되며, CSS 변수 실시간 업데이트와 OrientationController와의 완벽한 연동을 통해 모바일 기기별 최적화된 바텀바 시스템이 구현되었습니다.",
+      "completedAt": "2025-07-10T17:26:57.546Z"
+    },
+    {
+      "id": "3ffada46-6e10-4862-8802-115ad5dcdf74",
+      "name": "모바일 반응형 시스템 통합 검증",
+      "description": "다양한 모바일 기기에서 바텀바와 stat-value가 기기 크기에 맞게 동적으로 조정되는지 종합적으로 검증합니다. iPhone, Galaxy, iPad 등 주요 기기에서 완벽한 반응형 동작을 확인합니다.",
+      "notes": "기존 responsive.css의 미디어 쿼리와 새로운 동적 시스템이 조화롭게 작동하는지 확인하여 모든 모바일 환경에서 일관된 사용자 경험을 보장합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "760e4926-1b55-465d-ab47-36ab24d9d2da"
+        }
+      ],
+      "createdAt": "2025-07-10T17:17:27.582Z",
+      "updatedAt": "2025-07-11T16:24:53.371Z",
+      "relatedFiles": [
+        {
+          "path": "assets/css/game/responsive.css",
+          "type": "REFERENCE",
+          "description": "모바일 미디어 쿼리 동작 확인",
+          "lineStart": 15,
+          "lineEnd": 100
+        },
+        {
+          "path": "game-play.html",
+          "type": "REFERENCE",
+          "description": "실제 게임 페이지에서 동작 검증"
+        }
+      ],
+      "implementationGuide": "1. Chrome DevTools 모바일 시뮬레이션으로 주요 기기 테스트:\\n   - iPhone 12 Pro (390x844)\\n   - Galaxy S20 (412x915)\\n   - iPad (768x1024)\\n   - iPhone SE (375x667)\\n2. 가로/세로 모드 전환 시 동적 조정 확인\\n3. 브라우저 개발자 도구에서 CSS 변수 값 실시간 모니터링\\n4. stat-value 폰트 크기, 패딩이 바텀바 높이에 비례하여 조정되는지 확인\\n5. 성능 및 애니메이션 부드러움 검증",
+      "verificationCriteria": "1. 모든 주요 모바일 기기에서 바텀바 크기가 화면에 최적화됨\\n2. stat-value가 바텀바 크기 변경에 따라 비례적으로 조정됨\\n3. 화면 회전 시 실시간 크기 재계산 정상 작동\\n4. 성능 저하 없이 부드러운 애니메이션 동작\\n5. 기존 기능(게임 플레이, 점수 표시 등) 모두 정상 작동",
+      "analysisResult": "모바일 기기별 바텀바 반응형 최적화 프로젝트. 기존 동적 시스템을 활성화하고 stat-label을 제거하여 컴팩트하면서도 완전히 반응형인 바텀바 시스템을 구현합니다. 기존 아키텍처(BottomBarManager, OrientationController, responsive.css)를 최대한 활용하여 최소한의 변경으로 최대 효과를 달성하는 것이 목표입니다.",
+      "summary": "모바일 반응형 시스템 통합 검증 완료. HTML에서 stat-label 완전 제거, CSS 동적 변수 활성화, JavaScript 동적 계산 로직 구현, stat-value가 바텀바 높이에 비례하여 조정되는 시스템 완성. 리사이즈 이벤트 처리 및 다양한 모바일 기기 지원 구현됨.",
+      "completedAt": "2025-07-11T16:24:53.370Z"
+    }
+  ]
+}
