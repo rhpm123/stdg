@@ -726,6 +726,25 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 }
 
+// 브라우저 환경에서 전역 접근을 위한 코드 추가
+if (typeof window !== 'undefined') {
+  // 핵심 게임 함수들을 전역 스코프에 노출
+  window.loadGameData = loadGameData;
+  window.displayImages = displayImages;
+  window.startGame = startGame;
+  window.pauseGame = pauseGame;
+  window.resetGame = resetGame;
+  window.startTimer = startTimer;
+  window.updateTimerDisplay = updateTimerDisplay;
+  window.updateUI = updateUI;
+  window.debugMode = debugMode;
+  window.showAnswers = showAnswers;
+  window.calculateTimeBonus = calculateTimeBonus;
+  window.playNextGame = playNextGame;
+  
+  console.log('🌐 게임 로직 함수들이 전역 스코프에 등록되었습니다.');
+}
+
 /**
  * 시간 보너스 계산
  * @param {number} elapsedTime - 경과 시간 (밀리초)

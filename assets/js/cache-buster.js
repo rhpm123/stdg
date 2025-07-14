@@ -602,8 +602,13 @@ class CacheBuster {
   }
 }
 
-// 전역 캐시 무력화 인스턴스
-window.cacheBuster = new CacheBuster();
+// 전역 캐시 무력화 인스턴스 (중복 방지)
+if (!window.cacheBuster) {
+  window.cacheBuster = new CacheBuster();
+  console.log('🛠️ CacheBuster 인스턴스 생성 완료');
+} else {
+  console.log('⚙️ CacheBuster 인스턴스가 이미 존재합니다.');
+}
 
 // 자동 실행 (개발 환경에서만)
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {

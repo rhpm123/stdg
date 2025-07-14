@@ -286,7 +286,9 @@ const healthBarSystem = {
       // 30% 이하일 때 느린 깜박임 효과
       this.healthBarFill.style.animation = 'healthBarBlink 1s infinite';
     } else {
-      this.healthBarFill.classList.add('critical');
+      // 정상 상태: 애니메이션 제거하고 클래스 정리
+      this.healthBarFill.style.animation = 'none';
+      this.healthBarFill.classList.remove('critical');
     }
   }
   /**
@@ -302,7 +304,7 @@ const healthBarSystem = {
    */
   getHealth() {
     return this.currentHealth;
-  },
+  }
   
   /**
    * 체력바 표시 여부 확인
