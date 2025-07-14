@@ -165,7 +165,6 @@
       console.log('인증 상태 캐시가 클리어되었습니다.');
     }
     // 메시지 표시 함수
-    // 메시지 표시 함수
     function showMessage(message, type = 'error') {
       const errorEl = document.getElementById('errorMessage');
       const successEl = document.getElementById('successMessage');
@@ -182,6 +181,12 @@
       if (type === 'error') {
         errorEl.textContent = message;
         errorEl.style.display = 'block';
+      } else if (type === 'warning') {
+        // warning은 error 요소를 사용하되 스타일을 조정
+        errorEl.textContent = `⚠️ ${message}`;
+        errorEl.style.display = 'block';
+        errorEl.style.backgroundColor = '#f39c12';
+        errorEl.style.color = '#fff';
       } else {
         successEl.textContent = message;
         successEl.style.display = 'block';
@@ -580,58 +585,8 @@
         
         // === 5단계: 게임 시스템 초기화 ===
         
-        // 시간 제한 시각화 시스템 초기화
-        console.log('🔍 healthBarSystem 존재 여부:', typeof window.healthBarSystem);
-        if (typeof window.healthBarSystem !== 'undefined') {
-          console.log('🔍 healthBarSection DOM 요소 상태:', {
-            요소존재: !!document.getElementById('healthBarSection'),
-            클래스: document.getElementById('healthBarSection')?.className,
-            표시상태: document.getElementById('healthBarSection') ? window.getComputedStyle(document.getElementById('healthBarSection')).display : 'N/A'
-          });
-          
-          const healthBarInitSuccess = window.healthBarSystem.init();
-          if (healthBarInitSuccess) {
-            console.log('⏱️ 시간 제한 시각화 시스템 초기화 성공');
-          } else {
-            console.warn('⚠️ 시간 제한 시각화 시스템 초기화 실패');
-          }
-        } else {
-          console.error('❌ healthBarSystem이 로드되지 않았습니다!');
-        }
-        
-        // 게임 데이터 로딩 (표준화된 순서)
-        await loadGameData();
-        
-        // 체력바 시스템 시작 (게임 데이터 로딩 후)
-        if (typeof window.healthBarSystem !== 'undefined') {
-          console.log('🚀 체력바 시스템 수동 시작...');
-          window.healthBarSystem.start();
-          console.log('✅ 체력바 시스템 수동 시작 완료');
-        }
-        
-        // UI 업데이트 (모든 초기화 완료 후)
-        updateUI();
-        
-        // Orientation Controller 초기화 및 이벤트 리스너 설정
-        if (typeof window.orientationController !== 'undefined') {
-          console.log('🔄 Orientation Controller 초기화...');
-          
-          // OrientationController 초기화
-          window.orientationController.initOrientation();
-          
-          // Orientation 변경 시 게임 버튼 상태 업데이트
-          window.orientationController.addCallback('orientationChange', (data) => {
-            console.log('📱 Orientation 변경 감지:', data);
-            updateGameButtonStates();
-          });
-          
-          // 초기 게임 버튼 상태 설정
-          updateGameButtonStates();
-          
-          console.log('✅ Orientation Controller 초기화 완료');
-        } else {
-          console.warn('⚠️ OrientationController를 찾을 수 없음');
-        }
+        // 안전한 모듈 기반 초기화 실행
+        await safeGameInit();
         
         // === 최종 완료 메시지 ===
         showMessage('게임 준비 완료! 시작 버튼을 눌러주세요.', 'success');
@@ -640,8 +595,171 @@
       } catch (error) {
         console.error('❌ 게임 초기화 실패:', error);
         showMessage(`게임 초기화 실패: ${error.message}`, 'error');
+        
+        // 폴백 모드로 기본 초기화 시도
+        try {
+          console.log('🔧 폴백 모드로 기본 초기화 시도...');
+          await fallbackGameInit();
+          showMessage('폴백 모드로 게임을 시작했습니다. 일부 기능이 제한될 수 있습니다.', 'warning');
+        } catch (fallbackError) {
+          console.error('❌ 폴백 초기화도 실패:', fallbackError);
+          showMessage('게임 초기화에 실패했습니다. 페이지를 새로고침해주세요.', 'error');
+        }
       }
     });
+
+    /**
+     * 안전한 게임 초기화 함수 - 의존성 관리 기반
+     */
+    async function safeGameInit() {
+      console.log('🔧 안전한 게임 초기화 시작...');
+      
+      // 1단계: 필수 모듈 로드 확인 및 대기
+      const requiredModules = ['gameState', 'healthBarSystem', 'gameLogic'];
+      
+      for (const moduleName of requiredModules) {
+        const maxRetries = 10;
+        let retryCount = 0;
+        
+        while (retryCount < maxRetries) {
+          if (await waitForModule(moduleName)) {
+            console.log(`✅ ${moduleName} 모듈 로드 확인됨`);
+            break;
+          }
+          
+          retryCount++;
+          console.log(`⏳ ${moduleName} 모듈 대기 중... (${retryCount}/${maxRetries})`);
+          
+          if (retryCount >= maxRetries) {
+            throw new Error(`${moduleName} 모듈 로드 타임아웃`);
+          }
+          
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+      
+      // 2단계: 순차적 모듈 초기화
+      await initializeModulesSequentially();
+      
+      // 3단계: 게임 데이터 로딩
+      await loadGameDataSafely();
+      
+      // 4단계: 최종 시스템 활성화
+      await activateGameSystems();
+      
+      console.log('🎉 안전한 게임 초기화 완료!');
+    }
+
+    /**
+     * 모듈 로드 대기 함수
+     */
+    async function waitForModule(moduleName) {
+      const moduleMap = {
+        'gameState': () => typeof window.gameState !== 'undefined',
+        'healthBarSystem': () => typeof window.healthBarSystem !== 'undefined',
+        'gameLogic': () => typeof window.gameLogic !== 'undefined' || typeof window.loadGameData === 'function'
+      };
+      
+      const checkFunction = moduleMap[moduleName];
+      return checkFunction ? checkFunction() : false;
+    }
+
+    /**
+     * 순차적 모듈 초기화
+     */
+    async function initializeModulesSequentially() {
+      console.log('🔄 순차적 모듈 초기화 시작...');
+      
+      // healthBarSystem 초기화
+      if (typeof window.healthBarSystem !== 'undefined') {
+        console.log('🔍 healthBarSystem 초기화 중...');
+        console.log('🔍 healthBarSection DOM 요소 상태:', {
+          요소존재: !!document.getElementById('healthBarSection'),
+          클래스: document.getElementById('healthBarSection')?.className,
+          표시상태: document.getElementById('healthBarSection') ? window.getComputedStyle(document.getElementById('healthBarSection')).display : 'N/A'
+        });
+        
+        const healthBarInitSuccess = window.healthBarSystem.init();
+        if (healthBarInitSuccess) {
+          console.log('⏱️ 시간 제한 시각화 시스템 초기화 성공');
+        } else {
+          console.warn('⚠️ 시간 제한 시각화 시스템 초기화 실패');
+        }
+      }
+      
+      // orientationController 초기화
+      if (typeof window.orientationController !== 'undefined') {
+        console.log('🔄 Orientation Controller 초기화...');
+        window.orientationController.initOrientation();
+        
+        // Orientation 변경 시 게임 버튼 상태 업데이트
+        window.orientationController.addCallback('orientationChange', (data) => {
+          console.log('📱 Orientation 변경 감지:', data);
+          updateGameButtonStates();
+        });
+        
+        // 초기 게임 버튼 상태 설정
+        updateGameButtonStates();
+        console.log('✅ Orientation Controller 초기화 완료');
+      }
+      
+      console.log('✅ 순차적 모듈 초기화 완료');
+    }
+
+    /**
+     * 안전한 게임 데이터 로딩
+     */
+    async function loadGameDataSafely() {
+      console.log('📊 안전한 게임 데이터 로딩 시작...');
+      
+      if (typeof window.loadGameData === 'function') {
+        await window.loadGameData();
+        console.log('✅ 게임 데이터 로딩 완료');
+      } else {
+        throw new Error('loadGameData 함수를 찾을 수 없습니다');
+      }
+    }
+
+    /**
+     * 게임 시스템 활성화
+     */
+    async function activateGameSystems() {
+      console.log('🚀 게임 시스템 활성화 시작...');
+      
+      // 체력바 시스템 시작
+      if (typeof window.healthBarSystem !== 'undefined') {
+        console.log('🚀 체력바 시스템 수동 시작...');
+        window.healthBarSystem.start();
+        console.log('✅ 체력바 시스템 수동 시작 완료');
+      }
+      
+      // UI 업데이트
+      if (typeof window.updateUI === 'function') {
+        window.updateUI();
+        console.log('✅ UI 업데이트 완료');
+      }
+      
+      console.log('✅ 게임 시스템 활성화 완료');
+    }
+
+    /**
+     * 폴백 모드 초기화 (안전장치)
+     */
+    async function fallbackGameInit() {
+      console.log('🔧 폴백 모드 초기화 시작...');
+      
+      // 기본 게임 데이터만 로딩
+      if (typeof window.loadGameData === 'function') {
+        await window.loadGameData();
+      }
+      
+      // 기본 UI 업데이트
+      if (typeof window.updateUI === 'function') {
+        window.updateUI();
+      }
+      
+      console.log('✅ 폴백 모드 초기화 완료');
+    }
     
     /**
      * 사용자 인터페이스 업데이트
