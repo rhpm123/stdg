@@ -3,6 +3,15 @@
  * 개발 환경에서 CSS/JS 수정사항이 즉시 반영되도록 함
  */
 
+(function(global) {
+  'use strict';
+  
+  // 이미 로드된 경우 중복 방지
+  if (global.CacheBuster) {
+    console.log('⚙️ CacheBuster가 이미 로드되어 있습니다.');
+    return;
+  }
+
 class CacheBuster {
   constructor() {
     this.timestamp = Date.now();
@@ -602,13 +611,22 @@ class CacheBuster {
   }
 }
 
-// 전역 캐시 무력화 인스턴스 (중복 방지)
-if (!window.cacheBuster) {
-  window.cacheBuster = new CacheBuster();
-  console.log('🛠️ CacheBuster 인스턴스 생성 완료');
-} else {
-  console.log('⚙️ CacheBuster 인스턴스가 이미 존재합니다.');
-}
+  // 전역 CacheBuster 클래스 등록
+  global.CacheBuster = CacheBuster;
+  
+  // 안전한 인스턴스 생성 및 등록
+  if (!global.cacheBuster) {
+    global.cacheBuster = new CacheBuster();
+    console.log('🛠️ CacheBuster 인스턴스 생성 완료');
+  } else {
+    console.log('⚙️ CacheBuster 인스턴스가 이미 존재합니다.');
+  }
+  
+  // GameModuleLoader 시스템과 통합 (있는 경우에만)
+  if (typeof global.registerModule === 'function') {
+    global.registerModule('cacheBuster', global.cacheBuster);
+    console.log('📎 CacheBuster가 모듈 로더에 등록되었습니다.');
+  }
 
 // 자동 실행 (개발 환경에서만)
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
@@ -760,3 +778,5 @@ console.log('    - devUtils.stopSizeMonitor(): 모니터링 중지');
 console.log('  개별 확인:');
 console.log('    - devUtils.checkCssVar("--dynamic-bottom-bar-height"): 특정 CSS 변수');
 console.log('    - devUtils.measureElement(".bottom-bar"): 특정 요소 크기'); 
+
+})(window);
