@@ -30,3 +30,135 @@
 
 
 
+
+/* ============================================
+   바텀바 완전 제거 및 사이드바 전용 시스템
+   ============================================ */
+
+/* 바텀바 완전 숨김 (모든 디바이스) */
+.bottom-bar,
+.bottom-bar-stats,
+.bottom-bar-progress,
+.bottom-bar-controls {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  max-height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  z-index: -9999 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.bottom-bar *,
+.bottom-bar-stats *,
+.bottom-bar-progress *,
+.bottom-bar-controls * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* 모든 미디어 쿼리에서 바텀바 숨김 */
+@media (max-width: 480px) {
+  .bottom-bar { display: none !important; }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  .bottom-bar { display: none !important; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bottom-bar { display: none !important; }
+}
+
+@media (min-width: 1024px) {
+  .bottom-bar { display: none !important; }
+}
+
+/* 화면 방향에 상관없이 숨김 */
+@media (orientation: landscape) {
+  .bottom-bar { display: none !important; }
+}
+
+@media (orientation: portrait) {
+  .bottom-bar { display: none !important; }
+}
+
+/* 메인 콘텐츠 영역 전체 확장 (바텀바 제거로 인한 공간 활용) */
+.main-content {
+  height: calc(100vh - var(--game-header-height)) !important;
+  height: calc(100dvh - var(--game-header-height)) !important;
+  max-height: calc(100vh - var(--game-header-height)) !important;
+  max-height: calc(100dvh - var(--game-header-height)) !important;
+  padding-bottom: 0 !important;
+}
+
+/* 사이드바 강제 표시 (모든 디바이스) */
+.right-sidebar {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 메인 레이아웃을 사이드바 전용으로 강제 설정 */
+.main-layout-wrapper {
+  display: grid !important;
+  grid-template-columns: 1fr var(--game-right-sidebar-width) !important;
+  grid-template-areas: "content sidebar" !important;
+}
+
+/* 사이드바 우선순위 보장 */
+.main-layout-wrapper .main-layout-content {
+  grid-area: content !important;
+}
+
+.main-layout-wrapper .right-sidebar {
+  grid-area: sidebar !important;
+}
+
+/* ============================================
+   응급 대응: 어떤 상황에서도 바텀바 숨김 보장
+   ============================================ */
+
+/* 모든 선택자로 바텀바 완전 차단 */
+div[class*="bottom-bar"],
+section[class*="bottom-bar"],
+.game-bottom-bar,
+#bottomBar,
+#gameBottomBar {
+  display: none !important;
+}
+
+/* JavaScript로 동적 생성된 바텀바도 차단 */
+body .bottom-bar,
+html .bottom-bar,
+main .bottom-bar {
+  display: none !important;
+}
+
+/* 인라인 스타일로 표시된 바텀바도 차단 */
+.bottom-bar[style] {
+  display: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
