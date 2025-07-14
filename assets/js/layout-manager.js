@@ -70,6 +70,11 @@ class LayoutManager {
       // 초기 레이아웃 모드 결정
       this.determineInitialMode();
       
+      // ✅ 사이드바 초기 상태 동기화
+      setTimeout(() => {
+        this.initializeSidebarState();
+      }, 100); // DOM 완전 로딩 후 실행
+      
       this.isInitialized = true;
       
       console.log('✅ 통합 LayoutManager 초기화 완료');
@@ -161,6 +166,9 @@ class LayoutManager {
         this.handleResize();
       }, 200);
     });
+    
+    // ✅ 사이드바 버튼 이벤트 핸들러 연결
+    this.setupSidebarButtonHandlers();
     
     console.log('👂 이벤트 리스너 설정 완료');
   }
@@ -262,17 +270,28 @@ class LayoutManager {
    * 요소 동기화 (바텀바 ↔ 사이드바)
    */
   syncToSidebar(elementType, value) {
-    const sidebarElements = {
-      score: document.getElementById('sidebarScore'),
-      timer: document.getElementById('sidebarTimer'),
-      found: document.getElementById('sidebarFound'),
-      lives: document.getElementById('sidebarLives')
-    };
-    
-    const element = sidebarElements[elementType];
-    if (element) {
-      element.textContent = value;
-      console.log(`🔗 사이드바 동기화: ${elementType} = ${value}`);
+    try {
+      const sidebarElements = {
+        score: document.getElementById('sidebarScore'),
+        timer: document.getElementById('sidebarTimer'),
+        found: document.getElementById('sidebarFound'),
+        lives: document.getElementById('sidebarLives')
+      };
+      
+      const element = sidebarElements[elementType];
+      if (element) {
+        // 안전한 값 처리
+        const safeValue = value !== null && value !== undefined ? String(value) : '';
+        element.textContent = safeValue;
+        console.log(`🔗 사이드바 동기화: ${elementType} = ${safeValue}`);
+        return true;
+      } else {
+        console.warn(`⚠️ 사이드바 요소를 찾을 수 없음: ${elementType}`);
+        return false;
+      }
+    } catch (error) {
+      console.error(`❌ 사이드바 동기화 실패 (${elementType}):`, error);
+      return false;
     }
   }
 
@@ -313,6 +332,75 @@ class LayoutManager {
     }
     
     console.log('🚫 바텀바 강제 숨김 적용');
+  }
+
+  /**
+   * 사이드바 버튼 이벤트 핸들러 설정
+   */
+  setupSidebarButtonHandlers() {
+    // 사이드바 시작 버튼
+    const sidebarStartBtn = document.getElementById('sidebarStartBtn');
+    const originalStartBtn = document.getElementById('startBtn');
+    
+    if (sidebarStartBtn && originalStartBtn) {
+      sidebarStartBtn.addEventListener('click', () => {
+        originalStartBtn.click(); // 원본 버튼 클릭 이벤트 트리거
+        console.log('🎮 사이드바 시작 버튼 클릭됨');
+      });
+    }
+    
+    // 사이드바 힌트 버튼
+    const sidebarHintBtn = document.getElementById('sidebarHintBtn');
+    const originalHintBtn = document.getElementById('hintBtn');
+    
+    if (sidebarHintBtn && originalHintBtn) {
+      sidebarHintBtn.addEventListener('click', () => {
+        originalHintBtn.click(); // 원본 버튼 클릭 이벤트 트리거
+        console.log('💡 사이드바 힌트 버튼 클릭됨');
+      });
+    }
+    
+    console.log('🔗 사이드바 버튼 이벤트 핸들러 설정 완료');
+  }
+
+  /**
+   * 사이드바 초기 상태 동기화
+   */
+  initializeSidebarState() {
+    try {
+      // 게임 상태가 있다면 초기 동기화 수행
+      if (typeof gameState !== 'undefined' && gameState) {
+        this.syncToSidebar('score', gameState.score || 0);
+        this.syncToSidebar('found', `${(gameState.foundPoints || []).length}/${(gameState.answerPoints || []).length}`);
+        this.syncToSidebar('timer', '00:00');
+      }
+      
+      // 하트 시스템 초기화
+      if (window.heartSystem) {
+        const heartText = '❤️'.repeat(window.heartSystem.getCurrentHearts() || 5);
+        this.syncToSidebar('lives', heartText);
+      }
+      
+      // 버튼 상태 초기화
+      const startBtn = document.getElementById('startBtn');
+      const hintBtn = document.getElementById('hintBtn');
+      const sidebarStartBtn = document.getElementById('sidebarStartBtn');
+      const sidebarHintBtn = document.getElementById('sidebarHintBtn');
+      
+      if (startBtn && sidebarStartBtn) {
+        sidebarStartBtn.disabled = startBtn.disabled;
+        sidebarStartBtn.textContent = startBtn.textContent || '게임 시작';
+      }
+      
+      if (hintBtn && sidebarHintBtn) {
+        sidebarHintBtn.disabled = hintBtn.disabled || true;
+        sidebarHintBtn.textContent = hintBtn.textContent || '💡 힌트';
+      }
+      
+      console.log('🔄 사이드바 초기 상태 동기화 완료');
+    } catch (error) {
+      console.error('❌ 사이드바 초기화 중 오류:', error);
+    }
   }
 
   /**
