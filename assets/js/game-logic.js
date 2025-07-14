@@ -390,7 +390,8 @@ function resumeGame() {
    updateUI();
    showMessage('게임이 리셋되었습니다.', 'success');
    console.log('🔄 게임 리셋');
- }
+}
+
 /**
  * 타이머 시작
  */
@@ -450,6 +451,7 @@ function updateTimerDisplay() {
     // 시간 제한 및 체력 감소 처리
     checkTimeLimit();
   }
+}
 
 /**
  * 시간 제한 처리
@@ -710,41 +712,6 @@ function checkGameCompletion() {
   return false;
 }
 
-// 전역 접근을 위한 export (모듈 시스템 사용 시)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    loadGameData,
-    displayImages,
-    startGame,
-    pauseGame,
-    resetGame,
-    startTimer,
-    updateTimerDisplay,
-    updateUI,
-    debugMode,
-    showAnswers
-  };
-}
-
-// 브라우저 환경에서 전역 접근을 위한 코드 추가
-if (typeof window !== 'undefined') {
-  // 핵심 게임 함수들을 전역 스코프에 노출
-  window.loadGameData = loadGameData;
-  window.displayImages = displayImages;
-  window.startGame = startGame;
-  window.pauseGame = pauseGame;
-  window.resetGame = resetGame;
-  window.startTimer = startTimer;
-  window.updateTimerDisplay = updateTimerDisplay;
-  window.updateUI = updateUI;
-  window.debugMode = debugMode;
-  window.showAnswers = showAnswers;
-  window.calculateTimeBonus = calculateTimeBonus;
-  window.playNextGame = playNextGame;
-  
-  console.log('🌐 게임 로직 함수들이 전역 스코프에 등록되었습니다.');
-}
-
 /**
  * 시간 보너스 계산
  * @param {number} elapsedTime - 경과 시간 (밀리초)
@@ -922,4 +889,69 @@ function playNextGame() {
   
   // 다음 게임으로 이동
   window.location.href = `game-play.html?id=${nextId}`;
+}
+
+// 게임 로직 모듈 - 핵심 함수들을 체계적으로 관리
+const gameLogic = {
+  // 게임 데이터 및 초기화
+  loadGameData,
+  startGame,
+  resetGame,
+  displayImages,
+  
+  // 게임 상태 제어
+  pauseGame,
+  resumeGame,
+  canStartGame,
+  
+  // 타이머 및 UI
+  startTimer,
+  updateTimerDisplay,
+  updateUI,
+  checkGameCompletion,
+  
+  // 방향 제어
+  isLandscapeMode,
+  showOrientationMessage,
+  hideOrientationMessage,
+  updateGameButtonStates,
+  
+  // 게임 종료 및 결과
+  handleGameOver,
+  calculateTimeBonus,
+  saveGameResult,
+  showGameCompleteModal,
+  closeGameCompleteModal,
+  playNextGame
+};
+
+// 전역 접근 보장 시스템
+if (typeof window !== 'undefined') {
+  // 핵심 함수들을 안전하게 전역에 노출
+  window.loadGameData = loadGameData;
+  window.startGame = startGame;
+  window.resetGame = resetGame;
+  window.pauseGame = pauseGame;
+  window.resumeGame = resumeGame;
+  window.canStartGame = canStartGame;
+  window.isLandscapeMode = isLandscapeMode;
+  window.showOrientationMessage = showOrientationMessage;
+  window.hideOrientationMessage = hideOrientationMessage;
+  window.updateGameButtonStates = updateGameButtonStates;
+  window.playNextGame = playNextGame;
+  
+  // 모듈 객체도 전역에 노출
+  window.gameLogic = gameLogic;
+  console.log('✅ gameLogic 모듈이 전역에 등록되었습니다!', Object.keys(gameLogic));
+  
+  // 새로운 모듈 로더 시스템에 등록 (의존성 명시)
+  if (typeof registerModule === 'function') {
+    registerModule('gameLogic', gameLogic, ['gameState', 'healthBarSystem']);
+    console.log('🔧 gameLogic이 모듈 로더에 등록되었습니다.');
+  }
+}
+
+// Node.js 환경 지원
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = gameLogic;
 }
