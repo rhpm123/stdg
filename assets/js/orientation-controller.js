@@ -673,6 +673,14 @@ class OrientationController {
           this.updateBottomBarMode();
         }
         
+        // ✅ Layout Manager 사이드바 너비 재계산 트리거
+        if (window.layoutManager && typeof window.layoutManager.handleResize === 'function') {
+          setTimeout(() => {
+            window.layoutManager.handleResize();
+            console.log('🔗 Orientation 변경 시 사이드바 너비 재계산 완료');
+          }, 100); // 화면 회전 완료 후 실행
+        }
+        
         // 콜백 실행
         this.triggerCallbacks('orientationChange', {
           isLandscape: this.isLandscape,

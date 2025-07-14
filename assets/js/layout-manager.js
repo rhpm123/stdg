@@ -140,10 +140,13 @@ class LayoutManager {
     const mainContentHeight = `calc(100vh - ${headerHeight}px - ${bottomBarHeight}px)`;
     root.style.setProperty('--main-content-height', mainContentHeight);
     
-    console.log(`🎨 CSS 변수 업데이트:`, {
+    // ✅ 반응형 사이드바 너비 시스템 로깅
+    console.log('📐 반응형 사이드바 너비 설정:', {
+      deviceType: this.deviceType,
       sidebarWidth: `${sidebarWidth}px`,
       bottomBarHeight: `${bottomBarHeight}px`,
-      mainContentHeight
+      viewportSize: `${window.innerWidth}×${window.innerHeight}px`,
+      cssVariable: getComputedStyle(root).getPropertyValue('--game-right-sidebar-width').trim()
     });
   }
 
@@ -177,6 +180,10 @@ class LayoutManager {
    * 화면 크기 변경 처리
    */
   handleResize() {
+    const startTime = performance.now();
+    const beforeDevice = this.deviceType;
+    const beforeWidth = this.sidebarWidth[this.deviceType];
+    
     console.log('📱 화면 크기 변경 감지, 레이아웃 재계산 중...');
     
     this.detectDeviceType();
@@ -189,7 +196,18 @@ class LayoutManager {
       this.applyBottomBarMode();
     }
     
-    console.log('🔄 레이아웃 재계산 완료');
+    const endTime = performance.now();
+    const afterWidth = this.sidebarWidth[this.deviceType];
+    
+    // ✅ 반응형 시스템 성능 및 변경사항 로깅
+    console.log('🔄 반응형 사이드바 너비 재계산 완료:', {
+      deviceChange: `${beforeDevice} → ${this.deviceType}`,
+      widthChange: `${beforeWidth}px → ${afterWidth}px`,
+      changed: beforeDevice !== this.deviceType,
+      performanceMs: (endTime - startTime).toFixed(2),
+      currentMode: this.currentMode,
+      viewportSize: `${window.innerWidth}×${window.innerHeight}px`
+    });
   }
 
   /**
@@ -416,11 +434,11 @@ class LayoutManager {
   getStatus() {
     return {
       isInitialized: this.isInitialized,
-      currentMode: this.currentMode,
       deviceType: this.deviceType,
+      currentMode: this.currentMode,
       sidebarWidth: this.sidebarWidth[this.deviceType],
       bottomBarHeight: this.bottomBarHeight[this.deviceType],
-      elementsFound: {
+      elements: {
         bottomBar: !!this.bottomBar,
         rightSidebar: !!this.rightSidebar,
         mainContent: !!this.mainContent
@@ -429,29 +447,112 @@ class LayoutManager {
   }
 
   /**
-   * 시스템 정리
+   * 반응형 사이드바 너비 시스템 검증 테스트
+   */
+  testResponsiveWidthSystem() {
+    console.group('🧪 반응형 사이드바 너비 시스템 테스트');
+    
+    try {
+      const root = document.documentElement;
+      const currentViewport = { width: window.innerWidth, height: window.innerHeight };
+      const currentDevice = this.deviceType;
+      const expectedWidth = this.sidebarWidth[currentDevice];
+      const actualCSSVariable = getComputedStyle(root).getPropertyValue('--game-right-sidebar-width').trim();
+      const sidebarElement = document.querySelector('.right-sidebar');
+      const actualSidebarWidth = sidebarElement ? getComputedStyle(sidebarElement).width : 'N/A';
+      
+      // 테스트 결과 수집
+      const testResults = {
+        viewport: currentViewport,
+        detectedDevice: currentDevice,
+        expectedWidth: `${expectedWidth}px`,
+        cssVariable: actualCSSVariable,
+        actualSidebarWidth: actualSidebarWidth,
+        cssVariableMatch: actualCSSVariable === `${expectedWidth}px`,
+        allDeviceSizes: this.sidebarWidth,
+        breakpoints: {
+          desktop: `>= 1024px (현재: ${currentViewport.width >= 1024 ? '✅' : '❌'})`,
+          tablet: `768-1023px (현재: ${currentViewport.width >= 768 && currentViewport.width < 1024 ? '✅' : '❌'})`,
+          mobile: `480-767px (현재: ${currentViewport.width >= 480 && currentViewport.width < 768 ? '✅' : '❌'})`,
+          mini: `< 480px (현재: ${currentViewport.width < 480 ? '✅' : '❌'})`
+        }
+      };
+      
+      console.log('📊 반응형 시스템 현재 상태:', testResults);
+      
+      // 통과/실패 판정
+      const testPassed = testResults.cssVariableMatch;
+      console.log(`🎯 테스트 결과: ${testPassed ? '✅ 통과' : '❌ 실패'}`);
+      
+      if (!testPassed) {
+        console.warn('⚠️ CSS 변수와 예상 너비가 일치하지 않습니다!');
+      }
+      
+      return testResults;
+      
+    } catch (error) {
+      console.error('❌ 반응형 시스템 테스트 중 오류:', error);
+      return { error: error.message };
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * 시스템 해제
    */
   destroy() {
     try {
-      // CSS 변수 정리
-      const root = document.documentElement;
-      root.style.removeProperty('--game-right-sidebar-width');
-      root.style.removeProperty('--dynamic-bottom-bar-height');
-      root.style.removeProperty('--game-bottom-bar-height');
-      root.style.removeProperty('--main-content-height');
+      // 이벤트 리스너 제거
+      window.removeEventListener('resize', this.handleResize);
+      window.removeEventListener('orientationchange', this.handleResize);
       
-      console.log('🧹 LayoutManager 정리 완료');
+      this.isInitialized = false;
+      console.log('🗑️ LayoutManager 해제 완료');
     } catch (error) {
-      console.error('❌ LayoutManager 정리 실패:', error);
+      console.error('❌ LayoutManager 해제 실패:', error);
     }
   }
 }
 
-// 전역 인스턴스 생성
-window.layoutManager = new LayoutManager();
-
-// 기존 bottomBarManager 호환성 유지
-window.bottomBarManager = window.layoutManager;
+// 전역 LayoutManager 인스턴스 생성
+if (typeof window !== 'undefined') {
+  window.layoutManager = new LayoutManager();
+  
+  // 하위 호환성: bottomBarManager 별칭 유지
+  window.bottomBarManager = window.layoutManager;
+  
+  // ✅ 개발자용 전역 테스트 함수들
+  window.testResponsiveWidth = () => {
+    if (window.layoutManager) {
+      return window.layoutManager.testResponsiveWidthSystem();
+    } else {
+      console.error('❌ LayoutManager가 초기화되지 않았습니다.');
+    }
+  };
+  
+  window.checkLayoutStatus = () => {
+    if (window.layoutManager) {
+      console.log('📋 현재 레이아웃 상태:', window.layoutManager.getStatus());
+    } else {
+      console.error('❌ LayoutManager가 초기화되지 않았습니다.');
+    }
+  };
+  
+  window.triggerLayoutResize = () => {
+    if (window.layoutManager && window.layoutManager.isInitialized) {
+      window.layoutManager.handleResize();
+      console.log('🔄 레이아웃 강제 재계산 완료');
+    } else {
+      console.error('❌ LayoutManager가 초기화되지 않았습니다.');
+    }
+  };
+  
+  console.log('🌐 전역 반응형 테스트 함수 등록 완료:');
+  console.log('   - window.testResponsiveWidth() : 반응형 시스템 테스트');
+  console.log('   - window.checkLayoutStatus() : 현재 상태 확인');  
+  console.log('   - window.triggerLayoutResize() : 강제 재계산');
+}
 
 // 페이지 로드 시 자동 초기화
 document.addEventListener('DOMContentLoaded', () => {
