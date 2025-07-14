@@ -20,6 +20,7 @@ const healthBarSystem = {
   healthBarSection: null,
   healthBarFill: null,
   healthBarText: null,
+  timerDisplay: null, // 시간 표시 요소 추가
   
   /**
    * 체력바 시스템 초기화
@@ -27,32 +28,37 @@ const healthBarSystem = {
   init() {
     console.log('🔧 체력바 시스템 초기화 시작...');
     
-    // DOM 요소 찾기
-    console.log('🔍 DOM 요소 검색 중...');
-    this.healthBarSection = document.getElementById('healthBarSection');
-    console.log('📍 healthBarSection 검색 결과:', this.healthBarSection);
+    // DOM 요소 찾기 (사이드바 전환에 맞게 수정)
+    console.log('🔍 사이드바 DOM 요소 검색 중...');
+    this.healthBarSection = document.getElementById('sidebarHealthBarSection');
+    console.log('📍 sidebarHealthBarSection 검색 결과:', this.healthBarSection);
     
-    this.healthBarFill = document.getElementById('healthBarFill');
-    console.log('📍 healthBarFill 검색 결과:', this.healthBarFill);
+    this.healthBarFill = document.getElementById('sidebarHealthBarFill');
+    console.log('📍 sidebarHealthBarFill 검색 결과:', this.healthBarFill);
     
-    this.healthBarText = document.getElementById('healthBarText');
-    console.log('📍 healthBarText 검색 결과:', this.healthBarText);
+    this.healthBarText = document.getElementById('sidebarHealthBarText');
+    console.log('📍 sidebarHealthBarText 검색 결과:', this.healthBarText);
     
-    // DOM 요소 존재 여부 확인
-    if (!this.healthBarSection || !this.healthBarFill || !this.healthBarText) {
-      console.log('⚠️ 체력바 DOM 요소가 제거되었거나 찾을 수 없습니다.');
-      console.log('📊 DOM 요소 상태:', {
+    // 시간 표시 요소도 추가
+    this.timerDisplay = document.getElementById('sidebarTimer');
+    console.log('📍 sidebarTimer 검색 결과:', this.timerDisplay);
+    
+    // DOM 요소 존재 여부 확인 (시간 표시 요소 포함)
+    if (!this.healthBarSection || !this.healthBarFill || !this.healthBarText || !this.timerDisplay) {
+      console.log('⚠️ 사이드바 DOM 요소가 제거되었거나 찾을 수 없습니다.');
+      console.log('📊 사이드바 DOM 요소 상태:', {
         healthBarSection: !!this.healthBarSection,
         healthBarFill: !!this.healthBarFill,
-        healthBarText: !!this.healthBarText
+        healthBarText: !!this.healthBarText,
+        timerDisplay: !!this.timerDisplay
       });
       
-      // 체력바가 하단 바 간소화로 인해 제거되었음을 알림
-      console.log('💡 체력바가 하단 바 간소화 과정에서 제거되었습니다. 게임은 목숨 시스템으로 계속 진행됩니다.');
+      // 사이드바 체력바 및 시간 표시 요소가 없음을 알림
+      console.log('💡 사이드바 체력바 또는 시간 표시 요소를 찾을 수 없습니다. DOM 구조를 확인해주세요.');
       
       // 전체 DOM에서 관련 요소들 검색해보기 (디버그용)
-      const allHealthSections = document.querySelectorAll('[id*="health"], [class*="health"]');
-      console.log('🔍 health 관련 모든 요소들:', allHealthSections);
+      const allHealthSections = document.querySelectorAll('[id*="health"], [class*="health"], [id*="timer"], [class*="timer"]');
+      console.log('🔍 health 및 timer 관련 모든 요소들:', allHealthSections);
       
       return false;
     }
@@ -220,23 +226,24 @@ const healthBarSystem = {
   },
   
   /**
-   * 체력바 표시 업데이트
+   * 체력바 및 시간 표시 업데이트
    */
   updateDisplay() {
     if (!this.healthBarFill || !this.healthBarText) {
-      // 체력바 DOM 요소가 없어서 화면 업데이트 스킵 (이는 정상적인 동작)
+      // 사이드바 체력바 DOM 요소가 없어서 화면 업데이트 스킵
+      console.log('⚠️ 사이드바 체력바 요소가 없어서 업데이트를 스킵합니다');
       return;
     }
   
     const percentage = Math.round(this.currentHealth);
     
-    // 체력바 너비 업데이트
+    // 사이드바 체력바 너비 업데이트
     this.healthBarFill.style.width = `${percentage}%`;
     
-    // 체력바 텍스트 업데이트
+    // 사이드바 체력바 텍스트 업데이트
     this.healthBarText.textContent = `${percentage}%`;
     
-    // 체력바 색상 업데이트 (단계별 색상 변경)
+    // 사이드바 체력바 색상 업데이트 (단계별 색상 변경)
     this.healthBarFill.className = 'health-bar-fill'; // 기본 클래스 리셋
     
     if (percentage <= 10) {
@@ -249,33 +256,13 @@ const healthBarSystem = {
       this.healthBarFill.classList.add('safe');     // 안전 (50% 초과)
     }
     
-    // ✅ 사이드바 체력바 동기화 (새로 추가된 로직)
-    if (window.layoutManager && typeof window.layoutManager.syncToSidebar === 'function') {
-      // 사이드바 체력바 너비 업데이트
-      const sidebarHealthBarFill = document.getElementById('sidebarHealthBarFill');
-      if (sidebarHealthBarFill) {
-        sidebarHealthBarFill.style.width = `${percentage}%`;
-        
-        // 사이드바 체력바 색상도 동일하게 적용
-        sidebarHealthBarFill.className = 'health-bar-fill';
-        if (percentage <= 10) {
-          sidebarHealthBarFill.classList.add('critical');
-        } else if (percentage <= 30) {
-          sidebarHealthBarFill.classList.add('warning');
-        } else if (percentage <= 50) {
-          sidebarHealthBarFill.classList.add('caution');
-        } else {
-          sidebarHealthBarFill.classList.add('safe');
-        }
-      }
-      
-      // 사이드바 체력바 텍스트 업데이트
-      const sidebarHealthBarText = document.getElementById('sidebarHealthBarText');
-      if (sidebarHealthBarText) {
-        sidebarHealthBarText.textContent = `${percentage}%`;
-      }
-      
-      console.log('💪 사이드바 체력바 동기화 완료:', percentage + '%');
+    // 🕒 시간 표시 업데이트 (새로 추가)
+    if (this.timerDisplay && window.gameState && typeof window.gameState.getElapsedTime === 'function') {
+      const elapsedTime = window.gameState.getElapsedTime();
+      const minutes = Math.floor(elapsedTime / 60);
+      const seconds = elapsedTime % 60;
+      const timeText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      this.timerDisplay.textContent = timeText;
     }
     
     // 사용자 피드백: 체력 단계별 체력바 깜박임 효과
