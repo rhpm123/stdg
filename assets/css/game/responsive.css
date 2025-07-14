@@ -105,8 +105,8 @@
     /* 모바일에서 안전한 터치 영역 보장 */
     min-height: 60px;
     
-    /* 모바일 최적화 그리드 비율 - stats 영역 확대로 가독성 개선 */
-    grid-template-columns: 50% 30% 20% !important;
+    /* 모바일 최적화 그리드 비율 - CSS 변수 기반 */
+    grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
     padding-bottom: env(safe-area-inset-bottom, 0px); /* 아이폰 X 이상 노치 대응 */
   }
   
@@ -242,9 +242,9 @@
    소형 화면 (480px 이하) stat-value 최적화
    ============================================ */
 @media (max-width: 480px) {
-  /* 소형 화면 그리드 비율 최적화 */
+  /* 소형 화면 그리드 비율 - 모바일과 통일 */
   .bottom-bar {
-        grid-template-columns: 45% 30% 25% !important;
+        grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
   }
   
   .bottom-bar .stat-value {
@@ -291,8 +291,8 @@
     padding: 8px;
     gap: 4px;
     
-    /* 초소형 화면 그리드 비율 최적화 */
-        grid-template-columns: 40% 35% 25% !important;
+    /* 초소형 화면 그리드 비율 - 모바일과 통일 */
+        grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important;
   }
   
   .bottom-bar .stat-value {
@@ -507,7 +507,7 @@
     padding: 1px 8px !important;
     
     /* 세로모드와 일관된 레이아웃 비율 적용 */
-    grid-template-columns: 50% 30% 20% !important; /* 가로모드 일관성 유지 */
+    grid-template-columns: var(--grid-stats-ratio) var(--grid-progress-ratio) var(--grid-controls-ratio) !important; /* 가로모드 일관성 유지 */
     gap: 4px !important;
   }
   
