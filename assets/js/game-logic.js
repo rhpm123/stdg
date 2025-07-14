@@ -15,17 +15,53 @@ let showAnswers = false;
  * 현재 가로모드 여부 확인
  */
 function isLandscapeMode() {
+  console.log('🔍 isLandscapeMode 함수 호출 시작');
+  
+  // 현재 화면 정보 수집
+  const screenInfo = {
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+    devicePixelRatio: window.devicePixelRatio,
+    orientation: window.orientation,
+    userAgent: navigator.userAgent.substring(0, 100)
+  };
+  console.log('📱 현재 화면 정보:', screenInfo);
+  
+  // 방법 1: OrientationController 사용 (최우선)
   if (typeof window.orientationController !== 'undefined') {
-    return window.orientationController.isCurrentlyLandscape();
+    const controllerResult = window.orientationController.isCurrentlyLandscape();
+    console.log('🎯 OrientationController 결과:', {
+      exists: true,
+      isLandscape: controllerResult,
+      controllerState: window.orientationController.getCurrentState ? window.orientationController.getCurrentState() : 'getCurrentState 메서드 없음'
+    });
+    return controllerResult;
+  } else {
+    console.log('⚠️ OrientationController 없음 - 폴백 방법 사용');
   }
   
-  // 폴백: CSS 미디어쿼리 사용
+  // 방법 2: CSS 미디어쿼리 사용
   if (window.matchMedia) {
-    return window.matchMedia('(orientation: landscape)').matches;
+    const mediaQueryResult = window.matchMedia('(orientation: landscape)').matches;
+    console.log('🎨 CSS 미디어쿼리 결과:', {
+      supports: true,
+      isLandscape: mediaQueryResult
+    });
+    return mediaQueryResult;
+  } else {
+    console.log('⚠️ matchMedia 지원하지 않음');
   }
   
-  // 최후 폴백: 화면 크기 비교
-  return window.innerWidth > window.innerHeight;
+  // 방법 3: 화면 크기 비교 (최후 폴백)
+  const dimensionResult = window.innerWidth > window.innerHeight;
+  console.log('📐 화면 크기 비교 결과:', {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    isLandscape: dimensionResult,
+    calculation: `${window.innerWidth} > ${window.innerHeight} = ${dimensionResult}`
+  });
+  
+  return dimensionResult;
 }
 
 /**
