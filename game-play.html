@@ -829,6 +829,33 @@
     window.addEventListener('beforeunload', () => {
       hideAnswerPoints();
     });
+// 게임 시작 버튼 이벤트 리스너 추가
+document.addEventListener('DOMContentLoaded', () => {
+  const startBtn = document.getElementById('sidebarStartBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      console.log('🎮 게임 시작 버튼 클릭됨!');
+      if (typeof startGame === 'function') {
+        startGame();
+      } else {
+        console.error('startGame 함수가 정의되지 않았습니다.');
+        showMessage('게임 시작 함수가 로드되지 않았습니다. 페이지를 새로고침해 주세요.', 'error');
+      }
+    });
+    console.log('✅ 게임 시작 버튼 이벤트 리스너 등록 완료');
+  } else {
+    console.error('게임 시작 버튼(sidebarStartBtn)을 찾을 수 없습니다.');
+  }
+  
+  // 게임 데이터 자동 로딩
+  if (typeof loadGameData === 'function') {
+    loadGameData();
+    console.log('🔄 게임 데이터 로딩 시작');
+  } else {
+    console.error('loadGameData 함수가 정의되지 않았습니다.');
+  }
+});
+
 
     /**
      * 개발자용 힌트 리셋 함수
